@@ -1,2 +1,2 @@
 # RMA
-Implementation of Relational Matrix Algebra in MonetDB
+Implementation of selected Relational Matrix Algebra operations in MonetDB
