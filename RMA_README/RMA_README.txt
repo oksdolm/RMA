@@ -8,6 +8,14 @@ regression, and copy to MKL format. In total it changes 20 files out
 of approximately 4500 files (we excluded test and configuration
 files) and includes additionally 2426 lines of code.
 
+The main extensions are done in the following files:
+
+sql/server/sql_parser.y
+sql/server/rel_select.c
+sql/server/rel_rel.c
+sql/backends/monet5/rel_bin.c
+sql/backends/monet5/sql_statement.c
+
 Please refer to HowToStart.rst file in order to find official
 installation guide from MonetDB. 
 
