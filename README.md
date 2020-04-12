@@ -8,7 +8,7 @@ Go to the folder RMA_README and perform the following steps:
 - Run the command `./mclient -d demo < RMA_CreateData.sql` from the command 
 line to create sample tables.
 
- - Run the command `./mclient -d demo --timer=performance < RMA_QueryData.sql 
+ - Run the command `./mclient -d demo --timer=performance < RMA_QueryData.sql` 
 from the command line to perform sample queries. You can compare the output 
 of mclient with output given in RMA_QueryDataOutput.txt.
 
