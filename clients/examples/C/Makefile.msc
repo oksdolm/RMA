@@ -1,0 +1,138 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\clients\examples\C
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+INCLUDES = -I$(srcdir) "-I..\..\mapilib" -I$(srcdir)\..\..\mapilib
+sample0dir = $(bindir)
+!IF defined(HAVE_TESTING)
+C_inst_sample0_exe = sample0.exe
+C_noinst_sample0_exe = 
+!ELSE
+C_inst_sample0_exe = 
+C_noinst_sample0_exe = sample0.exe
+!ENDIF
+sample0.exe:  ..\..\mapilib\libmapi.lib ..\..\..\common\stream\libstream.lib
+sample0_LIBS = ..\..\mapilib\libmapi.lib ..\..\..\common\stream\libstream.lib $(SOCKET_LIBS) $(zlib_LIBS) $(BZ_LIBS) $(snappy_LIBS) $(lz4_LIBS) $(liblzma_LIBS) $(curl_LIBS) $(LTLIBICONV) $(openssl_LIBS)
+sample0_OBJS = sample0.obj
+sample0.exe: $(sample0_OBJS)
+	$(CC) $(CFLAGS) -Fesample0.exe $(sample0_OBJS) /link $(sample0_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+sample1dir = $(bindir)
+!IF defined(HAVE_TESTING)
+C_inst_sample1_exe = sample1.exe
+C_noinst_sample1_exe = 
+!ELSE
+C_inst_sample1_exe = 
+C_noinst_sample1_exe = sample1.exe
+!ENDIF
+sample1.exe:  ..\..\mapilib\libmapi.lib ..\..\..\common\stream\libstream.lib
+sample1_LIBS = ..\..\mapilib\libmapi.lib ..\..\..\common\stream\libstream.lib $(SOCKET_LIBS) $(zlib_LIBS) $(BZ_LIBS) $(snappy_LIBS) $(lz4_LIBS) $(liblzma_LIBS) $(curl_LIBS) $(LTLIBICONV) $(openssl_LIBS)
+sample1_OBJS = sample1.obj
+sample1.exe: $(sample1_OBJS)
+	$(CC) $(CFLAGS) -Fesample1.exe $(sample1_OBJS) /link $(sample1_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+sample4dir = $(bindir)
+!IF defined(HAVE_TESTING)
+C_inst_sample4_exe = sample4.exe
+C_noinst_sample4_exe = 
+!ELSE
+C_inst_sample4_exe = 
+C_noinst_sample4_exe = sample4.exe
+!ENDIF
+sample4.exe:  ..\..\mapilib\libmapi.lib ..\..\..\common\stream\libstream.lib
+sample4_LIBS = ..\..\mapilib\libmapi.lib ..\..\..\common\stream\libstream.lib $(SOCKET_LIBS) $(zlib_LIBS) $(BZ_LIBS) $(snappy_LIBS) $(lz4_LIBS) $(liblzma_LIBS) $(curl_LIBS) $(LTLIBICONV) $(openssl_LIBS)
+sample4_OBJS = sample4.obj
+sample4.exe: $(sample4_OBJS)
+	$(CC) $(CFLAGS) -Fesample4.exe $(sample4_OBJS) /link $(sample4_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+smack00dir = $(bindir)
+!IF defined(HAVE_TESTING)
+C_inst_smack00_exe = smack00.exe
+C_noinst_smack00_exe = 
+!ELSE
+C_inst_smack00_exe = 
+C_noinst_smack00_exe = smack00.exe
+!ENDIF
+smack00.exe:  ..\..\mapilib\libmapi.lib ..\..\..\common\stream\libstream.lib
+smack00_LIBS = ..\..\mapilib\libmapi.lib ..\..\..\common\stream\libstream.lib $(SOCKET_LIBS) $(zlib_LIBS) $(BZ_LIBS) $(snappy_LIBS) $(lz4_LIBS) $(liblzma_LIBS) $(curl_LIBS) $(LTLIBICONV) $(openssl_LIBS)
+smack00_OBJS = smack00.obj
+smack00.exe: $(smack00_OBJS)
+	$(CC) $(CFLAGS) -Fesmack00.exe $(smack00_OBJS) /link $(smack00_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+smack01dir = $(bindir)
+!IF defined(HAVE_TESTING)
+C_inst_smack01_exe = smack01.exe
+C_noinst_smack01_exe = 
+!ELSE
+C_inst_smack01_exe = 
+C_noinst_smack01_exe = smack01.exe
+!ENDIF
+smack01.exe:  ..\..\mapilib\libmapi.lib ..\..\..\common\stream\libstream.lib
+smack01_LIBS = ..\..\mapilib\libmapi.lib ..\..\..\common\stream\libstream.lib $(SOCKET_LIBS) $(zlib_LIBS) $(BZ_LIBS) $(snappy_LIBS) $(lz4_LIBS) $(liblzma_LIBS) $(curl_LIBS) $(LTLIBICONV) $(openssl_LIBS)
+smack01_OBJS = smack01.obj
+smack01.exe: $(smack01_OBJS)
+	$(CC) $(CFLAGS) -Fesmack01.exe $(smack01_OBJS) /link $(smack01_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+sample4.obj: "$(srcdir)\sample4.c" "$(srcdir)\..\..\mapilib\mapi.h"
+sample1.obj: "$(srcdir)\sample1.c" "$(srcdir)\..\..\mapilib\mapi.h"
+smack01.obj: "$(srcdir)\smack01.c" "$(srcdir)\..\..\mapilib\mapi.h"
+sample0.obj: "$(srcdir)\sample0.c" "$(srcdir)\..\..\mapilib\mapi.h"
+smack00.obj: "$(srcdir)\smack00.c" "$(srcdir)\..\..\mapilib\mapi.h"
+all-msc: $(C_noinst_sample0_exe) $(C_noinst_sample1_exe) $(C_noinst_sample4_exe) $(C_noinst_smack00_exe) $(C_noinst_smack01_exe) $(C_inst_sample0_exe) $(C_inst_sample1_exe) $(C_inst_sample4_exe) $(C_inst_smack00_exe) $(C_inst_smack01_exe)
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec: "install_bin_sample0" "install_bin_sample1" "install_bin_sample4" "install_bin_smack00" "install_bin_smack01"  
+!IF defined(HAVE_TESTING)
+install_bin_sample0: $(C_inst_sample0_exe)
+	if not exist "$(sample0dir)" $(MKDIR) "$(sample0dir)"
+	$(INSTALL) $(C_inst_sample0_exe) "$(sample0dir)"
+	$(INSTALL) sample0.pdb "$(sample0dir)"
+!ELSE
+install_bin_sample0:
+!ENDIF
+!IF defined(HAVE_TESTING)
+install_bin_sample1: $(C_inst_sample1_exe)
+	if not exist "$(sample1dir)" $(MKDIR) "$(sample1dir)"
+	$(INSTALL) $(C_inst_sample1_exe) "$(sample1dir)"
+	$(INSTALL) sample1.pdb "$(sample1dir)"
+!ELSE
+install_bin_sample1:
+!ENDIF
+!IF defined(HAVE_TESTING)
+install_bin_sample4: $(C_inst_sample4_exe)
+	if not exist "$(sample4dir)" $(MKDIR) "$(sample4dir)"
+	$(INSTALL) $(C_inst_sample4_exe) "$(sample4dir)"
+	$(INSTALL) sample4.pdb "$(sample4dir)"
+!ELSE
+install_bin_sample4:
+!ENDIF
+!IF defined(HAVE_TESTING)
+install_bin_smack00: $(C_inst_smack00_exe)
+	if not exist "$(smack00dir)" $(MKDIR) "$(smack00dir)"
+	$(INSTALL) $(C_inst_smack00_exe) "$(smack00dir)"
+	$(INSTALL) smack00.pdb "$(smack00dir)"
+!ELSE
+install_bin_smack00:
+!ENDIF
+!IF defined(HAVE_TESTING)
+install_bin_smack01: $(C_inst_smack01_exe)
+	if not exist "$(smack01dir)" $(MKDIR) "$(smack01dir)"
+	$(INSTALL) $(C_inst_smack01_exe) "$(smack01dir)"
+	$(INSTALL) smack01.pdb "$(smack01dir)"
+!ELSE
+install_bin_smack01:
+!ENDIF
+install-data:

@@ -1,0 +1,51 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\common\stream
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) $(zlib_CFLAGS) $(BZ_CFLAGS) $(snappy_CFLAGS) $(lz4_CFLAGS) $(liblzma_CFLAGS) $(curl_CFLAGS)
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+stream_socket.h: "$(srcdir)\stream_socket.h"
+	$(INSTALL) "$(srcdir)\stream_socket.h" "stream_socket.h"
+stream.h: "$(srcdir)\stream.h"
+	$(INSTALL) "$(srcdir)\stream.h" "stream.h"
+libstream.dll: 
+libstream_LIBS = $(SOCKET_LIBS) $(zlib_LIBS) $(BZ_LIBS) $(snappy_LIBS) $(lz4_LIBS) $(liblzma_LIBS) $(curl_LIBS) $(LTLIBICONV)
+libstream_OBJS = stream.obj
+libstream_DEPS = $(libstream_OBJS)
+libstream.lib: libstream.dll
+libstream.dll: $(libstream_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -Felibstream.dll @<< /link @<<
+$(libstream_OBJS)
+<<
+$(libstream_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+monetdb-stream.pc: "$(TOPDIR)\winconfig_conds.py" "$(srcdir)\monetdb-stream.pc.in"
+	$(CONFIGURE) "$(srcdir)\monetdb-stream.pc.in" > "monetdb-stream.pc"
+stream.obj: "$(srcdir)\stream.c" "$(srcdir)\stream.h" "$(srcdir)\stream_socket.h"
+	$(CC) /EHsc $(CFLAGS) $(stream_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSTREAM "-Fostream.obj" -c "$(srcdir)\stream.c"
+all-msc: "libstream.dll" "stream_socket.h" "stream.h"
+check-msc: all-msc "stream_socket.h" "stream.h" "libstream.dll"
+install-msc: install-exec install-data
+install-exec:  "install_stream_socket.h" "install_stream.h" "install_libstream" 
+install_stream_socket.h: "stream_socket.h" "$(includedir)\monetdb"
+	$(INSTALL) "stream_socket.h" "$(includedir)\monetdb\stream_socket.h"
+install_stream.h: "stream.h" "$(includedir)\monetdb"
+	$(INSTALL) "stream.h" "$(includedir)\monetdb\stream.h"
+install_libstream: "libstream.dll" "$(libdir)"
+	$(INSTALL) "libstream.dll" "$(libdir)\libstream.dll"
+	$(INSTALL) "libstream.lib" "$(libdir)\libstream.lib"
+	$(INSTALL) "libstream.pdb" "$(libdir)\libstream.pdb"
+"$(includedir)\monetdb":
+	if not exist "$(includedir)\monetdb" $(MKDIR) "$(includedir)\monetdb"
+"$(libdir)":
+	if not exist "$(libdir)" $(MKDIR) "$(libdir)"
+install-data:

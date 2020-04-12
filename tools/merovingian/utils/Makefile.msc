@@ -1,0 +1,32 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\tools\merovingian\utils
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I..\..\..\common\stream" -I$(srcdir)\..\..\..\common\stream "-I..\..\..\common\options" -I$(srcdir)\..\..\..\common\options "-I..\..\..\common\utils" -I$(srcdir)\..\..\..\common\utils $(openssl_CFLAGS)
+libmeroutil_OBJS = control.obj database.obj glob.obj properties.obj utils.obj
+libmeroutil_DEPS = $(libmeroutil_OBJS)
+libmeroutil.lib: $(libmeroutil_DEPS)
+	$(ARCHIVER) /out:"libmeroutil.lib" $(libmeroutil_OBJS) $(libmeroutil_LIBS)
+
+utils.obj: "$(srcdir)\utils.c" "$(srcdir)\utils.h"
+	$(CC) /EHsc $(CFLAGS) $(utils_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMEROUTIL "-Foutils.obj" -c "$(srcdir)\utils.c"
+properties.obj: "$(srcdir)\properties.c" "$(srcdir)\properties.h" "$(srcdir)\utils.h"
+	$(CC) /EHsc $(CFLAGS) $(properties_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMEROUTIL "-Foproperties.obj" -c "$(srcdir)\properties.c"
+database.obj: "$(srcdir)\database.c" "$(srcdir)\..\..\..\common\utils\msabaoth.h" "$(srcdir)\utils.h" "$(srcdir)\..\..\..\common\utils\mutils.h" "$(srcdir)\database.h"
+	$(CC) /EHsc $(CFLAGS) $(database_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMEROUTIL "-Fodatabase.obj" -c "$(srcdir)\database.c"
+glob.obj: "$(srcdir)\glob.c" "$(srcdir)\glob.h"
+	$(CC) /EHsc $(CFLAGS) $(glob_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMEROUTIL "-Foglob.obj" -c "$(srcdir)\glob.c"
+control.obj: "$(srcdir)\control.c" "$(srcdir)\control.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\common\stream\stream_socket.h" "$(srcdir)\..\..\..\common\utils\mcrypt.h"
+	$(CC) /EHsc $(CFLAGS) $(control_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMEROUTIL "-Focontrol.obj" -c "$(srcdir)\control.c"
+all-msc: "libmeroutil.lib"
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

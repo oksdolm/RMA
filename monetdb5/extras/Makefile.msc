@@ -1,0 +1,47 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\monetdb5\extras
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+INCLUDES = -I$(srcdir)
+mal_optimizer_template-1-all: "mal_optimizer_template-1-dir" "mal_optimizer_template-1-Makefile"
+	$(CD) "mal_optimizer_template" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+mal_optimizer_template-1-dir: 
+	if not exist "mal_optimizer_template" $(MKDIR) "mal_optimizer_template"
+mal_optimizer_template-1-Makefile: "$(srcdir)\mal_optimizer_template\Makefile.msc"
+	$(INSTALL) "$(srcdir)\mal_optimizer_template\Makefile.msc" "mal_optimizer_template\Makefile"
+mal_optimizer_template-1-check:
+	$(CD) "mal_optimizer_template" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+mal_optimizer_template-1-install:
+	$(CD) "mal_optimizer_template" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!IFDEF HAVE_LIBR
+HAVE_LIBR-2-all: "HAVE_LIBR-2-dir" "HAVE_LIBR-2-Makefile"
+	$(CD) "rapi" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_LIBR-2-dir: 
+	if not exist "rapi" $(MKDIR) "rapi"
+HAVE_LIBR-2-Makefile: "$(srcdir)\rapi\Makefile.msc"
+	$(INSTALL) "$(srcdir)\rapi\Makefile.msc" "rapi\Makefile"
+HAVE_LIBR-2-check:
+	$(CD) "rapi" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_LIBR-2-install:
+	$(CD) "rapi" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_LIBR-2-all:
+HAVE_LIBR-2-check:
+HAVE_LIBR-2-install:
+!ENDIF
+all-recursive: "mal_optimizer_template-1-all" "HAVE_LIBR-2-all" 
+check-recursive: "mal_optimizer_template-1-check" "HAVE_LIBR-2-check" 
+install-recursive: "mal_optimizer_template-1-install" "HAVE_LIBR-2-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

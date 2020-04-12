@@ -1,0 +1,27 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\sql\NT
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir)
+MSQLclient.bat: "$(srcdir)\MSQLclient.bat"
+	$(INSTALL) "$(srcdir)\MSQLclient.bat" "MSQLclient.bat"
+MSQLserver.bat: "$(srcdir)\MSQLserver.bat"
+	$(INSTALL) "$(srcdir)\MSQLserver.bat" "MSQLserver.bat"
+all-msc: "MSQLclient.bat" "MSQLserver.bat"
+check-msc: all-msc "MSQLclient.bat" "MSQLserver.bat"
+install-msc: install-exec install-data
+install-exec:  "install_MSQLclient.bat" "install_MSQLserver.bat" 
+install_MSQLclient.bat: "MSQLclient.bat" "$(prefix)"
+	$(INSTALL) "MSQLclient.bat" "$(prefix)\MSQLclient.bat"
+install_MSQLserver.bat: "MSQLserver.bat" "$(prefix)"
+	$(INSTALL) "MSQLserver.bat" "$(prefix)\MSQLserver.bat"
+"$(prefix)":
+	if not exist "$(prefix)" $(MKDIR) "$(prefix)"
+install-data:

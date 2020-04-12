@@ -1,0 +1,51 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..
+srcdir = $(TOPDIR)\..\common
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+INCLUDES = -I$(srcdir)
+stream-1-all: "stream-1-dir" "stream-1-Makefile"
+	$(CD) "stream" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+stream-1-dir: 
+	if not exist "stream" $(MKDIR) "stream"
+stream-1-Makefile: "$(srcdir)\stream\Makefile.msc"
+	$(INSTALL) "$(srcdir)\stream\Makefile.msc" "stream\Makefile"
+stream-1-check:
+	$(CD) "stream" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+stream-1-install:
+	$(CD) "stream" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+options-2-all: "options-2-dir" "options-2-Makefile"
+	$(CD) "options" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+options-2-dir: 
+	if not exist "options" $(MKDIR) "options"
+options-2-Makefile: "$(srcdir)\options\Makefile.msc"
+	$(INSTALL) "$(srcdir)\options\Makefile.msc" "options\Makefile"
+options-2-check:
+	$(CD) "options" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+options-2-install:
+	$(CD) "options" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+utils-3-all: "utils-3-dir" "utils-3-Makefile"
+	$(CD) "utils" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+utils-3-dir: 
+	if not exist "utils" $(MKDIR) "utils"
+utils-3-Makefile: "$(srcdir)\utils\Makefile.msc"
+	$(INSTALL) "$(srcdir)\utils\Makefile.msc" "utils\Makefile"
+utils-3-check:
+	$(CD) "utils" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+utils-3-install:
+	$(CD) "utils" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+all-recursive: "stream-1-all" "options-2-all" "utils-3-all" 
+check-recursive: "stream-1-check" "options-2-check" "utils-3-check" 
+install-recursive: "stream-1-install" "options-2-install" "utils-3-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

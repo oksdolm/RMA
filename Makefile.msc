@@ -1,0 +1,146 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .
+srcdir = $(TOPDIR)\..
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+buildtools-1-all: "buildtools-1-dir" "buildtools-1-Makefile"
+	$(CD) "buildtools" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+buildtools-1-dir: 
+	if not exist "buildtools" $(MKDIR) "buildtools"
+buildtools-1-Makefile: "$(srcdir)\buildtools\Makefile.msc"
+	$(INSTALL) "$(srcdir)\buildtools\Makefile.msc" "buildtools\Makefile"
+buildtools-1-check:
+	$(CD) "buildtools" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+buildtools-1-install:
+	$(CD) "buildtools" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+common-2-all: "common-2-dir" "common-2-Makefile"
+	$(CD) "common" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+common-2-dir: 
+	if not exist "common" $(MKDIR) "common"
+common-2-Makefile: "$(srcdir)\common\Makefile.msc"
+	$(INSTALL) "$(srcdir)\common\Makefile.msc" "common\Makefile"
+common-2-check:
+	$(CD) "common" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+common-2-install:
+	$(CD) "common" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+clients-3-all: "clients-3-dir" "clients-3-Makefile"
+	$(CD) "clients" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+clients-3-dir: 
+	if not exist "clients" $(MKDIR) "clients"
+clients-3-Makefile: "$(srcdir)\clients\Makefile.msc"
+	$(INSTALL) "$(srcdir)\clients\Makefile.msc" "clients\Makefile"
+clients-3-check:
+	$(CD) "clients" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+clients-3-install:
+	$(CD) "clients" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!IFDEF HAVE_GDK
+HAVE_GDK-4-all: "HAVE_GDK-4-dir" "HAVE_GDK-4-Makefile"
+	$(CD) "gdk" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_GDK-4-dir: 
+	if not exist "gdk" $(MKDIR) "gdk"
+HAVE_GDK-4-Makefile: "$(srcdir)\gdk\Makefile.msc"
+	$(INSTALL) "$(srcdir)\gdk\Makefile.msc" "gdk\Makefile"
+HAVE_GDK-4-check:
+	$(CD) "gdk" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_GDK-4-install:
+	$(CD) "gdk" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_GDK-4-all:
+HAVE_GDK-4-check:
+HAVE_GDK-4-install:
+!ENDIF
+!IFDEF HAVE_MONETDB5
+HAVE_MONETDB5-5-all: "HAVE_MONETDB5-5-dir" "HAVE_MONETDB5-5-Makefile"
+	$(CD) "monetdb5" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_MONETDB5-5-dir: 
+	if not exist "monetdb5" $(MKDIR) "monetdb5"
+HAVE_MONETDB5-5-Makefile: "$(srcdir)\monetdb5\Makefile.msc"
+	$(INSTALL) "$(srcdir)\monetdb5\Makefile.msc" "monetdb5\Makefile"
+HAVE_MONETDB5-5-check:
+	$(CD) "monetdb5" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_MONETDB5-5-install:
+	$(CD) "monetdb5" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_MONETDB5-5-all:
+HAVE_MONETDB5-5-check:
+HAVE_MONETDB5-5-install:
+!ENDIF
+!IFDEF HAVE_SQL
+HAVE_SQL-6-all: "HAVE_SQL-6-dir" "HAVE_SQL-6-Makefile"
+	$(CD) "sql" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_SQL-6-dir: 
+	if not exist "sql" $(MKDIR) "sql"
+HAVE_SQL-6-Makefile: "$(srcdir)\sql\Makefile.msc"
+	$(INSTALL) "$(srcdir)\sql\Makefile.msc" "sql\Makefile"
+HAVE_SQL-6-check:
+	$(CD) "sql" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_SQL-6-install:
+	$(CD) "sql" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_SQL-6-all:
+HAVE_SQL-6-check:
+HAVE_SQL-6-install:
+!ENDIF
+!IFDEF HAVE_GEOM
+HAVE_GEOM-7-all: "HAVE_GEOM-7-dir" "HAVE_GEOM-7-Makefile"
+	$(CD) "geom" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_GEOM-7-dir: 
+	if not exist "geom" $(MKDIR) "geom"
+HAVE_GEOM-7-Makefile: "$(srcdir)\geom\Makefile.msc"
+	$(INSTALL) "$(srcdir)\geom\Makefile.msc" "geom\Makefile"
+HAVE_GEOM-7-check:
+	$(CD) "geom" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_GEOM-7-install:
+	$(CD) "geom" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_GEOM-7-all:
+HAVE_GEOM-7-check:
+HAVE_GEOM-7-install:
+!ENDIF
+tools-8-all: "tools-8-dir" "tools-8-Makefile"
+	$(CD) "tools" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+tools-8-dir: 
+	if not exist "tools" $(MKDIR) "tools"
+tools-8-Makefile: "$(srcdir)\tools\Makefile.msc"
+	$(INSTALL) "$(srcdir)\tools\Makefile.msc" "tools\Makefile"
+tools-8-check:
+	$(CD) "tools" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+tools-8-install:
+	$(CD) "tools" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!IFDEF HAVE_TESTING
+HAVE_TESTING-9-all: "HAVE_TESTING-9-dir" "HAVE_TESTING-9-Makefile"
+	$(CD) "testing" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_TESTING-9-dir: 
+	if not exist "testing" $(MKDIR) "testing"
+HAVE_TESTING-9-Makefile: "$(srcdir)\testing\Makefile.msc"
+	$(INSTALL) "$(srcdir)\testing\Makefile.msc" "testing\Makefile"
+HAVE_TESTING-9-check:
+	$(CD) "testing" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_TESTING-9-install:
+	$(CD) "testing" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_TESTING-9-all:
+HAVE_TESTING-9-check:
+HAVE_TESTING-9-install:
+!ENDIF
+all-recursive: "buildtools-1-all" "common-2-all" "clients-3-all" "HAVE_GDK-4-all" "HAVE_MONETDB5-5-all" "HAVE_SQL-6-all" "HAVE_GEOM-7-all" "tools-8-all" "HAVE_TESTING-9-all" 
+check-recursive: "buildtools-1-check" "common-2-check" "clients-3-check" "HAVE_GDK-4-check" "HAVE_MONETDB5-5-check" "HAVE_SQL-6-check" "HAVE_GEOM-7-check" "tools-8-check" "HAVE_TESTING-9-check" 
+install-recursive: "buildtools-1-install" "common-2-install" "clients-3-install" "HAVE_GDK-4-install" "HAVE_MONETDB5-5-install" "HAVE_SQL-6-install" "HAVE_GEOM-7-install" "tools-8-install" "HAVE_TESTING-9-install" 
+EXTRA_DIST_DIR =  NT debian MacOSX
+INCLUDES = -I$(srcdir)
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc: "monetdb_config.h"
+check-msc: all-msc "monetdb_config.h"
+install-msc: install-exec install-data
+install-exec:  "install_monetdb_config.h" 
+install_monetdb_config.h: "monetdb_config.h" "$(includedir)\monetdb"
+	$(INSTALL) "monetdb_config.h" "$(includedir)\monetdb\monetdb_config.h"
+"$(includedir)\monetdb":
+	if not exist "$(includedir)\monetdb" $(MKDIR) "$(includedir)\monetdb"
+install-data:

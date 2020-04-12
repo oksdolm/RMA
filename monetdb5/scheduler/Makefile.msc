@@ -1,0 +1,46 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\monetdb5\scheduler
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+EXTRA_DIST_DIR =  Tests
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+INCLUDES = -I$(srcdir) "-I..\mal" -I$(srcdir)\..\mal "-I..\optimizer" -I$(srcdir)\..\optimizer "-I..\modules\atoms" -I$(srcdir)\..\modules\atoms "-I..\modules\mal" -I$(srcdir)\..\modules\mal "-I..\modules\kernel" -I$(srcdir)\..\modules\kernel "-I..\..\clients\mapilib" -I$(srcdir)\..\..\clients\mapilib "-I..\..\common\options" -I$(srcdir)\..\..\common\options "-I..\..\common\stream" -I$(srcdir)\..\..\common\stream "-I..\..\common\utils" -I$(srcdir)\..\..\common\utils "-I..\..\gdk" -I$(srcdir)\..\..\gdk
+libscheduler_OBJS = run_adder.obj run_isolate.obj run_memo.obj run_pipeline.obj
+libscheduler_DEPS = $(libscheduler_OBJS)
+libscheduler.lib: $(libscheduler_DEPS)
+	$(ARCHIVER) /out:"libscheduler.lib" $(libscheduler_OBJS) $(libscheduler_LIBS)
+
+run_pipeline.obj: "$(srcdir)\run_pipeline.c" "$(srcdir)\run_pipeline.h" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\mal\mal.h" "$(srcdir)\..\mal\mal_type.h" "$(srcdir)\..\mal\mal_stack.h" "$(srcdir)\..\mal\mal_namespace.h" "$(srcdir)\..\mal\mal_instruction.h" "$(srcdir)\..\mal\mal_resolve.h" "$(srcdir)\..\mal\mal_exception.h" "$(srcdir)\..\mal\mal_errors.h" "$(srcdir)\..\mal\mal_function.h" "$(srcdir)\..\mal\mal_module.h" "$(srcdir)\..\mal\mal_listing.h" "$(srcdir)\..\mal\mal_profiler.h" "$(srcdir)\..\mal\mal_client.h" "$(srcdir)\..\mal\mal_factory.h" "$(srcdir)\..\mal\mal_interpreter.h" "$(srcdir)\..\optimizer\opt_support.h" "$(srcdir)\..\mal\mal_scenario.h" "$(srcdir)\..\mal\mal_import.h" "$(srcdir)\..\mal\mal_session.h" "$(srcdir)\..\mal\mal_utils.h" "$(srcdir)\..\mal\mal_builder.h" "$(srcdir)\..\optimizer\opt_prelude.h" "$(srcdir)\..\optimizer\opt_macro.h" "$(srcdir)\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\common\options\monet_options.h" "$(srcdir)\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(run_pipeline_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSCHEDULER "-Forun_pipeline.obj" -c "$(srcdir)\run_pipeline.c"
+run_memo.obj: "$(srcdir)\run_memo.c" "$(srcdir)\run_memo.h" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\mal\mal.h" "$(srcdir)\..\mal\mal_client.h" "$(srcdir)\..\mal\mal_resolve.h" "$(srcdir)\..\mal\mal_exception.h" "$(srcdir)\..\mal\mal_instruction.h" "$(srcdir)\..\mal\mal_type.h" "$(srcdir)\..\mal\mal_stack.h" "$(srcdir)\..\mal\mal_namespace.h" "$(srcdir)\..\mal\mal_errors.h" "$(srcdir)\..\mal\mal_function.h" "$(srcdir)\..\mal\mal_module.h" "$(srcdir)\..\mal\mal_listing.h" "$(srcdir)\..\mal\mal_profiler.h" "$(srcdir)\..\mal\mal_factory.h" "$(srcdir)\..\mal\mal_interpreter.h" "$(srcdir)\..\mal\mal_linker.h" "$(srcdir)\..\mal\mal_runtime.h" "$(srcdir)\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\common\options\monet_options.h" "$(srcdir)\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(run_memo_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSCHEDULER "-Forun_memo.obj" -c "$(srcdir)\run_memo.c"
+run_adder.obj: "$(srcdir)\run_adder.c" "$(srcdir)\..\mal\mal.h" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\mal\mal_instruction.h" "$(srcdir)\..\mal\mal_type.h" "$(srcdir)\..\mal\mal_stack.h" "$(srcdir)\..\mal\mal_namespace.h" "$(srcdir)\..\mal\mal_builder.h" "$(srcdir)\..\optimizer\opt_support.h" "$(srcdir)\..\mal\mal_function.h" "$(srcdir)\..\mal\mal_module.h" "$(srcdir)\..\mal\mal_resolve.h" "$(srcdir)\..\mal\mal_exception.h" "$(srcdir)\..\mal\mal_errors.h" "$(srcdir)\..\mal\mal_listing.h" "$(srcdir)\..\mal\mal_scenario.h" "$(srcdir)\..\mal\mal_import.h" "$(srcdir)\..\mal\mal_client.h" "$(srcdir)\..\mal\mal_profiler.h" "$(srcdir)\..\mal\mal_session.h" "$(srcdir)\..\mal\mal_utils.h" "$(srcdir)\..\optimizer\opt_prelude.h" "$(srcdir)\run_adder.h" "$(srcdir)\..\mal\mal_factory.h" "$(srcdir)\..\mal\mal_interpreter.h" "$(srcdir)\..\mal\mal_linker.h" "$(srcdir)\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\common\options\monet_options.h" "$(srcdir)\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(run_adder_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSCHEDULER "-Forun_adder.obj" -c "$(srcdir)\run_adder.c"
+run_isolate.obj: "$(srcdir)\run_isolate.c" "$(srcdir)\run_isolate.h" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\mal\mal.h" "$(srcdir)\..\mal\mal_type.h" "$(srcdir)\..\mal\mal_stack.h" "$(srcdir)\..\mal\mal_namespace.h" "$(srcdir)\..\mal\mal_instruction.h" "$(srcdir)\..\mal\mal_resolve.h" "$(srcdir)\..\mal\mal_exception.h" "$(srcdir)\..\mal\mal_errors.h" "$(srcdir)\..\mal\mal_function.h" "$(srcdir)\..\mal\mal_module.h" "$(srcdir)\..\mal\mal_listing.h" "$(srcdir)\..\mal\mal_profiler.h" "$(srcdir)\..\mal\mal_client.h" "$(srcdir)\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\common\options\monet_options.h" "$(srcdir)\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(run_isolate_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSCHEDULER "-Forun_isolate.obj" -c "$(srcdir)\run_isolate.c"
+run_memo.mal: "$(srcdir)\run_memo.mal"
+	$(INSTALL) "$(srcdir)\run_memo.mal" "run_memo.mal"
+run_adder.mal: "$(srcdir)\run_adder.mal"
+	$(INSTALL) "$(srcdir)\run_adder.mal" "run_adder.mal"
+run_isolate.mal: "$(srcdir)\run_isolate.mal"
+	$(INSTALL) "$(srcdir)\run_isolate.mal" "run_isolate.mal"
+all-msc: "libscheduler.lib" "run_memo.mal" "run_adder.mal" "run_isolate.mal"
+check-msc: all-msc "run_memo.mal" "run_adder.mal" "run_isolate.mal"
+install-msc: install-exec install-data
+install-exec:  "install_run_memo.mal" "install_run_adder.mal" "install_run_isolate.mal" 
+install_run_memo.mal: "run_memo.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "run_memo.mal" "$(libdir)\monetdb5\run_memo.mal"
+install_run_adder.mal: "run_adder.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "run_adder.mal" "$(libdir)\monetdb5\run_adder.mal"
+install_run_isolate.mal: "run_isolate.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "run_isolate.mal" "$(libdir)\monetdb5\run_isolate.mal"
+"$(libdir)\monetdb5":
+	if not exist "$(libdir)\monetdb5" $(MKDIR) "$(libdir)\monetdb5"
+install-data:

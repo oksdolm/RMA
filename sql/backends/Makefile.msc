@@ -1,0 +1,31 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\sql\backends
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+INCLUDES = -I$(srcdir)
+monet5-1-all: "monet5-1-dir" "monet5-1-Makefile"
+	$(CD) "monet5" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+monet5-1-dir: 
+	if not exist "monet5" $(MKDIR) "monet5"
+monet5-1-Makefile: "$(srcdir)\monet5\Makefile.msc"
+	$(INSTALL) "$(srcdir)\monet5\Makefile.msc" "monet5\Makefile"
+monet5-1-check:
+	$(CD) "monet5" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+monet5-1-install:
+	$(CD) "monet5" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+all-recursive: "monet5-1-all" 
+check-recursive: "monet5-1-check" 
+install-recursive: "monet5-1-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

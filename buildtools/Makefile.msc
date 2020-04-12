@@ -1,0 +1,32 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..
+srcdir = $(TOPDIR)\..\buildtools
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+EXTRA_DIST_DIR =  autogen doc selinux
+INCLUDES = -I$(srcdir)
+conf-1-all: "conf-1-dir" "conf-1-Makefile"
+	$(CD) "conf" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+conf-1-dir: 
+	if not exist "conf" $(MKDIR) "conf"
+conf-1-Makefile: "$(srcdir)\conf\Makefile.msc"
+	$(INSTALL) "$(srcdir)\conf\Makefile.msc" "conf\Makefile"
+conf-1-check:
+	$(CD) "conf" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+conf-1-install:
+	$(CD) "conf" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+all-recursive: "conf-1-all" 
+check-recursive: "conf-1-check" 
+install-recursive: "conf-1-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

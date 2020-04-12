@@ -1,0 +1,84 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..\..\..
+srcdir = $(TOPDIR)\..\sql\backends\monet5\UDF\pyapi3
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I..\..\..\..\..\clients\mapilib" -I$(srcdir)\..\..\..\..\..\clients\mapilib "-I..\..\..\..\..\common\options" -I$(srcdir)\..\..\..\..\..\common\options "-I..\..\..\..\..\common\stream" -I$(srcdir)\..\..\..\..\..\common\stream "-I..\..\..\..\..\monetdb5\modules\atoms" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms "-I..\..\..\..\..\monetdb5\modules\mal" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\mal "-I..\..\..\..\..\gdk" -I$(srcdir)\..\..\..\..\..\gdk "-I..\..\..\..\..\monetdb5\mal" -I$(srcdir)\..\..\..\..\..\monetdb5\mal "-I..\..\..\..\..\sql\backends\monet5" -I$(srcdir)\..\..\..\..\..\sql\backends\monet5 "-I..\..\..\..\..\sql\common" -I$(srcdir)\..\..\..\..\..\sql\common "-I..\..\..\..\..\sql\include" -I$(srcdir)\..\..\..\..\..\sql\include "-I..\..\..\..\..\sql\server" -I$(srcdir)\..\..\..\..\..\sql\server "-I..\..\..\..\..\sql\storage" -I$(srcdir)\..\..\..\..\..\sql\storage "-I..\pyapi" -I$(srcdir)\..\pyapi $(libpy3_CFLAGS)
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+EXTRA_DIST_DIR =  Tests
+50_pyapi3.mal: "$(srcdir)\50_pyapi3.mal"
+	$(INSTALL) "$(srcdir)\50_pyapi3.mal" "50_pyapi3.mal"
+!IF defined(HAVE_LIBPY3)
+C_50_pyapi3_mal = 50_pyapi3.mal
+!ELSE
+C_50_pyapi3_mal =
+!ENDIF
+pyapi3.mal: "$(srcdir)\pyapi3.mal"
+	$(INSTALL) "$(srcdir)\pyapi3.mal" "pyapi3.mal"
+!IF defined(HAVE_LIBPY3)
+C_pyapi3_mal = pyapi3.mal
+!ELSE
+C_pyapi3_mal =
+!ENDIF
+lib_pyapi3.dll:  ..\..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\..\gdk\libbat.lib
+lib_pyapi3_LIBS = ..\..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\..\gdk\libbat.lib $(libpy3_LIBS)
+lib_pyapi3_OBJS = pyapi3.obj unicode3.obj pytypes3.obj type_conversion3.obj formatinput3.obj connection3.obj pyloader3.obj emit3.obj conversion3.obj
+lib_pyapi3_DEPS = $(lib_pyapi3_OBJS) $(libpy3_LIBDEP)
+lib_pyapi3.lib: lib_pyapi3.dll
+lib_pyapi3.dll: $(lib_pyapi3_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -Felib_pyapi3.dll @<< /link @<<
+$(lib_pyapi3_OBJS)
+<<
+$(lib_pyapi3_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+pyloader3.obj: "$(srcdir)\pyloader3.c" "$(srcdir)\..\pyapi\pyapi.h" "$(srcdir)\..\pyapi\conversion.h" "$(srcdir)\..\pyapi\connection.h" "$(srcdir)\..\pyapi\emit.h" "$(srcdir)\..\pyapi\unicode.h" "$(srcdir)\..\pyapi\pytypes.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_interprocess.h" "$(srcdir)\..\..\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\pyapi\type_conversion.h" "$(srcdir)\..\pyapi\formatinput.h" "$(srcdir)\..\pyapi\pyloader.c"
+	$(CC) /EHsc $(CFLAGS) $(pyloader3_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBPYAPI3 "-Fopyloader3.obj" -c "$(srcdir)\pyloader3.c"
+formatinput3.obj: "$(srcdir)\formatinput3.c" "$(srcdir)\..\pyapi\formatinput.h" "$(srcdir)\..\pyapi\type_conversion.h" "$(srcdir)\..\pyapi\formatinput.c"
+	$(CC) /EHsc $(CFLAGS) $(formatinput3_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBPYAPI3 "-Foformatinput3.obj" -c "$(srcdir)\formatinput3.c"
+unicode3.obj: "$(srcdir)\unicode3.c" "$(srcdir)\..\pyapi\unicode.h" "$(srcdir)\..\pyapi\unicode.c"
+	$(CC) /EHsc $(CFLAGS) $(unicode3_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBPYAPI3 "-Founicode3.obj" -c "$(srcdir)\unicode3.c"
+pytypes3.obj: "$(srcdir)\pytypes3.c" "$(srcdir)\..\pyapi\pytypes.h" "$(srcdir)\..\pyapi\pytypes.c"
+	$(CC) /EHsc $(CFLAGS) $(pytypes3_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBPYAPI3 "-Fopytypes3.obj" -c "$(srcdir)\pytypes3.c"
+pyapi3.obj: "$(srcdir)\pyapi3.c" "$(srcdir)\..\pyapi\pyapi.h" "$(srcdir)\..\pyapi\connection.h" "$(srcdir)\..\pyapi\unicode.h" "$(srcdir)\..\pyapi\pytypes.h" "$(srcdir)\..\pyapi\type_conversion.h" "$(srcdir)\..\pyapi\formatinput.h" "$(srcdir)\..\pyapi\conversion.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_interprocess.h" "$(srcdir)\..\..\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\pyapi\pyapi.c"
+	$(CC) /EHsc $(CFLAGS) $(pyapi3_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBPYAPI3 "-Fopyapi3.obj" -c "$(srcdir)\pyapi3.c"
+type_conversion3.obj: "$(srcdir)\type_conversion3.c" "$(srcdir)\..\pyapi\type_conversion.h" "$(srcdir)\..\pyapi\unicode.h" "$(srcdir)\..\pyapi\type_conversion.c"
+	$(CC) /EHsc $(CFLAGS) $(type_conversion3_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBPYAPI3 "-Fotype_conversion3.obj" -c "$(srcdir)\type_conversion3.c"
+emit3.obj: "$(srcdir)\emit3.c" "$(srcdir)\..\pyapi\emit.h" "$(srcdir)\..\pyapi\conversion.h" "$(srcdir)\..\pyapi\convert_loops.h" "$(srcdir)\..\pyapi\type_conversion.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_interprocess.h" "$(srcdir)\..\..\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\mtime.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\pyapi\unicode.h" "$(srcdir)\..\pyapi\emit.c"
+	$(CC) /EHsc $(CFLAGS) $(emit3_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBPYAPI3 "-Foemit3.obj" -c "$(srcdir)\emit3.c"
+conversion3.obj: "$(srcdir)\conversion3.c" "$(srcdir)\..\pyapi\conversion.h" "$(srcdir)\..\pyapi\convert_loops.h" "$(srcdir)\..\pyapi\pytypes.h" "$(srcdir)\..\pyapi\type_conversion.h" "$(srcdir)\..\pyapi\unicode.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\blob.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_interprocess.h" "$(srcdir)\..\pyapi\conversion.c"
+	$(CC) /EHsc $(CFLAGS) $(conversion3_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBPYAPI3 "-Foconversion3.obj" -c "$(srcdir)\conversion3.c"
+connection3.obj: "$(srcdir)\connection3.c" "$(srcdir)\..\pyapi\pyapi.h" "$(srcdir)\..\pyapi\conversion.h" "$(srcdir)\..\pyapi\connection.h" "$(srcdir)\..\pyapi\type_conversion.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_interprocess.h" "$(srcdir)\..\..\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\pyapi\connection.c"
+	$(CC) /EHsc $(CFLAGS) $(connection3_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBPYAPI3 "-Foconnection3.obj" -c "$(srcdir)\connection3.c"
+all-msc: "lib_pyapi3.dll" "50_pyapi3.mal" "pyapi3.mal"
+check-msc: all-msc "lib_pyapi3.dll" "pyapi3.mal" "50_pyapi3.mal"
+install-msc: install-exec install-data
+install-exec:  "install_lib_pyapi3" "install_pyapi3.mal" "install_50_pyapi3.mal" 
+install_lib_pyapi3: "lib_pyapi3.dll" "$(libdir)\monetdb5"
+	$(INSTALL) "lib_pyapi3.dll" "$(libdir)\monetdb5\lib_pyapi3.dll"
+	$(INSTALL) "lib_pyapi3.lib" "$(libdir)\monetdb5\lib_pyapi3.lib"
+	$(INSTALL) "lib_pyapi3.pdb" "$(libdir)\monetdb5\lib_pyapi3.pdb"
+!IF defined(HAVE_LIBPY3)
+install_pyapi3.mal: "pyapi3.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "pyapi3.mal" "$(libdir)\monetdb5\pyapi3.mal"
+!ELSE
+install_pyapi3.mal:
+!ENDIF
+!IF defined(HAVE_LIBPY3)
+install_50_pyapi3.mal: "50_pyapi3.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "50_pyapi3.mal" "$(libdir)\monetdb5\autoload\50_pyapi3.mal"
+!ELSE
+install_50_pyapi3.mal:
+!ENDIF
+"$(libdir)\monetdb5":
+	if not exist "$(libdir)\monetdb5" $(MKDIR) "$(libdir)\monetdb5"
+"$(libdir)\monetdb5\autoload":
+	if not exist "$(libdir)\monetdb5\autoload" $(MKDIR) "$(libdir)\monetdb5\autoload"
+install-data:

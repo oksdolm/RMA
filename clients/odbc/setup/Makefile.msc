@@ -1,0 +1,37 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\clients\odbc\setup
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+DEFS =  @DEFS@
+INCLUDES = -I$(srcdir) $(ODBC_INCS)
+libMonetODBCs_OBJS = drvcfg.obj
+libMonetODBCs_DEPS = $(libMonetODBCs_OBJS)
+libMonetODBCs.lib: libMonetODBCs.dll
+libMonetODBCs.dll: $(libMonetODBCs_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -FelibMonetODBCs.dll @<< /link @<<
+$(libMonetODBCs_OBJS)
+<<
+$(libMonetODBCs_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+drvcfg.obj: "$(srcdir)\drvcfg.c" "$(srcdir)\drvcfg.h"
+	$(CC) /EHsc $(CFLAGS) $(drvcfg_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMONETODBCS "-Fodrvcfg.obj" -c "$(srcdir)\drvcfg.c"
+all-msc: "libMonetODBCs.dll"
+check-msc: all-msc "libMonetODBCs.dll"
+install-msc: install-exec install-data
+install-exec:  "install_libMonetODBCs" 
+install_libMonetODBCs: "libMonetODBCs.dll" "$(libdir)"
+	$(INSTALL) "libMonetODBCs.dll" "$(libdir)\libMonetODBCs.dll"
+	$(INSTALL) "libMonetODBCs.lib" "$(libdir)\libMonetODBCs.lib"
+	$(INSTALL) "libMonetODBCs.pdb" "$(libdir)\libMonetODBCs.pdb"
+"$(libdir)":
+	if not exist "$(libdir)" $(MKDIR) "$(libdir)"
+install-data:

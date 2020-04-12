@@ -1,0 +1,114 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\clients\odbc\samples
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+INCLUDES = -I$(srcdir) $(ODBC_INCS)
+odbcsample1dir = $(libdir)\monetdb\tests
+!IF defined(HAVE_TESTING)
+C_inst_odbcsample1_exe = odbcsample1.exe
+C_noinst_odbcsample1_exe = 
+!ELSE
+C_inst_odbcsample1_exe = 
+C_noinst_odbcsample1_exe = odbcsample1.exe
+!ENDIF
+odbcsample1.exe: 
+odbcsample1_LIBS = $(ODBC_LIBS)
+odbcsample1_OBJS = odbcsample1.obj
+odbcsample1.exe: $(odbcsample1_OBJS)
+	$(CC) $(CFLAGS) -Feodbcsample1.exe $(odbcsample1_OBJS) /link $(odbcsample1_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+testgetinfodir = $(libdir)\monetdb\tests
+!IF defined(HAVE_TESTING)
+C_inst_testgetinfo_exe = testgetinfo.exe
+C_noinst_testgetinfo_exe = 
+!ELSE
+C_inst_testgetinfo_exe = 
+C_noinst_testgetinfo_exe = testgetinfo.exe
+!ENDIF
+testgetinfo.exe: 
+testgetinfo_LIBS = $(ODBC_LIBS)
+testgetinfo_OBJS = testgetinfo.obj
+testgetinfo.exe: $(testgetinfo_OBJS)
+	$(CC) $(CFLAGS) -Fetestgetinfo.exe $(testgetinfo_OBJS) /link $(testgetinfo_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+arraytestdir = $(libdir)\monetdb\tests
+!IF defined(HAVE_TESTING)
+C_inst_arraytest_exe = arraytest.exe
+C_noinst_arraytest_exe = 
+!ELSE
+C_inst_arraytest_exe = 
+C_noinst_arraytest_exe = arraytest.exe
+!ENDIF
+arraytest.exe: 
+arraytest_LIBS = $(ODBC_LIBS)
+arraytest_OBJS = arraytest.obj
+arraytest.exe: $(arraytest_OBJS)
+	$(CC) $(CFLAGS) -Fearraytest.exe $(arraytest_OBJS) /link $(arraytest_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+testStmtAttrdir = $(libdir)\monetdb\tests
+!IF defined(HAVE_TESTING)
+C_inst_testStmtAttr_exe = testStmtAttr.exe
+C_noinst_testStmtAttr_exe = 
+!ELSE
+C_inst_testStmtAttr_exe = 
+C_noinst_testStmtAttr_exe = testStmtAttr.exe
+!ENDIF
+testStmtAttr.exe: 
+testStmtAttr_LIBS = $(ODBC_LIBS)
+testStmtAttr_OBJS = testStmtAttr.obj
+testStmtAttr.exe: $(testStmtAttr_OBJS)
+	$(CC) $(CFLAGS) -FetestStmtAttr.exe $(testStmtAttr_OBJS) /link $(testStmtAttr_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+testStmtAttr.obj: "$(srcdir)\testStmtAttr.c"
+testgetinfo.obj: "$(srcdir)\testgetinfo.c"
+arraytest.obj: "$(srcdir)\arraytest.c"
+odbcsample1.obj: "$(srcdir)\odbcsample1.c"
+all-msc: $(C_noinst_odbcsample1_exe) $(C_noinst_testgetinfo_exe) $(C_noinst_arraytest_exe) $(C_noinst_testStmtAttr_exe) $(C_inst_odbcsample1_exe) $(C_inst_testgetinfo_exe) $(C_inst_arraytest_exe) $(C_inst_testStmtAttr_exe)
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec: "install_bin_odbcsample1" "install_bin_testgetinfo" "install_bin_arraytest" "install_bin_testStmtAttr"  
+!IF defined(HAVE_TESTING)
+install_bin_odbcsample1: $(C_inst_odbcsample1_exe)
+	if not exist "$(odbcsample1dir)" $(MKDIR) "$(odbcsample1dir)"
+	$(INSTALL) $(C_inst_odbcsample1_exe) "$(odbcsample1dir)"
+	$(INSTALL) odbcsample1.pdb "$(odbcsample1dir)"
+!ELSE
+install_bin_odbcsample1:
+!ENDIF
+!IF defined(HAVE_TESTING)
+install_bin_testgetinfo: $(C_inst_testgetinfo_exe)
+	if not exist "$(testgetinfodir)" $(MKDIR) "$(testgetinfodir)"
+	$(INSTALL) $(C_inst_testgetinfo_exe) "$(testgetinfodir)"
+	$(INSTALL) testgetinfo.pdb "$(testgetinfodir)"
+!ELSE
+install_bin_testgetinfo:
+!ENDIF
+!IF defined(HAVE_TESTING)
+install_bin_arraytest: $(C_inst_arraytest_exe)
+	if not exist "$(arraytestdir)" $(MKDIR) "$(arraytestdir)"
+	$(INSTALL) $(C_inst_arraytest_exe) "$(arraytestdir)"
+	$(INSTALL) arraytest.pdb "$(arraytestdir)"
+!ELSE
+install_bin_arraytest:
+!ENDIF
+!IF defined(HAVE_TESTING)
+install_bin_testStmtAttr: $(C_inst_testStmtAttr_exe)
+	if not exist "$(testStmtAttrdir)" $(MKDIR) "$(testStmtAttrdir)"
+	$(INSTALL) $(C_inst_testStmtAttr_exe) "$(testStmtAttrdir)"
+	$(INSTALL) testStmtAttr.pdb "$(testStmtAttrdir)"
+!ELSE
+install_bin_testStmtAttr:
+!ENDIF
+install-data:

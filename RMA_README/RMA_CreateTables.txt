@@ -1,0 +1,102 @@
+This file explains how to use RMA_CreateTables.py to repeat Experiments given in Tables 4 and 5.
+
+Description
+-----------
+
+The execution of RMA_CreateTables.py file creates five files for each specified size of a relation:
+
+1) Create_Intern.sql creates two relations with the specified schema
+2) SCV_Intern.csv includes the values for the relations
+3) Insert_Intern.sql executes insert into created relations from SCV_Intern.csv
+4) Select_Intern.sql executes QR decomposition on top of a first relation
+5) Add_Intern.sql executes addition operation on top of two relations
+
+For example, when the following sizes are specified:
+numberTuples = [1000]
+numberAttributesApp = [10] 
+numberAttributesDes = [1] 
+
+Files are as follows:
+
+cat Create_Intern_1000x1x10_order0.sql
+
+CREATE TABLE table_1000x1x10_order0 ("x1" double, "x2" double, "x3" double, "x4" double, "x5" double, "x6" double, "x7" double, "x8" double, "x9" double, "x10" double, "x11" double);
+CREATE TABLE table_1000x1x10_order01 ("y1" double, "y2" double, "y3" double, "y4" double, "y5" double, "y6" double, "y7" double, "y8" double, "y9" double, "y10" double, "y11" double);
+
+cat Insert_Intern_1000x1x10_order0.sql 
+
+COPY 1000 RECORDS INTO table_1000x1x10_order0 FROM '/home/DATA/Experiments/Scripts/CSV_Intern_table_1000x1x10_order0.csv' USING DELIMITERS ';','\n';
+COPY 1000 RECORDS INTO table_1000x1x10_order01 FROM '/home/DATA/Experiments/Scripts/CSV_Intern_table_1000x1x10_order0.csv' USING DELIMITERS ';','\n';
+
+cat Select_Intern_1000x1x10_order0.sql 
+
+SELECT * FROM QQR (table_1000x1x10_order0 ON x2,x3,x4,x5,x6,x7,x8,x9,x10,x11 ORDER BY x1);
+
+cat Add_Intern_1000x1x10_order0.sql 
+SELECT * FROM (table_1000x1x10_order0 ON x2,x3,x4,x5,x6,x7,x8,x9,x10,x11 ORDER BY x1) ADD (table_1000x1x10_order01 ON y2,y3,y4,y5,y6,y7,y8,y9,y10,y11 ORDER BY y1);
+
+
+Repeating Experiments
+---------------------
+
+Please change the file and execute it with python in order to create tables for QQR, ADD, and LAPACK queries and queries itself.
+The changes should include:
+a) Determine the sizes of the tables you want to create.
+
+For example, for repeating Table 4 (add over wide relations in RMA) 
+the following sizes should be specified:  
+numberTuples = [1000]
+numberAttributesApp = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000] 
+numberAttributesDes = [1] 
+
+For repeating the Table 5 (add over sparse relations in RMA) set the size to 
+numberTuples = [5000000]
+numberAttributesApp = [10] 
+numberAttributesDes = [1] 
+
+Additionally, the sparsity must be specified, e.g., sparsity = 0.4 
+creates tables where 40% of values are zeros.
+
+The following lines must be uncommented: 
+                        #uncomment next 3 lines for sparsity experiments
+                        #if a < randomMAX*sparsity:
+                            #fileCSV.write('0')
+                        #else:
+The next line with 
+fileCSV.write('%s' %a)
+must be indented.
+
+In order to repeat table 5, please change vary the sparcity from 0 to 1 with step of 0.1.
+
+b) Specify the folder, where file RMA_CreateTables.py is located.
+adressToExperimentFolder = '/home/DATA/Experiments/Scripts'
+
+c) run 
+python RMA_CreateTables.py
+
+
+The created files you can execute with mclient.
+For example: 
+./mclient -d demo -f trash --timer=performance  < /home/DATA/Experiments/Scripts/Create_Intern_1000x1x1000_order0.sql
+./mclient -d demo -f trash --timer=performance  < /home/DATA/Experiments/Scripts/Insert_Intern_1000x1x1000_order0.sql
+./mclient -d demo -f trash --timer=performance  < /home/DATA/Experiments/Scripts/Add_Intern_1000x1x1000_order0.sql
+
+
+MonetDB and MKL
+---------------
+
+Please note that now MKL works outside of MonetDB. 
+So all the operations in this implementation are executed on BATs.
+
+In order to measure time of data copying into MKL compatible format, 
+please uncomment this line:
+#fileSelectIntern.write ('SELECT * FROM LAPACK (%s ON ' %tableName)
+
+and comment the next line:
+fileSelectIntern.write ('SELECT * FROM QQR (%s ON ' %tableName)
+
+Then file Select_Intern.sql would include LAPACK operation call.
+This operation copies all BATs from application list to one contiguous 
+array and copies them back. The exact time of copying (excluding query-processing
+related timing) is printed in the mserver5 output.
+

@@ -1,0 +1,54 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..\..\..
+srcdir = $(TOPDIR)\..\sql\backends\monet5\vaults\netcdf
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I.." -I$(srcdir)\.. "-I..\.." -I$(srcdir)\..\.. "-I..\..\..\..\include" -I$(srcdir)\..\..\..\..\include "-I..\..\..\..\common" -I$(srcdir)\..\..\..\..\common "-I..\..\..\..\storage" -I$(srcdir)\..\..\..\..\storage "-I..\..\..\..\server" -I$(srcdir)\..\..\..\..\server "-I..\..\..\..\..\monetdb5\modules\atoms" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms "-I..\..\..\..\..\monetdb5\modules\kernel" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\kernel "-I..\..\..\..\..\monetdb5\mal" -I$(srcdir)\..\..\..\..\..\monetdb5\mal "-I..\..\..\..\..\monetdb5\modules\mal" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\mal "-I..\..\..\..\..\monetdb5\optimizer" -I$(srcdir)\..\..\..\..\..\monetdb5\optimizer "-I..\..\..\..\..\monetdb5\scheduler" -I$(srcdir)\..\..\..\..\..\monetdb5\scheduler "-I..\..\..\..\..\common\options" -I$(srcdir)\..\..\..\..\..\common\options "-I..\..\..\..\..\common\stream" -I$(srcdir)\..\..\..\..\..\common\stream "-I..\..\..\..\..\common\utils" -I$(srcdir)\..\..\..\..\..\common\utils "-I..\..\..\..\..\gdk" -I$(srcdir)\..\..\..\..\..\gdk $(netcdf_CFLAGS)
+74_netcdf.sql: "$(srcdir)\74_netcdf.sql"
+	$(INSTALL) "$(srcdir)\74_netcdf.sql" "74_netcdf.sql"
+74_netcdf.mal: "$(srcdir)\74_netcdf.mal"
+	$(INSTALL) "$(srcdir)\74_netcdf.mal" "74_netcdf.mal"
+netcdf.mal: "$(srcdir)\netcdf.mal"
+	$(INSTALL) "$(srcdir)\netcdf.mal" "netcdf.mal"
+lib_netcdf.dll:  ..\..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\..\gdk\libbat.lib
+lib_netcdf_LIBS = ..\..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\..\gdk\libbat.lib $(netcdf_LIBS)
+lib_netcdf_OBJS = netcdf.obj
+lib_netcdf_DEPS = $(lib_netcdf_OBJS)
+lib_netcdf.lib: lib_netcdf.dll
+lib_netcdf.dll: $(lib_netcdf_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -Felib_netcdf.dll @<< /link @<<
+$(lib_netcdf_OBJS)
+<<
+$(lib_netcdf_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+netcdf.obj: "$(srcdir)\netcdf.c" "$(srcdir)\..\..\..\..\include\sql_mem.h" "$(srcdir)\..\..\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\..\server\sql_scan.h" "$(srcdir)\..\..\..\..\include\sql_list.h" "$(srcdir)\..\..\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\..\common\sql_types.h" "$(srcdir)\..\..\..\..\common\sql_string.h" "$(srcdir)\..\..\..\..\include\sql_catalog.h" "$(srcdir)\..\..\..\..\storage\sql_storage.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_logger.h" "$(srcdir)\..\..\..\..\common\sql_backend.h" "$(srcdir)\..\..\..\..\include\sql_relation.h" "$(srcdir)\..\..\..\..\include\sql_keyword.h" "$(srcdir)\..\..\..\..\server\sql_atom.h" "$(srcdir)\..\..\..\..\include\sql_query.h" "$(srcdir)\..\..\..\..\server\sql_mvc.h" "$(srcdir)\..\..\mal_backend.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_session.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_scenario.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_import.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_client.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_resolve.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_function.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_module.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_listing.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_profiler.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_utils.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_interpreter.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_factory.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\mal\tablet.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\streams.h" "$(srcdir)\..\..\..\..\..\common\stream\stream_socket.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\mtime.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\blob.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\mal\mkey.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\str.h" "$(srcdir)\..\..\..\..\server\sql_privileges.h" "$(srcdir)\..\..\..\..\server\sql_decimal.h" "$(srcdir)\..\..\..\..\server\sql_qc.h" "$(srcdir)\..\..\..\..\server\sql_symbol.h" "$(srcdir)\..\..\..\..\server\sql_env.h" "$(srcdir)\..\..\..\..\server\sql_parser.h" "$(srcdir)\..\..\sql_statement.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\mal\querylog.h" "$(srcdir)\..\..\..\..\storage\bat\bat_storage.h" "$(srcdir)\..\..\..\..\storage\bat\bat_utils.h" "$(srcdir)\..\..\sql_cast.h" "$(srcdir)\..\..\sql.h" "$(srcdir)\..\..\sql_execute.h" "$(srcdir)\..\..\sql_scenario.h" "$(srcdir)\netcdf_vault.h"
+	$(CC) /EHsc $(CFLAGS) $(netcdf_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBNETCDF "-Fonetcdf.obj" -c "$(srcdir)\netcdf.c"
+all-msc: "lib_netcdf.dll" "74_netcdf.sql" "74_netcdf.mal" "netcdf.mal"
+check-msc: all-msc "lib_netcdf.dll" "netcdf.mal" "74_netcdf.sql" "74_netcdf.mal"
+install-msc: install-exec install-data
+install-exec:  "install_lib_netcdf" "install_netcdf.mal" "install_74_netcdf.sql" "install_74_netcdf.mal" 
+install_lib_netcdf: "lib_netcdf.dll" "$(libdir)\monetdb5"
+	$(INSTALL) "lib_netcdf.dll" "$(libdir)\monetdb5\lib_netcdf.dll"
+	$(INSTALL) "lib_netcdf.lib" "$(libdir)\monetdb5\lib_netcdf.lib"
+	$(INSTALL) "lib_netcdf.pdb" "$(libdir)\monetdb5\lib_netcdf.pdb"
+install_netcdf.mal: "netcdf.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "netcdf.mal" "$(libdir)\monetdb5\netcdf.mal"
+install_74_netcdf.sql: "74_netcdf.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "74_netcdf.sql" "$(libdir)\monetdb5\createdb\74_netcdf.sql"
+install_74_netcdf.mal: "74_netcdf.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "74_netcdf.mal" "$(libdir)\monetdb5\autoload\74_netcdf.mal"
+"$(libdir)\monetdb5":
+	if not exist "$(libdir)\monetdb5" $(MKDIR) "$(libdir)\monetdb5"
+"$(libdir)\monetdb5\createdb":
+	if not exist "$(libdir)\monetdb5\createdb" $(MKDIR) "$(libdir)\monetdb5\createdb"
+"$(libdir)\monetdb5\autoload":
+	if not exist "$(libdir)\monetdb5\autoload" $(MKDIR) "$(libdir)\monetdb5\autoload"
+install-data:

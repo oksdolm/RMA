@@ -1,0 +1,317 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\monetdb5\modules\mal
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I..\..\mal" -I$(srcdir)\..\..\mal "-I..\atoms" -I$(srcdir)\..\atoms "-I..\kernel" -I$(srcdir)\..\kernel "-I..\..\..\clients\mapilib" -I$(srcdir)\..\..\..\clients\mapilib "-I..\..\..\common\options" -I$(srcdir)\..\..\..\common\options "-I..\..\..\common\stream" -I$(srcdir)\..\..\..\common\stream "-I..\..\..\common\utils" -I$(srcdir)\..\..\..\common\utils "-I..\..\..\gdk" -I$(srcdir)\..\..\..\gdk $(pcre_CFLAGS) $(zlib_CFLAGS) $(BZIP_INCS) $(MSGCONTROL_FLAGS) $(openssl_CFLAGS)
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+EXTRA_DIST_DIR =  Tests
+00_batcalc_hge.mal: "$(srcdir)\00_batcalc_hge.mal"
+	$(INSTALL) "$(srcdir)\00_batcalc_hge.mal" "00_batcalc_hge.mal"
+!IF defined(HAVE_HGE)
+C_00_batcalc_hge_mal = 00_batcalc_hge.mal
+!ELSE
+C_00_batcalc_hge_mal =
+!ENDIF
+00_calc_hge.mal: "$(srcdir)\00_calc_hge.mal"
+	$(INSTALL) "$(srcdir)\00_calc_hge.mal" "00_calc_hge.mal"
+!IF defined(HAVE_HGE)
+C_00_calc_hge_mal = 00_calc_hge.mal
+!ELSE
+C_00_calc_hge_mal =
+!ENDIF
+00_mkey_hge.mal: "$(srcdir)\00_mkey_hge.mal"
+	$(INSTALL) "$(srcdir)\00_mkey_hge.mal" "00_mkey_hge.mal"
+!IF defined(HAVE_HGE)
+C_00_mkey_hge_mal = 00_mkey_hge.mal
+!ELSE
+C_00_mkey_hge_mal =
+!ENDIF
+00_mal_mapi_hge.mal: "$(srcdir)\00_mal_mapi_hge.mal"
+	$(INSTALL) "$(srcdir)\00_mal_mapi_hge.mal" "00_mal_mapi_hge.mal"
+!IF defined(HAVE_HGE)
+C_00_mal_mapi_hge_mal = 00_mal_mapi_hge.mal
+!ELSE
+C_00_mal_mapi_hge_mal =
+!ENDIF
+00_iterator_hge.mal: "$(srcdir)\00_iterator_hge.mal"
+	$(INSTALL) "$(srcdir)\00_iterator_hge.mal" "00_iterator_hge.mal"
+!IF defined(HAVE_HGE)
+C_00_iterator_hge_mal = 00_iterator_hge.mal
+!ELSE
+C_00_iterator_hge_mal =
+!ENDIF
+00_language_hge.mal: "$(srcdir)\00_language_hge.mal"
+	$(INSTALL) "$(srcdir)\00_language_hge.mal" "00_language_hge.mal"
+!IF defined(HAVE_HGE)
+C_00_language_hge_mal = 00_language_hge.mal
+!ELSE
+C_00_language_hge_mal =
+!ENDIF
+00_batExtensions_hge.mal: "$(srcdir)\00_batExtensions_hge.mal"
+	$(INSTALL) "$(srcdir)\00_batExtensions_hge.mal" "00_batExtensions_hge.mal"
+!IF defined(HAVE_HGE)
+C_00_batExtensions_hge_mal = 00_batExtensions_hge.mal
+!ELSE
+C_00_batExtensions_hge_mal =
+!ENDIF
+libmal_OBJS = batExtensions.obj bbp.obj clients.obj factories.obj groupby.obj inspect.obj orderidx.obj iterator.obj projectionpath.obj language.obj mal_io.obj mal_mapi.obj manual.obj mat.obj mdb.obj mkey.obj manifold.obj oltp.obj wlc.obj pcre.obj profiler.obj querylog.obj remote.obj sabaoth.obj sysmon.obj tablet.obj tokenizer.obj transaction.obj txtsim.obj sample.obj json_util.obj calc.obj batcalc.obj
+libmal_DEPS = $(libmal_OBJS)
+libmal.lib: $(libmal_DEPS)
+	$(ARCHIVER) /out:"libmal.lib" $(libmal_OBJS) $(libmal_LIBS)
+
+mkey.obj: "$(srcdir)\mkey.c" "$(srcdir)\mkey.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(mkey_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fomkey.obj" -c "$(srcdir)\mkey.c"
+querylog.obj: "$(srcdir)\querylog.c" "$(srcdir)\querylog.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\atoms\mtime.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(querylog_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Foquerylog.obj" -c "$(srcdir)\querylog.c"
+projectionpath.obj: "$(srcdir)\projectionpath.c" "$(srcdir)\projectionpath.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(projectionpath_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Foprojectionpath.obj" -c "$(srcdir)\projectionpath.c"
+mat.obj: "$(srcdir)\mat.c" "$(srcdir)\mat.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(mat_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fomat.obj" -c "$(srcdir)\mat.c"
+transaction.obj: "$(srcdir)\transaction.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\kernel\bat5.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(transaction_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fotransaction.obj" -c "$(srcdir)\transaction.c"
+sample.obj: "$(srcdir)\sample.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\sample.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(sample_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fosample.obj" -c "$(srcdir)\sample.c"
+bbp.obj: "$(srcdir)\bbp.c" "$(srcdir)\bbp.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\mal\mal_scenario.h" "$(srcdir)\..\..\mal\mal_import.h" "$(srcdir)\..\..\mal\mal_session.h" "$(srcdir)\..\kernel\bat5.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\mal\mal_utils.h"
+	$(CC) /EHsc $(CFLAGS) $(bbp_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fobbp.obj" -c "$(srcdir)\bbp.c"
+groupby.obj: "$(srcdir)\groupby.c" "$(srcdir)\groupby.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\kernel\group.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(groupby_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fogroupby.obj" -c "$(srcdir)\groupby.c"
+pcre.obj: "$(srcdir)\pcre.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\..\gdk\gdk_cand.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(pcre_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fopcre.obj" -c "$(srcdir)\pcre.c"
+batExtensions.obj: "$(srcdir)\batExtensions.c" "$(srcdir)\batExtensions.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\kernel\bat5.h" "$(srcdir)\..\kernel\algebra.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(batExtensions_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-FobatExtensions.obj" -c "$(srcdir)\batExtensions.c"
+profiler.obj: "$(srcdir)\profiler.c" "$(srcdir)\profiler.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\mal\mal_runtime.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(profiler_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Foprofiler.obj" -c "$(srcdir)\profiler.c"
+wlc.obj: "$(srcdir)\wlc.c" "$(srcdir)\..\..\mal\mal_builder.h" "$(srcdir)\wlc.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(wlc_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fowlc.obj" -c "$(srcdir)\wlc.c"
+oltp.obj: "$(srcdir)\oltp.c" "$(srcdir)\oltp.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\atoms\mtime.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(oltp_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fooltp.obj" -c "$(srcdir)\oltp.c"
+orderidx.obj: "$(srcdir)\orderidx.c" "$(srcdir)\orderidx.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_builder.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(orderidx_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Foorderidx.obj" -c "$(srcdir)\orderidx.c"
+mdb.obj: "$(srcdir)\mdb.c" "$(srcdir)\mdb.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\common\utils\mutils.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_linker.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_debugger.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\mal\mal_import.h" "$(srcdir)\..\..\mal\mal_scenario.h" "$(srcdir)\..\..\mal\mal_session.h" "$(srcdir)\..\..\mal\mal_utils.h"
+	$(CC) /EHsc $(CFLAGS) $(mdb_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fomdb.obj" -c "$(srcdir)\mdb.c"
+language.obj: "$(srcdir)\language.c" "$(srcdir)\language.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_scenario.h" "$(srcdir)\..\..\mal\mal_import.h" "$(srcdir)\..\..\mal\mal_session.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\mal\mal_dataflow.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\mal\mal_utils.h"
+	$(CC) /EHsc $(CFLAGS) $(language_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Folanguage.obj" -c "$(srcdir)\language.c"
+sabaoth.obj: "$(srcdir)\sabaoth.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_sabaoth.h" "$(srcdir)\sabaoth.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\..\common\utils\msabaoth.h"
+	$(CC) /EHsc $(CFLAGS) $(sabaoth_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fosabaoth.obj" -c "$(srcdir)\sabaoth.c"
+mal_io.obj: "$(srcdir)\mal_io.c" "$(srcdir)\mal_io.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(mal_io_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fomal_io.obj" -c "$(srcdir)\mal_io.c"
+tablet.obj: "$(srcdir)\tablet.c" "$(srcdir)\tablet.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\..\common\stream\stream_socket.h" "$(srcdir)\..\atoms\streams.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\kernel\algebra.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(tablet_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fotablet.obj" -c "$(srcdir)\tablet.c"
+calc.obj: "$(srcdir)\calc.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(calc_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Focalc.obj" -c "$(srcdir)\calc.c"
+mal_mapi.obj: "$(srcdir)\mal_mapi.c" "$(srcdir)\mal_mapi.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_scenario.h" "$(srcdir)\..\..\mal\mal_import.h" "$(srcdir)\..\..\mal\mal_session.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\mal\mal_authorize.h" "$(srcdir)\..\..\..\common\utils\msabaoth.h" "$(srcdir)\..\..\..\common\utils\mcrypt.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\common\stream\stream_socket.h" "$(srcdir)\..\atoms\streams.h" "$(srcdir)\..\..\..\clients\mapilib\mapi.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\mal\mal_utils.h"
+	$(CC) /EHsc $(CFLAGS) $(mal_mapi_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fomal_mapi.obj" -c "$(srcdir)\mal_mapi.c"
+manual.obj: "$(srcdir)\manual.c" "$(srcdir)\manual.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_debugger.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\mal\mal_import.h" "$(srcdir)\..\..\mal\mal_scenario.h" "$(srcdir)\..\..\mal\mal_session.h" "$(srcdir)\..\..\mal\mal_utils.h"
+	$(CC) /EHsc $(CFLAGS) $(manual_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fomanual.obj" -c "$(srcdir)\manual.c"
+clients.obj: "$(srcdir)\clients.c" "$(srcdir)\clients.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\common\utils\mcrypt.h" "$(srcdir)\..\..\mal\mal_import.h" "$(srcdir)\..\..\mal\mal_scenario.h" "$(srcdir)\..\..\mal\mal_authorize.h" "$(srcdir)\..\..\mal\mal_private.h" "$(srcdir)\..\atoms\mtime.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\mal\mal_session.h" "$(srcdir)\..\..\mal\mal_utils.h"
+	$(CC) /EHsc $(CFLAGS) $(clients_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Foclients.obj" -c "$(srcdir)\clients.c"
+txtsim.obj: "$(srcdir)\txtsim.c" "$(srcdir)\txtsim.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(txtsim_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fotxtsim.obj" -c "$(srcdir)\txtsim.c"
+sysmon.obj: "$(srcdir)\sysmon.c" "$(srcdir)\sysmon.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\mal\mal_authorize.h" "$(srcdir)\..\..\mal\mal_runtime.h" "$(srcdir)\..\atoms\mtime.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(sysmon_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fosysmon.obj" -c "$(srcdir)\sysmon.c"
+iterator.obj: "$(srcdir)\iterator.c" "$(srcdir)\iterator.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(iterator_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Foiterator.obj" -c "$(srcdir)\iterator.c"
+batcalc.obj: "$(srcdir)\batcalc.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(batcalc_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fobatcalc.obj" -c "$(srcdir)\batcalc.c"
+factories.obj: "$(srcdir)\factories.c" "$(srcdir)\factories.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(factories_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fofactories.obj" -c "$(srcdir)\factories.c"
+tokenizer.obj: "$(srcdir)\tokenizer.c" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\kernel\bat5.h" "$(srcdir)\tokenizer.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\mal\mal_linker.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(tokenizer_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fotokenizer.obj" -c "$(srcdir)\tokenizer.c"
+json_util.obj: "$(srcdir)\json_util.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\json_util.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\atoms\json.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(json_util_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fojson_util.obj" -c "$(srcdir)\json_util.c"
+inspect.obj: "$(srcdir)\inspect.c" "$(srcdir)\inspect.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_debugger.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\mal\mal_import.h" "$(srcdir)\..\..\mal\mal_scenario.h" "$(srcdir)\..\..\mal\mal_session.h" "$(srcdir)\..\..\mal\mal_utils.h"
+	$(CC) /EHsc $(CFLAGS) $(inspect_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Foinspect.obj" -c "$(srcdir)\inspect.c"
+manifold.obj: "$(srcdir)\manifold.c" "$(srcdir)\manifold.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\mal\mal_builder.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(manifold_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Fomanifold.obj" -c "$(srcdir)\manifold.c"
+remote.obj: "$(srcdir)\remote.c" "$(srcdir)\remote.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\..\..\..\clients\mapilib\mapi.h" "$(srcdir)\..\..\..\common\utils\mutils.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(remote_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAL "-Foremote.obj" -c "$(srcdir)\remote.c"
+pcre.mal: "$(srcdir)\pcre.mal"
+	$(INSTALL) "$(srcdir)\pcre.mal" "pcre.mal"
+manifold.mal: "$(srcdir)\manifold.mal"
+	$(INSTALL) "$(srcdir)\manifold.mal" "manifold.mal"
+sysmon.mal: "$(srcdir)\sysmon.mal"
+	$(INSTALL) "$(srcdir)\sysmon.mal" "sysmon.mal"
+json_util.mal: "$(srcdir)\json_util.mal"
+	$(INSTALL) "$(srcdir)\json_util.mal" "json_util.mal"
+groupby.mal: "$(srcdir)\groupby.mal"
+	$(INSTALL) "$(srcdir)\groupby.mal" "groupby.mal"
+mal_init.mal: "$(srcdir)\mal_init.mal"
+	$(INSTALL) "$(srcdir)\mal_init.mal" "mal_init.mal"
+remote.mal: "$(srcdir)\remote.mal"
+	$(INSTALL) "$(srcdir)\remote.mal" "remote.mal"
+mal_mapi.mal: "$(srcdir)\mal_mapi.mal"
+	$(INSTALL) "$(srcdir)\mal_mapi.mal" "mal_mapi.mal"
+tokenizer.mal: "$(srcdir)\tokenizer.mal"
+	$(INSTALL) "$(srcdir)\tokenizer.mal" "tokenizer.mal"
+bbp.mal: "$(srcdir)\bbp.mal"
+	$(INSTALL) "$(srcdir)\bbp.mal" "bbp.mal"
+oltp.mal: "$(srcdir)\oltp.mal"
+	$(INSTALL) "$(srcdir)\oltp.mal" "oltp.mal"
+wlc.mal: "$(srcdir)\wlc.mal"
+	$(INSTALL) "$(srcdir)\wlc.mal" "wlc.mal"
+sabaoth.mal: "$(srcdir)\sabaoth.mal"
+	$(INSTALL) "$(srcdir)\sabaoth.mal" "sabaoth.mal"
+batExtensions.mal: "$(srcdir)\batExtensions.mal"
+	$(INSTALL) "$(srcdir)\batExtensions.mal" "batExtensions.mal"
+manual.mal: "$(srcdir)\manual.mal"
+	$(INSTALL) "$(srcdir)\manual.mal" "manual.mal"
+language.mal: "$(srcdir)\language.mal"
+	$(INSTALL) "$(srcdir)\language.mal" "language.mal"
+mdb.mal: "$(srcdir)\mdb.mal"
+	$(INSTALL) "$(srcdir)\mdb.mal" "mdb.mal"
+factories.mal: "$(srcdir)\factories.mal"
+	$(INSTALL) "$(srcdir)\factories.mal" "factories.mal"
+inspect.mal: "$(srcdir)\inspect.mal"
+	$(INSTALL) "$(srcdir)\inspect.mal" "inspect.mal"
+mat.mal: "$(srcdir)\mat.mal"
+	$(INSTALL) "$(srcdir)\mat.mal" "mat.mal"
+profiler.mal: "$(srcdir)\profiler.mal"
+	$(INSTALL) "$(srcdir)\profiler.mal" "profiler.mal"
+iterator.mal: "$(srcdir)\iterator.mal"
+	$(INSTALL) "$(srcdir)\iterator.mal" "iterator.mal"
+transaction.mal: "$(srcdir)\transaction.mal"
+	$(INSTALL) "$(srcdir)\transaction.mal" "transaction.mal"
+sample.mal: "$(srcdir)\sample.mal"
+	$(INSTALL) "$(srcdir)\sample.mal" "sample.mal"
+orderidx.mal: "$(srcdir)\orderidx.mal"
+	$(INSTALL) "$(srcdir)\orderidx.mal" "orderidx.mal"
+querylog.mal: "$(srcdir)\querylog.mal"
+	$(INSTALL) "$(srcdir)\querylog.mal" "querylog.mal"
+txtsim.mal: "$(srcdir)\txtsim.mal"
+	$(INSTALL) "$(srcdir)\txtsim.mal" "txtsim.mal"
+clients.mal: "$(srcdir)\clients.mal"
+	$(INSTALL) "$(srcdir)\clients.mal" "clients.mal"
+batmtime.mal: "$(srcdir)\batmtime.mal"
+	$(INSTALL) "$(srcdir)\batmtime.mal" "batmtime.mal"
+mkey.mal: "$(srcdir)\mkey.mal"
+	$(INSTALL) "$(srcdir)\mkey.mal" "mkey.mal"
+mal_io.mal: "$(srcdir)\mal_io.mal"
+	$(INSTALL) "$(srcdir)\mal_io.mal" "mal_io.mal"
+01_batcalc.mal: "$(srcdir)\01_batcalc.mal"
+	$(INSTALL) "$(srcdir)\01_batcalc.mal" "01_batcalc.mal"
+01_calc.mal: "$(srcdir)\01_calc.mal"
+	$(INSTALL) "$(srcdir)\01_calc.mal" "01_calc.mal"
+all-msc: "libmal.lib" "00_batcalc_hge.mal" "00_calc_hge.mal" "00_mkey_hge.mal" "00_mal_mapi_hge.mal" "00_iterator_hge.mal" "00_language_hge.mal" "00_batExtensions_hge.mal" "pcre.mal" "manifold.mal" "sysmon.mal" "json_util.mal" "groupby.mal" "mal_init.mal" "remote.mal" "mal_mapi.mal" "tokenizer.mal" "bbp.mal" "oltp.mal" "wlc.mal" "sabaoth.mal" "batExtensions.mal" "manual.mal" "language.mal" "mdb.mal" "factories.mal" "inspect.mal" "mat.mal" "profiler.mal" "iterator.mal" "transaction.mal" "sample.mal" "orderidx.mal" "querylog.mal" "txtsim.mal" "clients.mal" "batmtime.mal" "mkey.mal" "mal_io.mal" "01_batcalc.mal" "01_calc.mal"
+check-msc: all-msc "pcre.mal" "00_mkey_hge.mal" "manifold.mal" "sysmon.mal" "json_util.mal" "00_mal_mapi_hge.mal" "groupby.mal" "00_language_hge.mal" "mal_init.mal" "remote.mal" "mal_mapi.mal" "language.mal" "00_calc_hge.mal" "01_batcalc.mal" "bbp.mal" "oltp.mal" "wlc.mal" "sabaoth.mal" "batExtensions.mal" "manual.mal" "00_iterator_hge.mal" "tokenizer.mal" "mdb.mal" "mal_io.mal" "factories.mal" "inspect.mal" "mat.mal" "profiler.mal" "00_batcalc_hge.mal" "iterator.mal" "transaction.mal" "sample.mal" "orderidx.mal" "querylog.mal" "txtsim.mal" "clients.mal" "batmtime.mal" "mkey.mal" "00_batExtensions_hge.mal" "01_calc.mal"
+install-msc: install-exec install-data
+install-exec:  "install_pcre.mal" "install_00_mkey_hge.mal" "install_manifold.mal" "install_sysmon.mal" "install_json_util.mal" "install_00_mal_mapi_hge.mal" "install_groupby.mal" "install_00_language_hge.mal" "install_mal_init.mal" "install_remote.mal" "install_mal_mapi.mal" "install_language.mal" "install_00_calc_hge.mal" "install_01_batcalc.mal" "install_bbp.mal" "install_oltp.mal" "install_wlc.mal" "install_sabaoth.mal" "install_batExtensions.mal" "install_manual.mal" "install_00_iterator_hge.mal" "install_tokenizer.mal" "install_mdb.mal" "install_mal_io.mal" "install_factories.mal" "install_inspect.mal" "install_mat.mal" "install_profiler.mal" "install_00_batcalc_hge.mal" "install_iterator.mal" "install_transaction.mal" "install_sample.mal" "install_orderidx.mal" "install_querylog.mal" "install_txtsim.mal" "install_clients.mal" "install_batmtime.mal" "install_mkey.mal" "install_00_batExtensions_hge.mal" "install_01_calc.mal" 
+install_pcre.mal: "pcre.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "pcre.mal" "$(libdir)\monetdb5\pcre.mal"
+!IF defined(HAVE_HGE)
+install_00_mkey_hge.mal: "00_mkey_hge.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "00_mkey_hge.mal" "$(libdir)\monetdb5\autoload\00_mkey_hge.mal"
+!ELSE
+install_00_mkey_hge.mal:
+!ENDIF
+install_manifold.mal: "manifold.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "manifold.mal" "$(libdir)\monetdb5\manifold.mal"
+install_sysmon.mal: "sysmon.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "sysmon.mal" "$(libdir)\monetdb5\sysmon.mal"
+install_json_util.mal: "json_util.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "json_util.mal" "$(libdir)\monetdb5\json_util.mal"
+!IF defined(HAVE_HGE)
+install_00_mal_mapi_hge.mal: "00_mal_mapi_hge.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "00_mal_mapi_hge.mal" "$(libdir)\monetdb5\autoload\00_mal_mapi_hge.mal"
+!ELSE
+install_00_mal_mapi_hge.mal:
+!ENDIF
+install_groupby.mal: "groupby.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "groupby.mal" "$(libdir)\monetdb5\groupby.mal"
+!IF defined(HAVE_HGE)
+install_00_language_hge.mal: "00_language_hge.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "00_language_hge.mal" "$(libdir)\monetdb5\autoload\00_language_hge.mal"
+!ELSE
+install_00_language_hge.mal:
+!ENDIF
+install_mal_init.mal: "mal_init.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "mal_init.mal" "$(libdir)\monetdb5\mal_init.mal"
+install_remote.mal: "remote.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "remote.mal" "$(libdir)\monetdb5\remote.mal"
+install_mal_mapi.mal: "mal_mapi.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "mal_mapi.mal" "$(libdir)\monetdb5\mal_mapi.mal"
+install_language.mal: "language.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "language.mal" "$(libdir)\monetdb5\language.mal"
+!IF defined(HAVE_HGE)
+install_00_calc_hge.mal: "00_calc_hge.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "00_calc_hge.mal" "$(libdir)\monetdb5\autoload\00_calc_hge.mal"
+!ELSE
+install_00_calc_hge.mal:
+!ENDIF
+install_01_batcalc.mal: "01_batcalc.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "01_batcalc.mal" "$(libdir)\monetdb5\autoload\01_batcalc.mal"
+install_bbp.mal: "bbp.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "bbp.mal" "$(libdir)\monetdb5\bbp.mal"
+install_oltp.mal: "oltp.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "oltp.mal" "$(libdir)\monetdb5\oltp.mal"
+install_wlc.mal: "wlc.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "wlc.mal" "$(libdir)\monetdb5\wlc.mal"
+install_sabaoth.mal: "sabaoth.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "sabaoth.mal" "$(libdir)\monetdb5\sabaoth.mal"
+install_batExtensions.mal: "batExtensions.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "batExtensions.mal" "$(libdir)\monetdb5\batExtensions.mal"
+install_manual.mal: "manual.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "manual.mal" "$(libdir)\monetdb5\manual.mal"
+!IF defined(HAVE_HGE)
+install_00_iterator_hge.mal: "00_iterator_hge.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "00_iterator_hge.mal" "$(libdir)\monetdb5\autoload\00_iterator_hge.mal"
+!ELSE
+install_00_iterator_hge.mal:
+!ENDIF
+install_tokenizer.mal: "tokenizer.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "tokenizer.mal" "$(libdir)\monetdb5\tokenizer.mal"
+install_mdb.mal: "mdb.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "mdb.mal" "$(libdir)\monetdb5\mdb.mal"
+install_mal_io.mal: "mal_io.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "mal_io.mal" "$(libdir)\monetdb5\mal_io.mal"
+install_factories.mal: "factories.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "factories.mal" "$(libdir)\monetdb5\factories.mal"
+install_inspect.mal: "inspect.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "inspect.mal" "$(libdir)\monetdb5\inspect.mal"
+install_mat.mal: "mat.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "mat.mal" "$(libdir)\monetdb5\mat.mal"
+install_profiler.mal: "profiler.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "profiler.mal" "$(libdir)\monetdb5\profiler.mal"
+!IF defined(HAVE_HGE)
+install_00_batcalc_hge.mal: "00_batcalc_hge.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "00_batcalc_hge.mal" "$(libdir)\monetdb5\autoload\00_batcalc_hge.mal"
+!ELSE
+install_00_batcalc_hge.mal:
+!ENDIF
+install_iterator.mal: "iterator.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "iterator.mal" "$(libdir)\monetdb5\iterator.mal"
+install_transaction.mal: "transaction.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "transaction.mal" "$(libdir)\monetdb5\transaction.mal"
+install_sample.mal: "sample.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "sample.mal" "$(libdir)\monetdb5\sample.mal"
+install_orderidx.mal: "orderidx.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "orderidx.mal" "$(libdir)\monetdb5\orderidx.mal"
+install_querylog.mal: "querylog.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "querylog.mal" "$(libdir)\monetdb5\querylog.mal"
+install_txtsim.mal: "txtsim.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "txtsim.mal" "$(libdir)\monetdb5\txtsim.mal"
+install_clients.mal: "clients.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "clients.mal" "$(libdir)\monetdb5\clients.mal"
+install_batmtime.mal: "batmtime.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "batmtime.mal" "$(libdir)\monetdb5\batmtime.mal"
+install_mkey.mal: "mkey.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "mkey.mal" "$(libdir)\monetdb5\mkey.mal"
+!IF defined(HAVE_HGE)
+install_00_batExtensions_hge.mal: "00_batExtensions_hge.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "00_batExtensions_hge.mal" "$(libdir)\monetdb5\autoload\00_batExtensions_hge.mal"
+!ELSE
+install_00_batExtensions_hge.mal:
+!ENDIF
+install_01_calc.mal: "01_calc.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "01_calc.mal" "$(libdir)\monetdb5\autoload\01_calc.mal"
+"$(libdir)\monetdb5":
+	if not exist "$(libdir)\monetdb5" $(MKDIR) "$(libdir)\monetdb5"
+"$(libdir)\monetdb5\autoload":
+	if not exist "$(libdir)\monetdb5\autoload" $(MKDIR) "$(libdir)\monetdb5\autoload"
+install-data:

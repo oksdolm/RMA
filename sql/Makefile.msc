@@ -1,0 +1,108 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..
+srcdir = $(TOPDIR)\..\sql
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+include-1-all: "include-1-dir" "include-1-Makefile"
+	$(CD) "include" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+include-1-dir: 
+	if not exist "include" $(MKDIR) "include"
+include-1-Makefile: "$(srcdir)\include\Makefile.msc"
+	$(INSTALL) "$(srcdir)\include\Makefile.msc" "include\Makefile"
+include-1-check:
+	$(CD) "include" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+include-1-install:
+	$(CD) "include" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+common-2-all: "common-2-dir" "common-2-Makefile"
+	$(CD) "common" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+common-2-dir: 
+	if not exist "common" $(MKDIR) "common"
+common-2-Makefile: "$(srcdir)\common\Makefile.msc"
+	$(INSTALL) "$(srcdir)\common\Makefile.msc" "common\Makefile"
+common-2-check:
+	$(CD) "common" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+common-2-install:
+	$(CD) "common" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+storage-3-all: "storage-3-dir" "storage-3-Makefile"
+	$(CD) "storage" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+storage-3-dir: 
+	if not exist "storage" $(MKDIR) "storage"
+storage-3-Makefile: "$(srcdir)\storage\Makefile.msc"
+	$(INSTALL) "$(srcdir)\storage\Makefile.msc" "storage\Makefile"
+storage-3-check:
+	$(CD) "storage" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+storage-3-install:
+	$(CD) "storage" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+server-4-all: "server-4-dir" "server-4-Makefile"
+	$(CD) "server" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+server-4-dir: 
+	if not exist "server" $(MKDIR) "server"
+server-4-Makefile: "$(srcdir)\server\Makefile.msc"
+	$(INSTALL) "$(srcdir)\server\Makefile.msc" "server\Makefile"
+server-4-check:
+	$(CD) "server" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+server-4-install:
+	$(CD) "server" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+backends-5-all: "backends-5-dir" "backends-5-Makefile"
+	$(CD) "backends" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+backends-5-dir: 
+	if not exist "backends" $(MKDIR) "backends"
+backends-5-Makefile: "$(srcdir)\backends\Makefile.msc"
+	$(INSTALL) "$(srcdir)\backends\Makefile.msc" "backends\Makefile"
+backends-5-check:
+	$(CD) "backends" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+backends-5-install:
+	$(CD) "backends" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+scripts-6-all: "scripts-6-dir" "scripts-6-Makefile"
+	$(CD) "scripts" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+scripts-6-dir: 
+	if not exist "scripts" $(MKDIR) "scripts"
+scripts-6-Makefile: "$(srcdir)\scripts\Makefile.msc"
+	$(INSTALL) "$(srcdir)\scripts\Makefile.msc" "scripts\Makefile"
+scripts-6-check:
+	$(CD) "scripts" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+scripts-6-install:
+	$(CD) "scripts" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!IFDEF NATIVE_WIN32
+NATIVE_WIN32-7-all: "NATIVE_WIN32-7-dir" "NATIVE_WIN32-7-Makefile"
+	$(CD) "NT" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+NATIVE_WIN32-7-dir: 
+	if not exist "NT" $(MKDIR) "NT"
+NATIVE_WIN32-7-Makefile: "$(srcdir)\NT\Makefile.msc"
+	$(INSTALL) "$(srcdir)\NT\Makefile.msc" "NT\Makefile"
+NATIVE_WIN32-7-check:
+	$(CD) "NT" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+NATIVE_WIN32-7-install:
+	$(CD) "NT" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+NATIVE_WIN32-7-all:
+NATIVE_WIN32-7-check:
+NATIVE_WIN32-7-install:
+!ENDIF
+all-recursive: "include-1-all" "common-2-all" "storage-3-all" "server-4-all" "backends-5-all" "scripts-6-all" "NATIVE_WIN32-7-all" 
+check-recursive: "include-1-check" "common-2-check" "storage-3-check" "server-4-check" "backends-5-check" "scripts-6-check" "NATIVE_WIN32-7-check" 
+install-recursive: "include-1-install" "common-2-install" "storage-3-install" "server-4-install" "backends-5-install" "scripts-6-install" "NATIVE_WIN32-7-install" 
+EXTRA_DIST_DIR =  test benchmarks odbc\samples\Tests jdbc\tests
+INCLUDES = -I$(srcdir)
+dump-restore.html: "$(srcdir)\dump-restore.html"
+	$(INSTALL) "$(srcdir)\dump-restore.html" "dump-restore.html"
+dump-restore.txt: "$(srcdir)\dump-restore.txt"
+	$(INSTALL) "$(srcdir)\dump-restore.txt" "dump-restore.txt"
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc: "dump-restore.html" "dump-restore.txt"
+check-msc: all-msc "dump-restore.txt" "dump-restore.html"
+install-msc: install-exec install-data
+install-exec:  "install_dump-restore.txt" "install_dump-restore.html" 
+install_dump-restore.txt: "dump-restore.txt" "$(datadir)\doc\MonetDB-SQL"
+	$(INSTALL) "dump-restore.txt" "$(datadir)\doc\MonetDB-SQL\dump-restore.txt"
+install_dump-restore.html: "dump-restore.html" "$(datadir)\doc\MonetDB-SQL"
+	$(INSTALL) "dump-restore.html" "$(datadir)\doc\MonetDB-SQL\dump-restore.html"
+"$(datadir)\doc\MonetDB-SQL":
+	if not exist "$(datadir)\doc\MonetDB-SQL" $(MKDIR) "$(datadir)\doc\MonetDB-SQL"
+install-data:

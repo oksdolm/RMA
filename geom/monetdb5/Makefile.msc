@@ -1,0 +1,53 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\geom\monetdb5
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I..\lib" -I$(srcdir)\..\lib "-I..\..\gdk" -I$(srcdir)\..\..\gdk "-I..\..\common\stream" -I$(srcdir)\..\..\common\stream "-I..\..\common\options" -I$(srcdir)\..\..\common\options "-I..\..\monetdb5\mal" -I$(srcdir)\..\..\monetdb5\mal $(GEOS_INCS) $(PROJ_INCS)
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+30_geom.mal: "$(srcdir)\30_geom.mal"
+	$(INSTALL) "$(srcdir)\30_geom.mal" "30_geom.mal"
+geom.mal: "$(srcdir)\geom.mal"
+	$(INSTALL) "$(srcdir)\geom.mal" "geom.mal"
+lib_geom.dll:  ..\lib\libgeom.lib ..\..\gdk\libbat.lib ..\..\common\stream\libstream.lib ..\..\monetdb5\tools\libmonetdb5.lib
+lib_geom_LIBS = ..\lib\libgeom.lib ..\..\gdk\libbat.lib ..\..\common\stream\libstream.lib ..\..\monetdb5\tools\libmonetdb5.lib $(GEOS_LIBS) $(PROJ_LIBS)
+lib_geom_OBJS = geom.obj geomBulk.obj geom_upgrade.obj
+lib_geom_DEPS = $(lib_geom_OBJS)
+lib_geom.lib: lib_geom.dll
+lib_geom.dll: $(lib_geom_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -Felib_geom.dll @<< /link @<<
+$(lib_geom_OBJS)
+<<
+$(lib_geom_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+geomBulk.obj: "$(srcdir)\geomBulk.c" "$(srcdir)\geom.h" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\common\options\monet_options.h" "$(srcdir)\..\..\gdk\gdk_calc.h" "$(srcdir)\..\lib\libgeom.h" "$(srcdir)\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\monetdb5\mal\mal_atom.h" "$(srcdir)\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\monetdb5\mal\mal_resolve.h" "$(srcdir)\..\..\monetdb5\mal\mal_function.h" "$(srcdir)\..\..\monetdb5\mal\mal_module.h" "$(srcdir)\..\..\monetdb5\mal\mal_listing.h" "$(srcdir)\..\..\monetdb5\mal\mal_profiler.h" "$(srcdir)\..\..\monetdb5\mal\mal_client.h" "$(srcdir)\..\..\gdk\gdk_logger.h"
+	$(CC) /EHsc $(CFLAGS) $(geomBulk_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGEOM "-FogeomBulk.obj" -c "$(srcdir)\geomBulk.c"
+geom.obj: "$(srcdir)\geom.c" "$(srcdir)\geom.h" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\common\options\monet_options.h" "$(srcdir)\..\..\gdk\gdk_calc.h" "$(srcdir)\..\lib\libgeom.h" "$(srcdir)\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\monetdb5\mal\mal_atom.h" "$(srcdir)\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\monetdb5\mal\mal_resolve.h" "$(srcdir)\..\..\monetdb5\mal\mal_function.h" "$(srcdir)\..\..\monetdb5\mal\mal_module.h" "$(srcdir)\..\..\monetdb5\mal\mal_listing.h" "$(srcdir)\..\..\monetdb5\mal\mal_profiler.h" "$(srcdir)\..\..\monetdb5\mal\mal_client.h" "$(srcdir)\..\..\gdk\gdk_logger.h"
+	$(CC) /EHsc $(CFLAGS) $(geom_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGEOM "-Fogeom.obj" -c "$(srcdir)\geom.c"
+geom_upgrade.obj: "$(srcdir)\geom_upgrade.c" "$(srcdir)\geom.h" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\common\options\monet_options.h" "$(srcdir)\..\..\gdk\gdk_calc.h" "$(srcdir)\..\lib\libgeom.h" "$(srcdir)\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\monetdb5\mal\mal_atom.h" "$(srcdir)\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\monetdb5\mal\mal_resolve.h" "$(srcdir)\..\..\monetdb5\mal\mal_function.h" "$(srcdir)\..\..\monetdb5\mal\mal_module.h" "$(srcdir)\..\..\monetdb5\mal\mal_listing.h" "$(srcdir)\..\..\monetdb5\mal\mal_profiler.h" "$(srcdir)\..\..\monetdb5\mal\mal_client.h" "$(srcdir)\..\..\gdk\gdk_logger.h"
+	$(CC) /EHsc $(CFLAGS) $(geom_upgrade_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGEOM "-Fogeom_upgrade.obj" -c "$(srcdir)\geom_upgrade.c"
+all-msc: "lib_geom.dll" "30_geom.mal" "geom.mal"
+check-msc: all-msc "geom.mal" "lib_geom.dll" "30_geom.mal"
+install-msc: install-exec install-data
+install-exec:  "install_geom.mal" "install_lib_geom" "install_30_geom.mal" 
+install_geom.mal: "geom.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "geom.mal" "$(libdir)\monetdb5\geom.mal"
+install_lib_geom: "lib_geom.dll" "$(libdir)\monetdb5"
+	$(INSTALL) "lib_geom.dll" "$(libdir)\monetdb5\lib_geom.dll"
+	$(INSTALL) "lib_geom.lib" "$(libdir)\monetdb5\lib_geom.lib"
+	$(INSTALL) "lib_geom.pdb" "$(libdir)\monetdb5\lib_geom.pdb"
+install_30_geom.mal: "30_geom.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "30_geom.mal" "$(libdir)\monetdb5\autoload\30_geom.mal"
+"$(libdir)\monetdb5":
+	if not exist "$(libdir)\monetdb5" $(MKDIR) "$(libdir)\monetdb5"
+"$(libdir)\monetdb5\autoload":
+	if not exist "$(libdir)\monetdb5\autoload" $(MKDIR) "$(libdir)\monetdb5\autoload"
+install-data:

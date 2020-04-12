@@ -1,0 +1,51 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\monetdb5\modules
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+INCLUDES = -I$(srcdir)
+atoms-1-all: "atoms-1-dir" "atoms-1-Makefile"
+	$(CD) "atoms" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+atoms-1-dir: 
+	if not exist "atoms" $(MKDIR) "atoms"
+atoms-1-Makefile: "$(srcdir)\atoms\Makefile.msc"
+	$(INSTALL) "$(srcdir)\atoms\Makefile.msc" "atoms\Makefile"
+atoms-1-check:
+	$(CD) "atoms" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+atoms-1-install:
+	$(CD) "atoms" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+kernel-2-all: "kernel-2-dir" "kernel-2-Makefile"
+	$(CD) "kernel" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+kernel-2-dir: 
+	if not exist "kernel" $(MKDIR) "kernel"
+kernel-2-Makefile: "$(srcdir)\kernel\Makefile.msc"
+	$(INSTALL) "$(srcdir)\kernel\Makefile.msc" "kernel\Makefile"
+kernel-2-check:
+	$(CD) "kernel" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+kernel-2-install:
+	$(CD) "kernel" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+mal-3-all: "mal-3-dir" "mal-3-Makefile"
+	$(CD) "mal" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+mal-3-dir: 
+	if not exist "mal" $(MKDIR) "mal"
+mal-3-Makefile: "$(srcdir)\mal\Makefile.msc"
+	$(INSTALL) "$(srcdir)\mal\Makefile.msc" "mal\Makefile"
+mal-3-check:
+	$(CD) "mal" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+mal-3-install:
+	$(CD) "mal" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+all-recursive: "atoms-1-all" "kernel-2-all" "mal-3-all" 
+check-recursive: "atoms-1-check" "kernel-2-check" "mal-3-check" 
+install-recursive: "atoms-1-install" "kernel-2-install" "mal-3-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

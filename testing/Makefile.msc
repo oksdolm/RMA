@@ -1,0 +1,119 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..
+srcdir = $(TOPDIR)\..\testing
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+!IF defined(NATIVE_WIN32)
+Mapprove.py.bat: "Mtest.py.bat"
+	$(CP) "Mtest.py.bat" "Mapprove.py.bat"
+
+!ELSE
+Mapprove.py.bat:
+!ENDIF
+Mapprove.py: "Mtest.py"
+	$(CP) "Mtest.py" "Mapprove.py"
+
+INCLUDES = -I$(srcdir)
+Mtest.py: "$(TOPDIR)\winconfig_conds.py" "$(srcdir)\Mtest.py.in"
+	$(CONFIGURE) "$(srcdir)\Mtest.py.in" > "Mtest.py"
+exportutils.py: "$(srcdir)\exportutils.py"
+	$(INSTALL) "$(srcdir)\exportutils.py" "exportutils.py"
+listexports.py: "$(TOPDIR)\winconfig_conds.py" "$(srcdir)\listexports.py.in"
+	$(CONFIGURE) "$(srcdir)\listexports.py.in" > "listexports.py"
+monet_options.py: "$(TOPDIR)\winconfig_conds.py" "$(srcdir)\monet_options.py.in"
+	$(CONFIGURE) "$(srcdir)\monet_options.py.in" > "monet_options.py"
+__init__.py: "$(srcdir)\__init__.py"
+	$(INSTALL) "$(srcdir)\__init__.py" "__init__.py"
+Mfilter.py: "$(srcdir)\Mfilter.py"
+	$(INSTALL) "$(srcdir)\Mfilter.py" "Mfilter.py"
+malcheck.py: "$(srcdir)\malcheck.py"
+	$(INSTALL) "$(srcdir)\malcheck.py" "malcheck.py"
+process.py: "$(srcdir)\process.py"
+	$(INSTALL) "$(srcdir)\process.py" "process.py"
+Mlog.bat: "$(srcdir)\Mlog.bat"
+	$(INSTALL) "$(srcdir)\Mlog.bat" "Mlog.bat"
+!IF defined(NATIVE_WIN32)
+C_Mlog_bat = Mlog.bat
+!ELSE
+C_Mlog_bat =
+!ENDIF
+Mtest.py.bat: "$(srcdir)\Mtest.py.bat"
+	$(INSTALL) "$(srcdir)\Mtest.py.bat" "Mtest.py.bat"
+!IF defined(NATIVE_WIN32)
+C_Mtest_py_bat = Mtest.py.bat
+!ELSE
+C_Mtest_py_bat =
+!ENDIF
+Mdiffdir = $(bindir)
+Mdiff.exe: 
+Mdiff_LIBS = $(MALLOC_LIBS)
+Mdiff_OBJS = difflib.obj helpers.obj Mdiff.obj
+Mdiff.exe: $(Mdiff_OBJS)
+	$(CC) $(CFLAGS) -FeMdiff.exe $(Mdiff_OBJS) /link $(Mdiff_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	$(EDITBIN) $@ /HEAP:1048576,1048576 /LARGEADDRESSAWARE
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+helpers.obj: "$(srcdir)\helpers.c" "$(srcdir)\helpers.h"
+Mtimeout.obj: "$(srcdir)\Mtimeout.c"
+difflib.obj: "$(srcdir)\difflib.c" "$(srcdir)\helpers.h" "$(srcdir)\difflib.h"
+Mlog: "$(TOPDIR)\winconfig_conds.py" "$(srcdir)\Mlog.in"
+	$(CONFIGURE) "$(srcdir)\Mlog.in" > "Mlog"
+MkillUsers: "$(TOPDIR)\winconfig_conds.py" "$(srcdir)\MkillUsers.in"
+	$(CONFIGURE) "$(srcdir)\MkillUsers.in" > "MkillUsers"
+Mdiff.obj: "$(srcdir)\Mdiff.c" "$(srcdir)\difflib.h" "$(srcdir)\testing_getopt.c"
+BUILT_SOURCES =  listexports.py monet_options.py
+all-msc: "Mdiff.exe" "Mapprove.py.bat" "Mapprove.py" "Mtest.py" "exportutils.py" "listexports.py" "monet_options.py" "__init__.py" "Mfilter.py" "malcheck.py" "process.py" $(C_Mlog_bat) $(C_Mtest_py_bat)
+check-msc: all-msc "exportutils.py" "listexports.py" $(C_Mlog_bat) "monet_options.py" "__init__.py" "Mtest.py.bat" "Mtest.py" "Mtest.py" "malcheck.py" $(C_Mtest_py_bat) "process.py" "Mfilter.py"
+install-msc: install-exec install-data
+install-exec: "install_bin_Mdiff"  "install_exportutils.py" "install_listexports.py" "install_Mlog.bat" "install_monet_options.py" "install___init__.py" "install_Mapprove.py.bat" "install_Mapprove.py" "install_Mtest.py" "install_malcheck.py" "install_Mtest.py.bat" "install_process.py" "install_Mfilter.py" 
+install_bin_Mdiff: "Mdiff.exe"
+	if not exist "$(Mdiffdir)" $(MKDIR) "$(Mdiffdir)"
+	$(INSTALL) "Mdiff.exe" "$(Mdiffdir)"
+	$(INSTALL) Mdiff.pdb "$(Mdiffdir)"
+install_exportutils.py: "exportutils.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting"
+	$(INSTALL) "exportutils.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting\exportutils.py"
+install_listexports.py: "listexports.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting"
+	$(INSTALL) "listexports.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting\listexports.py"
+!IF defined(NATIVE_WIN32)
+install_Mlog.bat: "$(C_Mlog_bat)" "$(bindir)"
+	$(INSTALL) "$(C_Mlog_bat)" "$(bindir)\Mlog.bat"
+!ELSE
+install_Mlog.bat:
+!ENDIF
+install_monet_options.py: "monet_options.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting"
+	$(INSTALL) "monet_options.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting\monet_options.py"
+install___init__.py: "__init__.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting"
+	$(INSTALL) "__init__.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting\__init__.py"
+!IF defined(NATIVE_WIN32)
+install_Mapprove.py.bat: "Mtest.py.bat" "$(bindir)"
+	$(INSTALL) "Mtest.py.bat" "$(bindir)\Mapprove.py.bat"
+!ELSE
+install_Mapprove.py.bat:
+!ENDIF
+install_Mapprove.py: "Mtest.py" "$(bindir)"
+	$(INSTALL) "Mtest.py" "$(bindir)\Mapprove.py"
+install_Mtest.py: "Mtest.py" "$(bindir)"
+	$(INSTALL) "Mtest.py" "$(bindir)\Mtest.py"
+install_malcheck.py: "malcheck.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting"
+	$(INSTALL) "malcheck.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting\malcheck.py"
+!IF defined(NATIVE_WIN32)
+install_Mtest.py.bat: "$(C_Mtest_py_bat)" "$(bindir)"
+	$(INSTALL) "$(C_Mtest_py_bat)" "$(bindir)\Mtest.py.bat"
+!ELSE
+install_Mtest.py.bat:
+!ENDIF
+install_process.py: "process.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting"
+	$(INSTALL) "process.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting\process.py"
+install_Mfilter.py: "Mfilter.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting"
+	$(INSTALL) "Mfilter.py" "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting\Mfilter.py"
+"$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting":
+	if not exist "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting" $(MKDIR) "$(prefix)\$(PYTHON_LIBDIR)\MonetDBtesting"
+"$(bindir)":
+	if not exist "$(bindir)" $(MKDIR) "$(bindir)"
+install-data:

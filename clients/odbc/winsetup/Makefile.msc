@@ -1,0 +1,57 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\clients\odbc\winsetup
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+DEFS =  @DEFS@
+ODBCLIBS =  -lodbc32 -lodbccp32 -lversion -lshlwapi -luser32 $(LEGACY_STDIO_DEFINITIONS)
+INCLUDES = -I$(srcdir) "-I..\include" -I$(srcdir)\..\include "-I..\driver" -I$(srcdir)\..\driver "-I$(MONETDB_INCLUDEDIR)" $(ODBC_INCS)
+odbcinstalldir = $(bindir)
+odbcinstall.exe: 
+odbcinstall_LIBS = odbc32.lib odbccp32.lib version.lib shlwapi.lib user32.lib $(LEGACY_STDIO_DEFINITIONS)
+odbcinstall_OBJS = install.obj
+odbcinstall.exe: $(odbcinstall_OBJS)
+	$(CC) $(CFLAGS) -Feodbcinstall.exe $(odbcinstall_OBJS) /link $(odbcinstall_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	$(EDITBIN) $@ /HEAP:1048576,1048576 /LARGEADDRESSAWARE
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+install.obj: "$(srcdir)\install.c" "$(srcdir)\..\driver\ODBCGlobal.h"
+setup.def: "$(srcdir)\setup.syms"
+setup.res: "$(srcdir)\setup.rc"
+	$(RC) -fosetup.res $(srcdir)\setup.rc
+setup.obj: "$(srcdir)\setup.c" "$(srcdir)\resource.h"
+	$(CC) /EHsc $(CFLAGS) $(setup_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMONETODBCS "-Fosetup.obj" -c "$(srcdir)\setup.c"
+libMonetODBCs.dll: 
+libMonetODBCs_LIBS = odbccp32.lib user32.lib $(LEGACY_STDIO_DEFINITIONS)
+libMonetODBCs_OBJS = setup.obj setup.res
+libMonetODBCs_DEPS = $(libMonetODBCs_OBJS) setup.def
+libMonetODBCs.lib: libMonetODBCs.dll
+libMonetODBCs.dll: $(libMonetODBCs_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -FelibMonetODBCs.dll @<< /link @<<
+$(libMonetODBCs_OBJS)
+<<
+$(libMonetODBCs_LIBS) "-DEF:setup.def"
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+all-msc: "libMonetODBCs.dll" "odbcinstall.exe"
+check-msc: all-msc "libMonetODBCs.dll"
+install-msc: install-exec install-data
+install-exec: "install_bin_odbcinstall"  "install_libMonetODBCs" 
+install_bin_odbcinstall: "odbcinstall.exe"
+	if not exist "$(odbcinstalldir)" $(MKDIR) "$(odbcinstalldir)"
+	$(INSTALL) "odbcinstall.exe" "$(odbcinstalldir)"
+	$(INSTALL) odbcinstall.pdb "$(odbcinstalldir)"
+install_libMonetODBCs: "libMonetODBCs.dll" "$(libdir)"
+	$(INSTALL) "libMonetODBCs.dll" "$(libdir)\libMonetODBCs.dll"
+	$(INSTALL) "libMonetODBCs.lib" "$(libdir)\libMonetODBCs.lib"
+	$(INSTALL) "libMonetODBCs.pdb" "$(libdir)\libMonetODBCs.pdb"
+"$(libdir)":
+	if not exist "$(libdir)" $(MKDIR) "$(libdir)"
+install-data:

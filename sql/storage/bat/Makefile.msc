@@ -1,0 +1,32 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\sql\storage\bat
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I.." -I$(srcdir)\.. "-I..\..\include" -I$(srcdir)\..\..\include "-I..\..\common" -I$(srcdir)\..\..\common "-I..\..\..\common\options" -I$(srcdir)\..\..\..\common\options "-I..\..\..\common\stream" -I$(srcdir)\..\..\..\common\stream "-I..\..\..\gdk" -I$(srcdir)\..\..\..\gdk "-I..\..\..\monetdb5\modules\atoms" -I$(srcdir)\..\..\..\monetdb5\modules\atoms "-I..\..\..\monetdb5\modules\kernel" -I$(srcdir)\..\..\..\monetdb5\modules\kernel "-I..\..\..\monetdb5\mal" -I$(srcdir)\..\..\..\monetdb5\mal "-I..\..\..\monetdb5\modules\mal" -I$(srcdir)\..\..\..\monetdb5\modules\mal "-I..\..\..\monetdb5\optimizer" -I$(srcdir)\..\..\..\monetdb5\optimizer "-I..\..\..\monetdb5\scheduler" -I$(srcdir)\..\..\..\monetdb5\scheduler
+libbatstore_OBJS = bat_table.obj bat_storage.obj bat_logger.obj bat_utils.obj res_table.obj
+libbatstore_DEPS = $(libbatstore_OBJS)
+libbatstore.lib: $(libbatstore_DEPS)
+	$(ARCHIVER) /out:"libbatstore.lib" $(libbatstore_OBJS) $(libbatstore_LIBS)
+
+bat_logger.obj: "$(srcdir)\bat_logger.c" "$(srcdir)\bat_logger.h" "$(srcdir)\..\..\include\sql_catalog.h" "$(srcdir)\..\..\..\gdk\gdk_logger.h" "$(srcdir)\..\sql_storage.h" "$(srcdir)\bat_utils.h" "$(srcdir)\..\..\include\sql_mem.h" "$(srcdir)\..\..\include\sql_list.h" "$(srcdir)\..\..\common\sql_string.h" "$(srcdir)\..\..\storage\sql_storage.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\common\sql_types.h"
+	$(CC) /EHsc $(CFLAGS) $(bat_logger_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBBATSTORE "-Fobat_logger.obj" -c "$(srcdir)\bat_logger.c"
+bat_storage.obj: "$(srcdir)\bat_storage.c" "$(srcdir)\bat_storage.h" "$(srcdir)\..\..\include\sql_catalog.h" "$(srcdir)\..\..\..\gdk\gdk_logger.h" "$(srcdir)\..\sql_storage.h" "$(srcdir)\bat_logger.h" "$(srcdir)\bat_utils.h" "$(srcdir)\..\..\common\sql_string.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_interpreter.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_client.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_resolve.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_function.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_module.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_listing.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_profiler.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_factory.h" "$(srcdir)\..\..\..\monetdb5\modules\kernel\algebra.h"
+	$(CC) /EHsc $(CFLAGS) $(bat_storage_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBBATSTORE "-Fobat_storage.obj" -c "$(srcdir)\bat_storage.c"
+res_table.obj: "$(srcdir)\res_table.c" "$(srcdir)\res_table.h" "$(srcdir)\..\..\include\sql_catalog.h" "$(srcdir)\..\..\include\sql_mem.h" "$(srcdir)\..\..\include\sql_list.h" "$(srcdir)\..\..\common\sql_string.h" "$(srcdir)\..\..\storage\sql_storage.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\common\sql_types.h"
+	$(CC) /EHsc $(CFLAGS) $(res_table_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBBATSTORE "-Fores_table.obj" -c "$(srcdir)\res_table.c"
+bat_table.obj: "$(srcdir)\bat_table.c" "$(srcdir)\bat_table.h" "$(srcdir)\..\..\include\sql_catalog.h" "$(srcdir)\..\..\..\gdk\gdk_logger.h" "$(srcdir)\..\sql_storage.h" "$(srcdir)\bat_storage.h" "$(srcdir)\bat_logger.h" "$(srcdir)\bat_utils.h"
+	$(CC) /EHsc $(CFLAGS) $(bat_table_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBBATSTORE "-Fobat_table.obj" -c "$(srcdir)\bat_table.c"
+bat_utils.obj: "$(srcdir)\bat_utils.c" "$(srcdir)\bat_utils.h" "$(srcdir)\..\..\include\sql_catalog.h" "$(srcdir)\..\..\..\gdk\gdk_logger.h" "$(srcdir)\..\sql_storage.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\..\monetdb5\mal\mal.h"
+	$(CC) /EHsc $(CFLAGS) $(bat_utils_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBBATSTORE "-Fobat_utils.obj" -c "$(srcdir)\bat_utils.c"
+all-msc: "libbatstore.lib"
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

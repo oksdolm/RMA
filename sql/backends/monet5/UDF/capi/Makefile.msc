@@ -1,0 +1,50 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..\..\..
+srcdir = $(TOPDIR)\..\sql\backends\monet5\UDF\capi
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I..\..\..\..\..\clients\mapilib" -I$(srcdir)\..\..\..\..\..\clients\mapilib "-I..\..\..\..\..\common\options" -I$(srcdir)\..\..\..\..\..\common\options "-I..\..\..\..\..\common\stream" -I$(srcdir)\..\..\..\..\..\common\stream "-I..\..\..\..\..\monetdb5\modules\atoms" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms "-I..\..\..\..\..\monetdb5\modules\mal" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\mal "-I..\..\..\..\..\gdk" -I$(srcdir)\..\..\..\..\..\gdk "-I..\..\..\..\..\monetdb5\mal" -I$(srcdir)\..\..\..\..\..\monetdb5\mal "-I..\..\..\..\..\sql\backends\monet5" -I$(srcdir)\..\..\..\..\..\sql\backends\monet5 "-I..\..\..\..\..\sql\common" -I$(srcdir)\..\..\..\..\..\sql\common "-I..\..\..\..\..\sql\include" -I$(srcdir)\..\..\..\..\..\sql\include "-I..\..\..\..\..\sql\server" -I$(srcdir)\..\..\..\..\..\sql\server "-I..\..\..\..\..\sql\storage" -I$(srcdir)\..\..\..\..\..\sql\storage
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+EXTRA_DIST_DIR =  Tests
+capi.mal: "$(srcdir)\capi.mal"
+	$(INSTALL) "$(srcdir)\capi.mal" "capi.mal"
+50_capi.mal: "$(srcdir)\50_capi.mal"
+	$(INSTALL) "$(srcdir)\50_capi.mal" "50_capi.mal"
+lib_capi.dll:  ..\..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\..\gdk\libbat.lib
+lib_capi_LIBS = ..\..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\..\gdk\libbat.lib
+lib_capi_OBJS = capi.obj
+lib_capi_DEPS = $(lib_capi_OBJS)
+lib_capi.lib: lib_capi.dll
+lib_capi.dll: $(lib_capi_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -Felib_capi.dll @<< /link @<<
+$(lib_capi_OBJS)
+<<
+$(lib_capi_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+capi.obj: "$(srcdir)\capi.c" "$(srcdir)\capi.h" "$(srcdir)\..\..\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_linker.h" "$(srcdir)\..\..\..\..\..\sql\include\sql_catalog.h" "$(srcdir)\..\..\..\..\..\sql\backends\monet5\sql_scenario.h" "$(srcdir)\..\..\..\..\..\sql\backends\monet5\sql_cast.h" "$(srcdir)\..\..\..\..\..\sql\backends\monet5\sql_execute.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_logger.h" "$(srcdir)\..\..\..\..\..\sql\storage\sql_storage.h" "$(srcdir)\cheader.h" "cheader.text.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\mtime.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\blob.h"
+	$(CC) /EHsc $(CFLAGS) $(capi_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBCAPI "-Focapi.obj" -c "$(srcdir)\capi.c"
+all-msc: "lib_capi.dll" "capi.mal" "50_capi.mal"
+check-msc: all-msc "50_capi.mal" "capi.mal" "lib_capi.dll"
+install-msc: install-exec install-data
+install-exec:  "install_50_capi.mal" "install_capi.mal" "install_lib_capi" 
+install_50_capi.mal: "50_capi.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "50_capi.mal" "$(libdir)\monetdb5\autoload\50_capi.mal"
+install_capi.mal: "capi.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "capi.mal" "$(libdir)\monetdb5\capi.mal"
+install_lib_capi: "lib_capi.dll" "$(libdir)\monetdb5"
+	$(INSTALL) "lib_capi.dll" "$(libdir)\monetdb5\lib_capi.dll"
+	$(INSTALL) "lib_capi.lib" "$(libdir)\monetdb5\lib_capi.lib"
+	$(INSTALL) "lib_capi.pdb" "$(libdir)\monetdb5\lib_capi.pdb"
+"$(libdir)\monetdb5\autoload":
+	if not exist "$(libdir)\monetdb5\autoload" $(MKDIR) "$(libdir)\monetdb5\autoload"
+"$(libdir)\monetdb5":
+	if not exist "$(libdir)\monetdb5" $(MKDIR) "$(libdir)\monetdb5"
+install-data:

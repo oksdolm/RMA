@@ -1,0 +1,49 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\tools\merovingian\daemon
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+monetdb_var_dbfarmdir =  $(localstatedir)\monetdb5\dbfarm
+monetdb_var_rundir =  $(rundir)
+monetdb_etc_systemddir =  $(prefix)\lib\systemd\system
+monetdb_var_log_DATA = 
+INCLUDES = -I$(srcdir) "-I.." -I$(srcdir)\.. "-I..\..\..\common\stream" -I$(srcdir)\..\..\..\common\stream "-I..\..\..\common\utils" -I$(srcdir)\..\..\..\common\utils "-I..\..\..\common\options" -I$(srcdir)\..\..\..\common\options "-I..\..\..\clients\mapilib" -I$(srcdir)\..\..\..\clients\mapilib "-I..\..\..\gdk" -I$(srcdir)\..\..\..\gdk "-I..\..\..\monetdb5\mal" -I$(srcdir)\..\..\..\monetdb5\mal $(MSGCONTROL_FLAGS)
+monetdb_var_run_DATA = 
+monetdb_var_logdir =  $(logdir)
+monetdb_var_dbfarm_DATA =  .merovingian_properties
+man_MANS =  monetdbd.1
+monetdb_etc_systemd_DATA =  monetdbd.service
+monetdbddir = $(bindir)
+monetdbd.exe:  ..\utils\libmeroutil.lib ..\..\..\common\utils\libmcrypt.lib ..\..\..\common\utils\libmsabaoth.lib ..\..\..\common\utils\libmuuid.lib ..\..\..\common\utils\libmutils.lib ..\..\..\common\stream\libstream.lib ..\..\..\clients\mapilib\libmapi.lib ..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\gdk\libbat.lib
+monetdbd_LIBS = ..\utils\libmeroutil.lib ..\..\..\common\utils\libmcrypt.lib ..\..\..\common\utils\libmsabaoth.lib ..\..\..\common\utils\libmuuid.lib ..\..\..\common\utils\libmutils.lib ..\..\..\common\stream\libstream.lib ..\..\..\clients\mapilib\libmapi.lib ..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\gdk\libbat.lib $(UUID_LIBS) $(openssl_LIBS) $(SOCKET_LIBS) $(zlib_LIBS) $(BZ_LIBS) $(snappy_LIBS) $(lz4_LIBS) $(liblzma_LIBS) $(curl_LIBS) $(LTLIBICONV) $(MATH_LIBS) $(MALLOC_LIBS) $(PTHREAD_LIBS) $(DL_LIBS) $(PSAPILIB) $(KVM_LIBS) $(pcre_LIBS) $(libxml2_LIBS)
+monetdbd_OBJS = merovingian.obj argvcmds.obj client.obj connections.obj controlrunner.obj discoveryrunner.obj forkmserver.obj handlers.obj multiplex-funnel.obj proxy.obj
+monetdbd.exe: $(monetdbd_OBJS)
+	$(CC) $(CFLAGS) -Femonetdbd.exe $(monetdbd_OBJS) /link $(monetdbd_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	$(EDITBIN) $@ /HEAP:1048576,1048576 /LARGEADDRESSAWARE
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+multiplex-funnel.obj: "$(srcdir)\multiplex-funnel.c" "$(srcdir)\..\..\..\clients\mapilib\mapi.h" "$(srcdir)\..\..\..\common\utils\mutils.h" "$(srcdir)\merovingian.h" "$(srcdir)\discoveryrunner.h" "$(srcdir)\..\..\..\common\utils\msabaoth.h" "$(srcdir)\multiplex-funnel.h" "$(srcdir)\..\..\..\common\stream\stream.h"
+merovingian.obj: "$(srcdir)\merovingian.c" "$(srcdir)\..\..\..\common\utils\msabaoth.h" "$(srcdir)\..\..\..\common\utils\mutils.h" "$(srcdir)\..\..\..\common\utils\mcrypt.h" "$(srcdir)\merovingian.h" "$(srcdir)\client.h" "$(srcdir)\connections.h" "$(srcdir)\controlrunner.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\discoveryrunner.h" "$(srcdir)\handlers.h" "$(srcdir)\argvcmds.h" "$(srcdir)\multiplex-funnel.h" "$(srcdir)\..\..\..\clients\mapilib\mapi.h"
+discoveryrunner.obj: "$(srcdir)\discoveryrunner.c" "$(srcdir)\..\..\..\common\utils\msabaoth.h" "$(srcdir)\merovingian.h" "$(srcdir)\multiplex-funnel.h" "$(srcdir)\..\..\..\clients\mapilib\mapi.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\discoveryrunner.h"
+handlers.obj: "$(srcdir)\handlers.c" "$(srcdir)\merovingian.h" "$(srcdir)\handlers.h"
+proxy.obj: "$(srcdir)\proxy.c" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\common\stream\stream_socket.h" "$(srcdir)\merovingian.h" "$(srcdir)\proxy.h"
+client.obj: "$(srcdir)\client.c" "$(srcdir)\..\..\..\common\utils\msabaoth.h" "$(srcdir)\..\..\..\common\utils\mcrypt.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\common\stream\stream_socket.h" "$(srcdir)\merovingian.h" "$(srcdir)\forkmserver.h" "$(srcdir)\proxy.h" "$(srcdir)\multiplex-funnel.h" "$(srcdir)\..\..\..\clients\mapilib\mapi.h" "$(srcdir)\controlrunner.h" "$(srcdir)\client.h" "$(srcdir)\handlers.h"
+forkmserver.obj: "$(srcdir)\forkmserver.c" "$(srcdir)\..\..\..\common\utils\msabaoth.h" "$(srcdir)\..\..\..\common\utils\mutils.h" "$(srcdir)\merovingian.h" "$(srcdir)\discoveryrunner.h" "$(srcdir)\multiplex-funnel.h" "$(srcdir)\..\..\..\clients\mapilib\mapi.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\forkmserver.h"
+connections.obj: "$(srcdir)\connections.c" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\common\stream\stream_socket.h" "$(srcdir)\merovingian.h" "$(srcdir)\connections.h"
+argvcmds.obj: "$(srcdir)\argvcmds.c" "$(srcdir)\..\..\..\common\utils\mutils.h" "$(srcdir)\..\..\..\common\utils\mcrypt.h" "$(srcdir)\merovingian.h" "$(srcdir)\argvcmds.h"
+controlrunner.obj: "$(srcdir)\controlrunner.c" "$(srcdir)\..\..\..\common\utils\msabaoth.h" "$(srcdir)\..\..\..\common\utils\mcrypt.h" "$(srcdir)\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\monetdb5\mal\mal_authorize.h" "$(srcdir)\merovingian.h" "$(srcdir)\discoveryrunner.h" "$(srcdir)\forkmserver.h" "$(srcdir)\controlrunner.h" "$(srcdir)\multiplex-funnel.h" "$(srcdir)\..\..\..\clients\mapilib\mapi.h"
+all-msc: "monetdbd.exe"
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec: "install_bin_monetdbd"  
+install_bin_monetdbd: "monetdbd.exe"
+	if not exist "$(monetdbddir)" $(MKDIR) "$(monetdbddir)"
+	$(INSTALL) "monetdbd.exe" "$(monetdbddir)"
+	$(INSTALL) monetdbd.pdb "$(monetdbddir)"
+install-data:

@@ -1,0 +1,31 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\common\options
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir)
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+libmoptions_OBJS = monet_options.obj
+libmoptions_DEPS = $(libmoptions_OBJS)
+libmoptions.lib: $(libmoptions_DEPS)
+	$(ARCHIVER) /out:"libmoptions.lib" $(libmoptions_OBJS) $(libmoptions_LIBS)
+
+monet_options.obj: "$(srcdir)\monet_options.c" "$(srcdir)\monet_options.h" "$(srcdir)\monet_getopt.h" "$(srcdir)\getopt.c" "$(srcdir)\getopt1.c"
+	$(CC) /EHsc $(CFLAGS) $(monet_options_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMOPTIONS "-Fomonet_options.obj" -c "$(srcdir)\monet_options.c"
+monet_options.h: "$(srcdir)\monet_options.h"
+	$(INSTALL) "$(srcdir)\monet_options.h" "monet_options.h"
+all-msc: "libmoptions.lib" "monet_options.h"
+check-msc: all-msc "monet_options.h"
+install-msc: install-exec install-data
+install-exec:  "install_monet_options.h" 
+install_monet_options.h: "monet_options.h" "$(includedir)\monetdb"
+	$(INSTALL) "monet_options.h" "$(includedir)\monetdb\monet_options.h"
+"$(includedir)\monetdb":
+	if not exist "$(includedir)\monetdb" $(MKDIR) "$(includedir)\monetdb"
+install-data:

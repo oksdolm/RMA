@@ -1,0 +1,149 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..
+srcdir = $(TOPDIR)\..\gdk
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+INCLUDES = -I$(srcdir) "-I..\common\options" -I$(srcdir)\..\common\options "-I..\common\stream" -I$(srcdir)\..\common\stream "-I..\common\utils" -I$(srcdir)\..\common\utils $(valgrind_CFLAGS)
+libbat.dll:  ..\common\options\libmoptions.lib ..\common\utils\libmutils.lib ..\common\stream\libstream.lib
+libbat_LIBS = ..\common\options\libmoptions.lib ..\common\utils\libmutils.lib ..\common\stream\libstream.lib $(MATH_LIBS) $(SOCKET_LIBS) $(MALLOC_LIBS) $(PTHREAD_LIBS) $(DL_LIBS) $(PSAPILIB) $(KVM_LIBS)
+libbat_OBJS = gdk_select.obj gdk_calc.obj gdk_ssort.obj gdk_aggr.obj gdk_batop.obj gdk_search.obj gdk_hash.obj gdk_tm.obj gdk_orderidx.obj gdk_align.obj gdk_bbp.obj gdk_heap.obj gdk_utils.obj gdk_atoms.obj gdk_qsort.obj gdk_storage.obj gdk_bat.obj gdk_delta.obj gdk_cross.obj gdk_system.obj gdk_value.obj gdk_posix.obj gdk_logger.obj gdk_sample.obj gdk_group.obj gdk_imprints.obj gdk_join.obj gdk_project.obj gdk_unique.obj gdk_interprocess.obj gdk_firstn.obj libbat.res
+libbat_DEPS = $(libbat_OBJS)
+libbat.lib: libbat.dll
+libbat.dll: $(libbat_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -Felibbat.dll @<< /link @<<
+$(libbat_OBJS)
+<<
+$(libbat_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+monetdb-gdk.pc: "$(TOPDIR)\winconfig_conds.py" "$(srcdir)\monetdb-gdk.pc.in"
+	$(CONFIGURE) "$(srcdir)\monetdb-gdk.pc.in" > "monetdb-gdk.pc"
+gdk_utils.obj: "$(srcdir)\gdk_utils.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\..\common\utils\mutils.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_utils_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_utils.obj" -c "$(srcdir)\gdk_utils.c"
+gdk_qsort.obj: "$(srcdir)\gdk_qsort.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_qsort_impl.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_qsort_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_qsort.obj" -c "$(srcdir)\gdk_qsort.c"
+gdk_delta.obj: "$(srcdir)\gdk_delta.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_delta_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_delta.obj" -c "$(srcdir)\gdk_delta.c"
+gdk_aggr.obj: "$(srcdir)\gdk_aggr.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_calc_private.h" "$(srcdir)\gdk_cand.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_aggr_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_aggr.obj" -c "$(srcdir)\gdk_aggr.c"
+gdk_group.obj: "$(srcdir)\gdk_group.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_cand.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_group_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_group.obj" -c "$(srcdir)\gdk_group.c"
+gdk_interprocess.obj: "$(srcdir)\gdk_interprocess.c" "$(srcdir)\gdk_interprocess.h" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_interprocess_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_interprocess.obj" -c "$(srcdir)\gdk_interprocess.c"
+gdk_bat.obj: "$(srcdir)\gdk_bat.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_bat_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_bat.obj" -c "$(srcdir)\gdk_bat.c"
+gdk_tm.obj: "$(srcdir)\gdk_tm.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_tm.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_tm_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_tm.obj" -c "$(srcdir)\gdk_tm.c"
+gdk_align.obj: "$(srcdir)\gdk_align.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_align_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_align.obj" -c "$(srcdir)\gdk_align.c"
+gdk_hash.obj: "$(srcdir)\gdk_hash.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_cand.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_hash_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_hash.obj" -c "$(srcdir)\gdk_hash.c"
+gdk_imprints.obj: "$(srcdir)\gdk_imprints.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_imprints.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_imprints_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_imprints.obj" -c "$(srcdir)\gdk_imprints.c"
+gdk_logger.obj: "$(srcdir)\gdk_logger.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_logger.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_logger_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_logger.obj" -c "$(srcdir)\gdk_logger.c"
+gdk_bbp.obj: "$(srcdir)\gdk_bbp.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_storage.h" "$(srcdir)\..\common\utils\mutils.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_bbp_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_bbp.obj" -c "$(srcdir)\gdk_bbp.c"
+gdk_sample.obj: "$(srcdir)\gdk_sample.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_sample_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_sample.obj" -c "$(srcdir)\gdk_sample.c"
+gdk_atoms.obj: "$(srcdir)\gdk_atoms.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_atoms_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_atoms.obj" -c "$(srcdir)\gdk_atoms.c"
+gdk_cross.obj: "$(srcdir)\gdk_cross.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_cand.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_cross_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_cross.obj" -c "$(srcdir)\gdk_cross.c"
+libbat.res: "$(srcdir)\libbat.rc"
+	$(RC) -folibbat.res $(srcdir)\libbat.rc
+gdk_storage.obj: "$(srcdir)\gdk_storage.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_storage.h" "$(srcdir)\..\common\utils\mutils.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_storage_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_storage.obj" -c "$(srcdir)\gdk_storage.c"
+gdk_select.obj: "$(srcdir)\gdk_select.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_cand.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_imprints.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_select_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_select.obj" -c "$(srcdir)\gdk_select.c"
+gdk_calc.obj: "$(srcdir)\gdk_calc.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_calc_private.h" "$(srcdir)\gdk_cand.h" "$(srcdir)\gdk_calc_compare.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_calc_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_calc.obj" -c "$(srcdir)\gdk_calc.c"
+gdk_ssort.obj: "$(srcdir)\gdk_ssort.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_ssort_impl.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_ssort_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_ssort.obj" -c "$(srcdir)\gdk_ssort.c"
+gdk_system.obj: "$(srcdir)\gdk_system.c" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_system_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_system.obj" -c "$(srcdir)\gdk_system.c"
+gdk_batop.obj: "$(srcdir)\gdk_batop.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_cand.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_batop_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_batop.obj" -c "$(srcdir)\gdk_batop.c"
+gdk_firstn.obj: "$(srcdir)\gdk_firstn.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_calc_private.h" "$(srcdir)\gdk_cand.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_firstn_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_firstn.obj" -c "$(srcdir)\gdk_firstn.c"
+gdk_join.obj: "$(srcdir)\gdk_join.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_calc_private.h" "$(srcdir)\gdk_cand.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_join_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_join.obj" -c "$(srcdir)\gdk_join.c"
+gdk_project.obj: "$(srcdir)\gdk_project.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_project_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_project.obj" -c "$(srcdir)\gdk_project.c"
+gdk_unique.obj: "$(srcdir)\gdk_unique.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\gdk_calc_private.h" "$(srcdir)\gdk_cand.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_unique_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_unique.obj" -c "$(srcdir)\gdk_unique.c"
+gdk_search.obj: "$(srcdir)\gdk_search.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_search_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_search.obj" -c "$(srcdir)\gdk_search.c"
+gdk_heap.obj: "$(srcdir)\gdk_heap.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_heap_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_heap.obj" -c "$(srcdir)\gdk_heap.c"
+gdk_value.obj: "$(srcdir)\gdk_value.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_value_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_value.obj" -c "$(srcdir)\gdk_value.c"
+gdk_posix.obj: "$(srcdir)\gdk_posix.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h" "$(srcdir)\..\common\utils\mutils.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_posix_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_posix.obj" -c "$(srcdir)\gdk_posix.c"
+gdk_orderidx.obj: "$(srcdir)\gdk_orderidx.c" "$(srcdir)\gdk.h" "$(srcdir)\gdk_system.h" "$(srcdir)\gdk_atomic.h" "$(srcdir)\gdk_posix.h" "$(srcdir)\..\common\stream\stream.h" "$(srcdir)\gdk_delta.h" "$(srcdir)\gdk_hash.h" "$(srcdir)\gdk_atoms.h" "$(srcdir)\gdk_bbp.h" "$(srcdir)\gdk_utils.h" "$(srcdir)\..\common\options\monet_options.h" "$(srcdir)\gdk_calc.h" "$(srcdir)\gdk_private.h" "$(srcdir)\gdk_system_private.h"
+	$(CC) /EHsc $(CFLAGS) $(gdk_orderidx_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGDK "-Fogdk_orderidx.obj" -c "$(srcdir)\gdk_orderidx.c"
+gdk_utils.h: "$(srcdir)\gdk_utils.h"
+	$(INSTALL) "$(srcdir)\gdk_utils.h" "gdk_utils.h"
+gdk_cand.h: "$(srcdir)\gdk_cand.h"
+	$(INSTALL) "$(srcdir)\gdk_cand.h" "gdk_cand.h"
+gdk_delta.h: "$(srcdir)\gdk_delta.h"
+	$(INSTALL) "$(srcdir)\gdk_delta.h" "gdk_delta.h"
+gdk_hash.h: "$(srcdir)\gdk_hash.h"
+	$(INSTALL) "$(srcdir)\gdk_hash.h" "gdk_hash.h"
+gdk_bbp.h: "$(srcdir)\gdk_bbp.h"
+	$(INSTALL) "$(srcdir)\gdk_bbp.h" "gdk_bbp.h"
+gdk_atoms.h: "$(srcdir)\gdk_atoms.h"
+	$(INSTALL) "$(srcdir)\gdk_atoms.h" "gdk_atoms.h"
+gdk_calc.h: "$(srcdir)\gdk_calc.h"
+	$(INSTALL) "$(srcdir)\gdk_calc.h" "gdk_calc.h"
+gdk_system.h: "$(srcdir)\gdk_system.h"
+	$(INSTALL) "$(srcdir)\gdk_system.h" "gdk_system.h"
+gdk_atomic.h: "$(srcdir)\gdk_atomic.h"
+	$(INSTALL) "$(srcdir)\gdk_atomic.h" "gdk_atomic.h"
+gdk.h: "$(srcdir)\gdk.h"
+	$(INSTALL) "$(srcdir)\gdk.h" "gdk.h"
+gdk_posix.h: "$(srcdir)\gdk_posix.h"
+	$(INSTALL) "$(srcdir)\gdk_posix.h" "gdk_posix.h"
+all-msc: "libbat.dll" "gdk_utils.h" "gdk_cand.h" "gdk_delta.h" "gdk_hash.h" "gdk_bbp.h" "gdk_atoms.h" "gdk_calc.h" "gdk_system.h" "gdk_atomic.h" "gdk.h" "gdk_posix.h"
+check-msc: all-msc "libbat.dll" "gdk_utils.h" "gdk_cand.h" "gdk_calc.h" "gdk_system.h" "gdk_delta.h" "gdk_hash.h" "gdk_posix.h" "gdk_bbp.h" "gdk_atomic.h" "gdk_atoms.h" "gdk.h"
+install-msc: install-exec install-data
+install-exec:  "install_libbat" "install_gdk_utils.h" "install_gdk_cand.h" "install_gdk_calc.h" "install_gdk_system.h" "install_gdk_delta.h" "install_gdk_hash.h" "install_gdk_posix.h" "install_gdk_bbp.h" "install_gdk_atomic.h" "install_gdk_atoms.h" "install_gdk.h" 
+install_libbat: "libbat.dll" "$(libdir)"
+	$(INSTALL) "libbat.dll" "$(libdir)\libbat.dll"
+	$(INSTALL) "libbat.lib" "$(libdir)\libbat.lib"
+	$(INSTALL) "libbat.pdb" "$(libdir)\libbat.pdb"
+install_gdk_utils.h: "gdk_utils.h" "$(includedir)\monetdb"
+	$(INSTALL) "gdk_utils.h" "$(includedir)\monetdb\gdk_utils.h"
+install_gdk_cand.h: "gdk_cand.h" "$(includedir)\monetdb"
+	$(INSTALL) "gdk_cand.h" "$(includedir)\monetdb\gdk_cand.h"
+install_gdk_calc.h: "gdk_calc.h" "$(includedir)\monetdb"
+	$(INSTALL) "gdk_calc.h" "$(includedir)\monetdb\gdk_calc.h"
+install_gdk_system.h: "gdk_system.h" "$(includedir)\monetdb"
+	$(INSTALL) "gdk_system.h" "$(includedir)\monetdb\gdk_system.h"
+install_gdk_delta.h: "gdk_delta.h" "$(includedir)\monetdb"
+	$(INSTALL) "gdk_delta.h" "$(includedir)\monetdb\gdk_delta.h"
+install_gdk_hash.h: "gdk_hash.h" "$(includedir)\monetdb"
+	$(INSTALL) "gdk_hash.h" "$(includedir)\monetdb\gdk_hash.h"
+install_gdk_posix.h: "gdk_posix.h" "$(includedir)\monetdb"
+	$(INSTALL) "gdk_posix.h" "$(includedir)\monetdb\gdk_posix.h"
+install_gdk_bbp.h: "gdk_bbp.h" "$(includedir)\monetdb"
+	$(INSTALL) "gdk_bbp.h" "$(includedir)\monetdb\gdk_bbp.h"
+install_gdk_atomic.h: "gdk_atomic.h" "$(includedir)\monetdb"
+	$(INSTALL) "gdk_atomic.h" "$(includedir)\monetdb\gdk_atomic.h"
+install_gdk_atoms.h: "gdk_atoms.h" "$(includedir)\monetdb"
+	$(INSTALL) "gdk_atoms.h" "$(includedir)\monetdb\gdk_atoms.h"
+install_gdk.h: "gdk.h" "$(includedir)\monetdb"
+	$(INSTALL) "gdk.h" "$(includedir)\monetdb\gdk.h"
+"$(libdir)":
+	if not exist "$(libdir)" $(MKDIR) "$(libdir)"
+"$(includedir)\monetdb":
+	if not exist "$(includedir)\monetdb" $(MKDIR) "$(includedir)\monetdb"
+install-data:

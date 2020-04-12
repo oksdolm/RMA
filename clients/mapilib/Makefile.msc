@@ -1,0 +1,49 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\clients\mapilib
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+INCLUDES = -I$(srcdir) "-I..\..\common\options" -I$(srcdir)\..\..\common\options "-I..\..\common\stream" -I$(srcdir)\..\..\common\stream "-I..\..\common\utils" -I$(srcdir)\..\..\common\utils $(MSGCONTROL_FLAGS) $(openssl_CFLAGS)
+mapi.h: "$(srcdir)\mapi.h"
+	$(INSTALL) "$(srcdir)\mapi.h" "mapi.h"
+libmapi.dll:  ..\..\common\options\libmoptions.lib ..\..\common\utils\libmcrypt.lib ..\..\common\stream\libstream.lib
+libmapi_LIBS = ..\..\common\options\libmoptions.lib ..\..\common\utils\libmcrypt.lib ..\..\common\stream\libstream.lib $(SOCKET_LIBS) $(openssl_LIBS)
+libmapi_OBJS = mapi.obj mapi.res
+libmapi_DEPS = $(libmapi_OBJS)
+libmapi.lib: libmapi.dll
+libmapi.dll: $(libmapi_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -Felibmapi.dll @<< /link @<<
+$(libmapi_OBJS)
+<<
+$(libmapi_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+mapi.obj: "$(srcdir)\mapi.c" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\..\common\stream\stream_socket.h" "$(srcdir)\mapi.h" "$(srcdir)\..\..\common\utils\mcrypt.h"
+	$(CC) /EHsc $(CFLAGS) $(mapi_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMAPI "-Fomapi.obj" -c "$(srcdir)\mapi.c"
+monetdb-mapi.pc: "$(TOPDIR)\winconfig_conds.py" "$(srcdir)\monetdb-mapi.pc.in"
+	$(CONFIGURE) "$(srcdir)\monetdb-mapi.pc.in" > "monetdb-mapi.pc"
+mapi.res: "$(srcdir)\mapi.rc"
+	$(RC) -fomapi.res $(srcdir)\mapi.rc
+all-msc: "libmapi.dll" "mapi.h"
+check-msc: all-msc "libmapi.dll" "mapi.h"
+install-msc: install-exec install-data
+install-exec:  "install_libmapi" "install_mapi.h" 
+install_libmapi: "libmapi.dll" "$(libdir)"
+	$(INSTALL) "libmapi.dll" "$(libdir)\libmapi.dll"
+	$(INSTALL) "libmapi.lib" "$(libdir)\libmapi.lib"
+	$(INSTALL) "libmapi.pdb" "$(libdir)\libmapi.pdb"
+install_mapi.h: "mapi.h" "$(includedir)\monetdb"
+	$(INSTALL) "mapi.h" "$(includedir)\monetdb\mapi.h"
+"$(libdir)":
+	if not exist "$(libdir)" $(MKDIR) "$(libdir)"
+"$(includedir)\monetdb":
+	if not exist "$(includedir)\monetdb" $(MKDIR) "$(includedir)\monetdb"
+install-data:

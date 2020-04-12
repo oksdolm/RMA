@@ -1,0 +1,40 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\sql\common
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I.." -I$(srcdir)\.. "-I..\include" -I$(srcdir)\..\include "-I..\storage" -I$(srcdir)\..\storage "-I..\..\common\options" -I$(srcdir)\..\..\common\options "-I..\..\common\stream" -I$(srcdir)\..\..\common\stream "-I..\..\monetdb5\mal" -I$(srcdir)\..\..\monetdb5\mal "-I..\..\gdk" -I$(srcdir)\..\..\gdk
+libsqlcommon_OBJS = sql_mem.obj sql_list.obj sql_hash.obj sql_stack.obj sql_backend.obj sql_keyword.obj sql_changeset.obj sql_types.obj sql_string.obj
+libsqlcommon_DEPS = $(libsqlcommon_OBJS)
+libsqlcommon.lib: $(libsqlcommon_DEPS)
+	$(ARCHIVER) /out:"libsqlcommon.lib" $(libsqlcommon_OBJS) $(libsqlcommon_LIBS)
+
+sql_mem.obj: "$(srcdir)\sql_mem.c" "$(srcdir)\..\include\sql_mem.h"
+	$(CC) /EHsc $(CFLAGS) $(sql_mem_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSQLCOMMON "-Fosql_mem.obj" -c "$(srcdir)\sql_mem.c"
+sql_stack.obj: "$(srcdir)\sql_stack.c" "$(srcdir)\..\include\sql_stack.h"
+	$(CC) /EHsc $(CFLAGS) $(sql_stack_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSQLCOMMON "-Fosql_stack.obj" -c "$(srcdir)\sql_stack.c"
+sql_hash.obj: "$(srcdir)\sql_hash.c" "$(srcdir)\..\include\sql_mem.h" "$(srcdir)\..\include\sql_hash.h"
+	$(CC) /EHsc $(CFLAGS) $(sql_hash_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSQLCOMMON "-Fosql_hash.obj" -c "$(srcdir)\sql_hash.c"
+sql_types.obj: "$(srcdir)\sql_types.c" "$(srcdir)\sql_types.h" "$(srcdir)\..\include\sql_mem.h" "$(srcdir)\..\include\sql_list.h" "$(srcdir)\sql_string.h" "$(srcdir)\..\include\sql_catalog.h" "$(srcdir)\..\storage\sql_storage.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\include\sql_keyword.h" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\..\monetdb5\mal\mal.h"
+	$(CC) /EHsc $(CFLAGS) $(sql_types_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSQLCOMMON "-Fosql_types.obj" -c "$(srcdir)\sql_types.c"
+sql_changeset.obj: "$(srcdir)\sql_changeset.c" "$(srcdir)\..\include\sql_catalog.h"
+	$(CC) /EHsc $(CFLAGS) $(sql_changeset_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSQLCOMMON "-Fosql_changeset.obj" -c "$(srcdir)\sql_changeset.c"
+sql_backend.obj: "$(srcdir)\sql_backend.c" "$(srcdir)\sql_backend.h" "$(srcdir)\..\include\sql_mem.h" "$(srcdir)\..\include\sql_catalog.h" "$(srcdir)\..\include\sql_relation.h" "$(srcdir)\sql_types.h" "$(srcdir)\..\include\sql_list.h" "$(srcdir)\sql_string.h" "$(srcdir)\..\storage\sql_storage.h" "$(srcdir)\..\..\common\stream\stream.h"
+	$(CC) /EHsc $(CFLAGS) $(sql_backend_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSQLCOMMON "-Fosql_backend.obj" -c "$(srcdir)\sql_backend.c"
+sql_keyword.obj: "$(srcdir)\sql_keyword.c" "$(srcdir)\..\include\sql_mem.h" "$(srcdir)\sql_string.h" "$(srcdir)\..\include\sql_keyword.h"
+	$(CC) /EHsc $(CFLAGS) $(sql_keyword_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSQLCOMMON "-Fosql_keyword.obj" -c "$(srcdir)\sql_keyword.c"
+sql_list.obj: "$(srcdir)\sql_list.c" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\include\sql_list.h"
+	$(CC) /EHsc $(CFLAGS) $(sql_list_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSQLCOMMON "-Fosql_list.obj" -c "$(srcdir)\sql_list.c"
+sql_string.obj: "$(srcdir)\sql_string.c" "$(srcdir)\..\include\sql_mem.h" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\sql_string.h" "$(srcdir)\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\monetdb5\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(sql_string_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSQLCOMMON "-Fosql_string.obj" -c "$(srcdir)\sql_string.c"
+all-msc: "libsqlcommon.lib"
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

@@ -1,0 +1,33 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\clients\examples\php
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+INCLUDES = -I$(srcdir)
+sqlsample.php: "$(srcdir)\sqlsample.php"
+	$(INSTALL) "$(srcdir)\sqlsample.php" "sqlsample.php"
+!IF defined(HAVE_TESTING)
+C_sqlsample_php = sqlsample.php
+!ELSE
+C_sqlsample_php =
+!ENDIF
+all-msc: $(C_sqlsample_php)
+check-msc: all-msc $(C_sqlsample_php)
+install-msc: install-exec install-data
+install-exec:  "install_sqlsample.php" 
+!IF defined(HAVE_TESTING)
+install_sqlsample.php: "$(C_sqlsample_php)" "$(bindir)"
+	$(INSTALL) "$(C_sqlsample_php)" "$(bindir)\sqlsample.php"
+!ELSE
+install_sqlsample.php:
+!ENDIF
+"$(bindir)":
+	if not exist "$(bindir)" $(MKDIR) "$(bindir)"
+install-data:

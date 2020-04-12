@@ -1,0 +1,86 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\buildtools\conf
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir)
+website.html: "$(srcdir)\website.html"
+	$(INSTALL) "$(srcdir)\website.html" "website.html"
+!IF defined(NATIVE_WIN32)
+C_website_html = website.html
+!ELSE
+C_website_html =
+!ENDIF
+banner.bmp: "$(srcdir)\banner.bmp"
+	$(INSTALL) "$(srcdir)\banner.bmp" "banner.bmp"
+!IF defined(NATIVE_WIN32)
+C_banner_bmp = banner.bmp
+!ELSE
+C_banner_bmp =
+!ENDIF
+monetdb.ico: "$(srcdir)\monetdb.ico"
+	$(INSTALL) "$(srcdir)\monetdb.ico" "monetdb.ico"
+!IF defined(NATIVE_WIN32)
+C_monetdb_ico = monetdb.ico
+!ELSE
+C_monetdb_ico =
+!ENDIF
+Maddlog: "$(srcdir)\Maddlog"
+	$(INSTALL) "$(srcdir)\Maddlog" "Maddlog"
+!IF defined(HAVE_DEVELOPER)
+C_Maddlog = Maddlog
+!ELSE
+C_Maddlog =
+!ENDIF
+license.rtf: "$(srcdir)\license.rtf"
+	$(INSTALL) "$(srcdir)\license.rtf" "license.rtf"
+!IF defined(NATIVE_WIN32)
+C_license_rtf = license.rtf
+!ELSE
+C_license_rtf =
+!ENDIF
+all-msc: "website.html" "banner.bmp" "monetdb.ico" $(C_Maddlog) "license.rtf"
+check-msc: all-msc "website.html" "banner.bmp" "license.rtf" "monetdb.ico" $(C_Maddlog)
+install-msc: install-exec install-data
+install-exec:  "install_website.html" "install_banner.bmp" "install_license.rtf" "install_monetdb.ico" "install_Maddlog" 
+!IF defined(NATIVE_WIN32)
+install_website.html: "website.html" "$(prefix)"
+	$(INSTALL) "website.html" "$(prefix)\website.html"
+!ELSE
+install_website.html:
+!ENDIF
+!IF defined(NATIVE_WIN32)
+install_banner.bmp: "banner.bmp" "$(prefix)"
+	$(INSTALL) "banner.bmp" "$(prefix)\banner.bmp"
+!ELSE
+install_banner.bmp:
+!ENDIF
+!IF defined(NATIVE_WIN32)
+install_license.rtf: "license.rtf" "$(prefix)"
+	$(INSTALL) "license.rtf" "$(prefix)\license.rtf"
+!ELSE
+install_license.rtf:
+!ENDIF
+!IF defined(NATIVE_WIN32)
+install_monetdb.ico: "monetdb.ico" "$(prefix)"
+	$(INSTALL) "monetdb.ico" "$(prefix)\monetdb.ico"
+!ELSE
+install_monetdb.ico:
+!ENDIF
+!IF defined(HAVE_DEVELOPER)
+install_Maddlog: "$(C_Maddlog)" "$(bindir)"
+	$(INSTALL) "$(C_Maddlog)" "$(bindir)\Maddlog"
+!ELSE
+install_Maddlog:
+!ENDIF
+"$(prefix)":
+	if not exist "$(prefix)" $(MKDIR) "$(prefix)"
+"$(bindir)":
+	if not exist "$(bindir)" $(MKDIR) "$(bindir)"
+install-data:

@@ -1,0 +1,24 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\geom\sql
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir)
+EXTRA_DIST_DIR =  Tests conformance functions pg_regression
+40_geom.sql: "$(srcdir)\40_geom.sql"
+	$(INSTALL) "$(srcdir)\40_geom.sql" "40_geom.sql"
+all-msc: "40_geom.sql"
+check-msc: all-msc "40_geom.sql"
+install-msc: install-exec install-data
+install-exec:  "install_40_geom.sql" 
+install_40_geom.sql: "40_geom.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "40_geom.sql" "$(libdir)\monetdb5\createdb\40_geom.sql"
+"$(libdir)\monetdb5\createdb":
+	if not exist "$(libdir)\monetdb5\createdb" $(MKDIR) "$(libdir)\monetdb5\createdb"
+install-data:

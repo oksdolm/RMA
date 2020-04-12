@@ -1,0 +1,52 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\clients\examples
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+EXTRA_DIST_DIR =  python
+INCLUDES = -I$(srcdir)
+C-1-all: "C-1-dir" "C-1-Makefile"
+	$(CD) ".\C" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+C-1-dir: 
+	if not exist ".\C" $(MKDIR) ".\C"
+C-1-Makefile: "$(srcdir)\C\Makefile.msc"
+	$(INSTALL) "$(srcdir)\C\Makefile.msc" "C\Makefile"
+C-1-check:
+	$(CD) ".\C" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+C-1-install:
+	$(CD) ".\C" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+php-2-all: "php-2-dir" "php-2-Makefile"
+	$(CD) "php" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+php-2-dir: 
+	if not exist "php" $(MKDIR) "php"
+php-2-Makefile: "$(srcdir)\php\Makefile.msc"
+	$(INSTALL) "$(srcdir)\php\Makefile.msc" "php\Makefile"
+php-2-check:
+	$(CD) "php" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+php-2-install:
+	$(CD) "php" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+perl-3-all: "perl-3-dir" "perl-3-Makefile"
+	$(CD) "perl" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+perl-3-dir: 
+	if not exist "perl" $(MKDIR) "perl"
+perl-3-Makefile: "$(srcdir)\perl\Makefile.msc"
+	$(INSTALL) "$(srcdir)\perl\Makefile.msc" "perl\Makefile"
+perl-3-check:
+	$(CD) "perl" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+perl-3-install:
+	$(CD) "perl" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+all-recursive: "C-1-all" "php-2-all" "perl-3-all" 
+check-recursive: "C-1-check" "php-2-check" "perl-3-check" 
+install-recursive: "C-1-install" "php-2-install" "perl-3-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

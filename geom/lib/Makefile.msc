@@ -1,0 +1,25 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\geom\lib
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+INCLUDES = -I$(srcdir) "-I..\..\common\options" -I$(srcdir)\..\..\common\options "-I..\..\common\stream" -I$(srcdir)\..\..\common\stream "-I..\..\gdk" -I$(srcdir)\..\..\gdk $(GEOS_INCS) $(PROJ_INCS)
+libgeom_OBJS = libgeom.obj
+libgeom_DEPS = $(libgeom_OBJS)
+libgeom.lib: $(libgeom_DEPS)
+	$(ARCHIVER) /out:"libgeom.lib" $(libgeom_OBJS) $(libgeom_LIBS)
+
+libgeom.obj: "$(srcdir)\libgeom.c" "$(srcdir)\libgeom.h" "$(srcdir)\..\..\gdk\gdk.h"
+	$(CC) /EHsc $(CFLAGS) $(libgeom_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGEOM "-Folibgeom.obj" -c "$(srcdir)\libgeom.c"
+all-msc: "libgeom.lib"
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

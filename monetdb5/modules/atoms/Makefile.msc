@@ -1,0 +1,119 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\monetdb5\modules\atoms
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I..\..\mal" -I$(srcdir)\..\..\mal "-I..\..\..\common\options" -I$(srcdir)\..\..\..\common\options "-I..\..\..\common\stream" -I$(srcdir)\..\..\..\common\stream "-I..\..\..\common\utils" -I$(srcdir)\..\..\..\common\utils "-I..\..\..\gdk" -I$(srcdir)\..\..\..\gdk $(libxml2_CFLAGS) $(curl_CFLAGS) $(openssl_CFLAGS)
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+EXTRA_DIST_DIR =  Tests
+00_json_hge.mal: "$(srcdir)\00_json_hge.mal"
+	$(INSTALL) "$(srcdir)\00_json_hge.mal" "00_json_hge.mal"
+!IF defined(HAVE_HGE)
+C_00_json_hge_mal = 00_json_hge.mal
+!ELSE
+C_00_json_hge_mal =
+!ENDIF
+xml.mal: "$(srcdir)\xml.mal"
+	$(INSTALL) "$(srcdir)\xml.mal" "xml.mal"
+url.mal: "$(srcdir)\url.mal"
+	$(INSTALL) "$(srcdir)\url.mal" "url.mal"
+blob.mal: "$(srcdir)\blob.mal"
+	$(INSTALL) "$(srcdir)\blob.mal" "blob.mal"
+json.mal: "$(srcdir)\json.mal"
+	$(INSTALL) "$(srcdir)\json.mal" "json.mal"
+color.mal: "$(srcdir)\color.mal"
+	$(INSTALL) "$(srcdir)\color.mal" "color.mal"
+identifier.mal: "$(srcdir)\identifier.mal"
+	$(INSTALL) "$(srcdir)\identifier.mal" "identifier.mal"
+streams.mal: "$(srcdir)\streams.mal"
+	$(INSTALL) "$(srcdir)\streams.mal" "streams.mal"
+batxml.mal: "$(srcdir)\batxml.mal"
+	$(INSTALL) "$(srcdir)\batxml.mal" "batxml.mal"
+inet.mal: "$(srcdir)\inet.mal"
+	$(INSTALL) "$(srcdir)\inet.mal" "inet.mal"
+uuid.mal: "$(srcdir)\uuid.mal"
+	$(INSTALL) "$(srcdir)\uuid.mal" "uuid.mal"
+mcurl.mal: "$(srcdir)\mcurl.mal"
+	$(INSTALL) "$(srcdir)\mcurl.mal" "mcurl.mal"
+mtime.mal: "$(srcdir)\mtime.mal"
+	$(INSTALL) "$(srcdir)\mtime.mal" "mtime.mal"
+str.mal: "$(srcdir)\str.mal"
+	$(INSTALL) "$(srcdir)\str.mal" "str.mal"
+libatoms_OBJS = batxml.obj blob.obj color.obj identifier.obj inet.obj json.obj mcurl.obj mtime.obj str.obj streams.obj url.obj uuid.obj xml.obj
+libatoms_DEPS = $(libatoms_OBJS)
+libatoms.lib: $(libatoms_DEPS)
+	$(ARCHIVER) /out:"libatoms.lib" $(libatoms_OBJS) $(libatoms_LIBS)
+
+mtime.obj: "$(srcdir)\mtime.c" "$(srcdir)\mtime.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(mtime_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Fomtime.obj" -c "$(srcdir)\mtime.c"
+streams.obj: "$(srcdir)\streams.c" "$(srcdir)\streams.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\..\common\stream\stream_socket.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(streams_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Fostreams.obj" -c "$(srcdir)\streams.c"
+url.obj: "$(srcdir)\url.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\url.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(url_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Fourl.obj" -c "$(srcdir)\url.c"
+inet.obj: "$(srcdir)\inet.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(inet_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Foinet.obj" -c "$(srcdir)\inet.c"
+json.obj: "$(srcdir)\json.c" "$(srcdir)\json.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h"
+	$(CC) /EHsc $(CFLAGS) $(json_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Fojson.obj" -c "$(srcdir)\json.c"
+uuid.obj: "$(srcdir)\uuid.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_atom.h"
+	$(CC) /EHsc $(CFLAGS) $(uuid_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Fouuid.obj" -c "$(srcdir)\uuid.c"
+color.obj: "$(srcdir)\color.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\color.h"
+	$(CC) /EHsc $(CFLAGS) $(color_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Focolor.obj" -c "$(srcdir)\color.c"
+identifier.obj: "$(srcdir)\identifier.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(identifier_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Foidentifier.obj" -c "$(srcdir)\identifier.c"
+batxml.obj: "$(srcdir)\batxml.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h" "$(srcdir)\xml.h"
+	$(CC) /EHsc $(CFLAGS) $(batxml_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Fobatxml.obj" -c "$(srcdir)\batxml.c"
+str.obj: "$(srcdir)\str.c" "$(srcdir)\str.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(str_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Fostr.obj" -c "$(srcdir)\str.c"
+mcurl.obj: "$(srcdir)\mcurl.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(mcurl_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Fomcurl.obj" -c "$(srcdir)\mcurl.c"
+blob.obj: "$(srcdir)\blob.c" "$(srcdir)\blob.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(blob_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Foblob.obj" -c "$(srcdir)\blob.c"
+xml.obj: "$(srcdir)\xml.c" "$(srcdir)\xml.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h"
+	$(CC) /EHsc $(CFLAGS) $(xml_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBATOMS "-Foxml.obj" -c "$(srcdir)\xml.c"
+all-msc: "libatoms.lib" "00_json_hge.mal" "xml.mal" "url.mal" "blob.mal" "json.mal" "color.mal" "identifier.mal" "streams.mal" "batxml.mal" "inet.mal" "uuid.mal" "mcurl.mal" "mtime.mal" "str.mal"
+check-msc: all-msc "00_json_hge.mal" "streams.mal" "url.mal" "blob.mal" "json.mal" "color.mal" "identifier.mal" "xml.mal" "batxml.mal" "inet.mal" "uuid.mal" "mcurl.mal" "mtime.mal" "str.mal"
+install-msc: install-exec install-data
+install-exec:  "install_00_json_hge.mal" "install_streams.mal" "install_url.mal" "install_blob.mal" "install_json.mal" "install_color.mal" "install_identifier.mal" "install_xml.mal" "install_batxml.mal" "install_inet.mal" "install_uuid.mal" "install_mcurl.mal" "install_mtime.mal" "install_str.mal" 
+!IF defined(HAVE_HGE)
+install_00_json_hge.mal: "00_json_hge.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "00_json_hge.mal" "$(libdir)\monetdb5\autoload\00_json_hge.mal"
+!ELSE
+install_00_json_hge.mal:
+!ENDIF
+install_streams.mal: "streams.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "streams.mal" "$(libdir)\monetdb5\streams.mal"
+install_url.mal: "url.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "url.mal" "$(libdir)\monetdb5\url.mal"
+install_blob.mal: "blob.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "blob.mal" "$(libdir)\monetdb5\blob.mal"
+install_json.mal: "json.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "json.mal" "$(libdir)\monetdb5\json.mal"
+install_color.mal: "color.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "color.mal" "$(libdir)\monetdb5\color.mal"
+install_identifier.mal: "identifier.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "identifier.mal" "$(libdir)\monetdb5\identifier.mal"
+install_xml.mal: "xml.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "xml.mal" "$(libdir)\monetdb5\xml.mal"
+install_batxml.mal: "batxml.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "batxml.mal" "$(libdir)\monetdb5\batxml.mal"
+install_inet.mal: "inet.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "inet.mal" "$(libdir)\monetdb5\inet.mal"
+install_uuid.mal: "uuid.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "uuid.mal" "$(libdir)\monetdb5\uuid.mal"
+install_mcurl.mal: "mcurl.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "mcurl.mal" "$(libdir)\monetdb5\mcurl.mal"
+install_mtime.mal: "mtime.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "mtime.mal" "$(libdir)\monetdb5\mtime.mal"
+install_str.mal: "str.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "str.mal" "$(libdir)\monetdb5\str.mal"
+"$(libdir)\monetdb5\autoload":
+	if not exist "$(libdir)\monetdb5\autoload" $(MKDIR) "$(libdir)\monetdb5\autoload"
+"$(libdir)\monetdb5":
+	if not exist "$(libdir)\monetdb5" $(MKDIR) "$(libdir)\monetdb5"
+install-data:

@@ -1,0 +1,64 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\clients\odbc
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+INCLUDES = -I$(srcdir)
+!IFDEF NOT_WIN32
+NOT_WIN32-1-all: "NOT_WIN32-1-dir" "NOT_WIN32-1-Makefile"
+	$(CD) "setup" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+NOT_WIN32-1-dir: 
+	if not exist "setup" $(MKDIR) "setup"
+NOT_WIN32-1-Makefile: "$(srcdir)\setup\Makefile.msc"
+	$(INSTALL) "$(srcdir)\setup\Makefile.msc" "setup\Makefile"
+NOT_WIN32-1-check:
+	$(CD) "setup" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+NOT_WIN32-1-install:
+	$(CD) "setup" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+NOT_WIN32-1-all: "NOT_WIN32-1-dir" "NOT_WIN32-1-Makefile"
+	$(CD) "winsetup" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+NOT_WIN32-1-dir: 
+	if not exist "winsetup" $(MKDIR) "winsetup"
+NOT_WIN32-1-Makefile: "$(srcdir)\winsetup\Makefile.msc"
+	$(INSTALL) "$(srcdir)\winsetup\Makefile.msc" "winsetup\Makefile"
+NOT_WIN32-1-check:
+	$(CD) "winsetup" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+NOT_WIN32-1-install:
+	$(CD) "winsetup" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ENDIF
+driver-2-all: "driver-2-dir" "driver-2-Makefile"
+	$(CD) "driver" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+driver-2-dir: 
+	if not exist "driver" $(MKDIR) "driver"
+driver-2-Makefile: "$(srcdir)\driver\Makefile.msc"
+	$(INSTALL) "$(srcdir)\driver\Makefile.msc" "driver\Makefile"
+driver-2-check:
+	$(CD) "driver" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+driver-2-install:
+	$(CD) "driver" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+samples-3-all: "samples-3-dir" "samples-3-Makefile"
+	$(CD) "samples" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+samples-3-dir: 
+	if not exist "samples" $(MKDIR) "samples"
+samples-3-Makefile: "$(srcdir)\samples\Makefile.msc"
+	$(INSTALL) "$(srcdir)\samples\Makefile.msc" "samples\Makefile"
+samples-3-check:
+	$(CD) "samples" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+samples-3-install:
+	$(CD) "samples" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+all-recursive: "NOT_WIN32-1-all" "driver-2-all" "samples-3-all" 
+check-recursive: "NOT_WIN32-1-check" "driver-2-check" "samples-3-check" 
+install-recursive: "NOT_WIN32-1-install" "driver-2-install" "samples-3-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

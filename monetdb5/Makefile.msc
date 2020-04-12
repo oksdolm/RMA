@@ -1,0 +1,97 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..
+srcdir = $(TOPDIR)\..\monetdb5
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+INCLUDES = -I$(srcdir)
+mal-1-all: "mal-1-dir" "mal-1-Makefile"
+	$(CD) "mal" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+mal-1-dir: 
+	if not exist "mal" $(MKDIR) "mal"
+mal-1-Makefile: "$(srcdir)\mal\Makefile.msc"
+	$(INSTALL) "$(srcdir)\mal\Makefile.msc" "mal\Makefile"
+mal-1-check:
+	$(CD) "mal" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+mal-1-install:
+	$(CD) "mal" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+modules-2-all: "modules-2-dir" "modules-2-Makefile"
+	$(CD) "modules" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+modules-2-dir: 
+	if not exist "modules" $(MKDIR) "modules"
+modules-2-Makefile: "$(srcdir)\modules\Makefile.msc"
+	$(INSTALL) "$(srcdir)\modules\Makefile.msc" "modules\Makefile"
+modules-2-check:
+	$(CD) "modules" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+modules-2-install:
+	$(CD) "modules" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+optimizer-3-all: "optimizer-3-dir" "optimizer-3-Makefile"
+	$(CD) "optimizer" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+optimizer-3-dir: 
+	if not exist "optimizer" $(MKDIR) "optimizer"
+optimizer-3-Makefile: "$(srcdir)\optimizer\Makefile.msc"
+	$(INSTALL) "$(srcdir)\optimizer\Makefile.msc" "optimizer\Makefile"
+optimizer-3-check:
+	$(CD) "optimizer" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+optimizer-3-install:
+	$(CD) "optimizer" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+scheduler-4-all: "scheduler-4-dir" "scheduler-4-Makefile"
+	$(CD) "scheduler" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+scheduler-4-dir: 
+	if not exist "scheduler" $(MKDIR) "scheduler"
+scheduler-4-Makefile: "$(srcdir)\scheduler\Makefile.msc"
+	$(INSTALL) "$(srcdir)\scheduler\Makefile.msc" "scheduler\Makefile"
+scheduler-4-check:
+	$(CD) "scheduler" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+scheduler-4-install:
+	$(CD) "scheduler" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+tools-5-all: "tools-5-dir" "tools-5-Makefile"
+	$(CD) "tools" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+tools-5-dir: 
+	if not exist "tools" $(MKDIR) "tools"
+tools-5-Makefile: "$(srcdir)\tools\Makefile.msc"
+	$(INSTALL) "$(srcdir)\tools\Makefile.msc" "tools\Makefile"
+tools-5-check:
+	$(CD) "tools" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+tools-5-install:
+	$(CD) "tools" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+extras-6-all: "extras-6-dir" "extras-6-Makefile"
+	$(CD) "extras" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+extras-6-dir: 
+	if not exist "extras" $(MKDIR) "extras"
+extras-6-Makefile: "$(srcdir)\extras\Makefile.msc"
+	$(INSTALL) "$(srcdir)\extras\Makefile.msc" "extras\Makefile"
+extras-6-check:
+	$(CD) "extras" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+extras-6-install:
+	$(CD) "extras" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!IFDEF NATIVE_WIN32
+NATIVE_WIN32-7-all: "NATIVE_WIN32-7-dir" "NATIVE_WIN32-7-Makefile"
+	$(CD) "NT" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+NATIVE_WIN32-7-dir: 
+	if not exist "NT" $(MKDIR) "NT"
+NATIVE_WIN32-7-Makefile: "$(srcdir)\NT\Makefile.msc"
+	$(INSTALL) "$(srcdir)\NT\Makefile.msc" "NT\Makefile"
+NATIVE_WIN32-7-check:
+	$(CD) "NT" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+NATIVE_WIN32-7-install:
+	$(CD) "NT" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+NATIVE_WIN32-7-all:
+NATIVE_WIN32-7-check:
+NATIVE_WIN32-7-install:
+!ENDIF
+all-recursive: "mal-1-all" "modules-2-all" "optimizer-3-all" "scheduler-4-all" "tools-5-all" "extras-6-all" "NATIVE_WIN32-7-all" 
+check-recursive: "mal-1-check" "modules-2-check" "optimizer-3-check" "scheduler-4-check" "tools-5-check" "extras-6-check" "NATIVE_WIN32-7-check" 
+install-recursive: "mal-1-install" "modules-2-install" "optimizer-3-install" "scheduler-4-install" "tools-5-install" "extras-6-install" "NATIVE_WIN32-7-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

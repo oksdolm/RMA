@@ -1,0 +1,77 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\tools\mserver
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I..\..\monetdb5\mal" -I$(srcdir)\..\..\monetdb5\mal "-I..\..\gdk" -I$(srcdir)\..\..\gdk "-I..\..\common\stream" -I$(srcdir)\..\..\common\stream "-I..\..\common\utils" -I$(srcdir)\..\..\common\utils "-I..\..\common\options" -I$(srcdir)\..\..\common\options "-I..\..\monetdb5\modules\atoms" -I$(srcdir)\..\..\monetdb5\modules\atoms "-I..\..\monetdb5\modules\mal" -I$(srcdir)\..\..\monetdb5\modules\mal "-I..\..\sql\backends\monet5" -I$(srcdir)\..\..\sql\backends\monet5 "-I..\..\sql\common" -I$(srcdir)\..\..\sql\common "-I..\..\sql\include" -I$(srcdir)\..\..\sql\include "-I..\..\sql\server" -I$(srcdir)\..\..\sql\server "-I..\..\sql\storage" -I$(srcdir)\..\..\sql\storage $(openssl_CFLAGS) $(pcre_CFLAGS) $(libxml2_CFLAGS)
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+man_MANS =  mserver5.1
+!IF defined(HAVE_TESTING)
+C_inst_shutdowntest_exe = shutdowntest.exe
+C_noinst_shutdowntest_exe = 
+!ELSE
+C_inst_shutdowntest_exe = 
+C_noinst_shutdowntest_exe = shutdowntest.exe
+!ENDIF
+shutdowntestdir = $(bindir)
+shutdowntest.exe:  ..\..\monetdb5\tools\libmonetdb5.lib ..\..\gdk\libbat.lib ..\..\common\stream\libstream.lib ..\..\clients\mapilib\libmapi.lib
+shutdowntest_LIBS = ..\..\monetdb5\tools\libmonetdb5.lib ..\..\gdk\libbat.lib ..\..\common\stream\libstream.lib ..\..\clients\mapilib\libmapi.lib $(UUID_LIBS) $(MATH_LIBS) $(SOCKET_LIBS) $(MALLOC_LIBS) $(PTHREAD_LIBS) $(DL_LIBS) $(openssl_LIBS) $(pcre_LIBS) $(libxml2_LIBS) $(PSAPILIB) $(KVM_LIBS) $(zlib_LIBS) $(BZ_LIBS) $(snappy_LIBS) $(lz4_LIBS) $(liblzma_LIBS) $(curl_LIBS) $(LTLIBICONV)
+shutdowntest_OBJS = shutdowntest.obj
+shutdowntest.exe: $(shutdowntest_OBJS)
+	$(CC) $(CFLAGS) -Feshutdowntest.exe $(shutdowntest_OBJS) /link $(shutdowntest_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	$(EDITBIN) $@ /HEAP:1048576,1048576 /LARGEADDRESSAWARE
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+mserver5.obj: "$(srcdir)\mserver5.c" "$(srcdir)\..\..\common\options\monet_options.h" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\monetdb5\mal\mal_scenario.h" "$(srcdir)\..\..\monetdb5\mal\mal_import.h" "$(srcdir)\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\monetdb5\mal\mal_client.h" "$(srcdir)\..\..\monetdb5\mal\mal_resolve.h" "$(srcdir)\..\..\monetdb5\mal\mal_function.h" "$(srcdir)\..\..\monetdb5\mal\mal_module.h" "$(srcdir)\..\..\monetdb5\mal\mal_listing.h" "$(srcdir)\..\..\monetdb5\mal\mal_profiler.h" "$(srcdir)\..\..\monetdb5\mal\mal_session.h" "$(srcdir)\..\..\monetdb5\mal\mal_utils.h" "$(srcdir)\monet_version.h" "$(srcdir)\..\..\monetdb5\mal\mal_authorize.h" "$(srcdir)\..\..\common\utils\msabaoth.h" "$(srcdir)\..\..\common\utils\mutils.h" "$(srcdir)\..\..\common\options\monet_getopt.h"
+monet_version.obj: "monet_version.c" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\common\options\monet_options.h" "$(srcdir)\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\monetdb5\mal\mal.h" "$(srcdir)\monet_version.h"
+shutdowntest.obj: "$(srcdir)\shutdowntest.c" "$(srcdir)\..\..\common\options\monet_options.h" "$(srcdir)\..\..\gdk\gdk.h" "$(srcdir)\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\monetdb5\mal\mal_scenario.h" "$(srcdir)\..\..\monetdb5\mal\mal_import.h" "$(srcdir)\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\monetdb5\mal\mal_client.h" "$(srcdir)\..\..\monetdb5\mal\mal_resolve.h" "$(srcdir)\..\..\monetdb5\mal\mal_function.h" "$(srcdir)\..\..\monetdb5\mal\mal_module.h" "$(srcdir)\..\..\monetdb5\mal\mal_listing.h" "$(srcdir)\..\..\monetdb5\mal\mal_profiler.h" "$(srcdir)\..\..\monetdb5\mal\mal_session.h" "$(srcdir)\..\..\monetdb5\mal\mal_utils.h" "$(srcdir)\monet_version.h" "$(srcdir)\..\..\monetdb5\mal\mal_authorize.h" "$(srcdir)\..\..\common\utils\msabaoth.h" "$(srcdir)\..\..\common\utils\mutils.h" "$(srcdir)\..\..\monetdb5\mal\mal_linker.h" "$(srcdir)\..\..\sql\backends\monet5\sql_execute.h" "$(srcdir)\..\..\sql\backends\monet5\sql_scenario.h" "$(srcdir)\..\..\sql\include\sql_mem.h" "$(srcdir)\..\..\sql\backends\monet5\mal_backend.h" "$(srcdir)\..\..\sql\server\sql_mvc.h" "$(srcdir)\..\..\sql\server\sql_scan.h" "$(srcdir)\..\..\sql\include\sql_list.h" "$(srcdir)\..\..\sql\common\sql_types.h" "$(srcdir)\..\..\sql\common\sql_string.h" "$(srcdir)\..\..\sql\include\sql_catalog.h" "$(srcdir)\..\..\sql\storage\sql_storage.h" "$(srcdir)\..\..\gdk\gdk_logger.h" "$(srcdir)\..\..\sql\common\sql_backend.h" "$(srcdir)\..\..\sql\include\sql_relation.h" "$(srcdir)\..\..\sql\include\sql_keyword.h" "$(srcdir)\..\..\sql\server\sql_atom.h" "$(srcdir)\..\..\sql\include\sql_query.h" "$(srcdir)\..\..\monetdb5\mal\mal_interpreter.h" "$(srcdir)\..\..\monetdb5\mal\mal_factory.h" "$(srcdir)\..\..\monetdb5\modules\mal\tablet.h" "$(srcdir)\..\..\monetdb5\modules\atoms\streams.h" "$(srcdir)\..\..\common\stream\stream_socket.h" "$(srcdir)\..\..\monetdb5\modules\atoms\mtime.h" "$(srcdir)\..\..\monetdb5\modules\atoms\blob.h" "$(srcdir)\..\..\monetdb5\modules\mal\mkey.h" "$(srcdir)\..\..\monetdb5\modules\atoms\str.h" "$(srcdir)\..\..\sql\server\sql_privileges.h" "$(srcdir)\..\..\sql\server\sql_decimal.h" "$(srcdir)\..\..\sql\server\sql_qc.h" "$(srcdir)\..\..\sql\server\sql_symbol.h" "$(srcdir)\..\..\sql\server\sql_env.h" "$(srcdir)\..\..\sql\server\sql_parser.h" "$(srcdir)\..\..\sql\backends\monet5\sql_statement.h" "$(srcdir)\..\..\monetdb5\modules\mal\querylog.h" "$(srcdir)\..\..\sql\storage\bat\bat_storage.h" "$(srcdir)\..\..\sql\storage\bat\bat_utils.h" "$(srcdir)\..\..\sql\backends\monet5\sql_cast.h" "$(srcdir)\..\..\sql\backends\monet5\sql.h" "$(srcdir)\..\..\sql\include\sql_hash.h"
+monet_version.c: "$(TOPDIR)\winconfig_conds.py" "$(srcdir)\monet_version.c.in"
+	$(CONFIGURE) "$(srcdir)\monet_version.c.in" > "monet_version.c"
+monetdblogo.png: "$(srcdir)\monetdblogo.png"
+	$(INSTALL) "$(srcdir)\monetdblogo.png" "monetdblogo.png"
+mserver5dir = $(bindir)
+mserver5.exe:  ..\..\monetdb5\tools\libmonetdb5.lib ..\..\gdk\libbat.lib ..\..\common\stream\libstream.lib ..\..\clients\mapilib\libmapi.lib
+mserver5_LIBS = ..\..\monetdb5\tools\libmonetdb5.lib ..\..\gdk\libbat.lib ..\..\common\stream\libstream.lib ..\..\clients\mapilib\libmapi.lib $(UUID_LIBS) $(MATH_LIBS) $(SOCKET_LIBS) $(MALLOC_LIBS) $(PTHREAD_LIBS) $(DL_LIBS) $(openssl_LIBS) $(pcre_LIBS) $(libxml2_LIBS) $(PSAPILIB) $(KVM_LIBS) $(zlib_LIBS) $(BZ_LIBS) $(snappy_LIBS) $(lz4_LIBS) $(liblzma_LIBS) $(curl_LIBS) $(LTLIBICONV)
+mserver5_OBJS = mserver5.obj monet_version.obj
+mserver5.exe: $(mserver5_OBJS)
+	$(CC) $(CFLAGS) -Femserver5.exe $(mserver5_OBJS) /link $(mserver5_LIBS) /subsystem:console /NODEFAULTLIB:LIBC
+	$(EDITBIN) $@ /HEAP:1048576,1048576 /LARGEADDRESSAWARE
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;1
+
+tomographintro.docx: "$(srcdir)\tomographintro.docx"
+	$(INSTALL) "$(srcdir)\tomographintro.docx" "tomographintro.docx"
+tomographintro.pdf: "$(srcdir)\tomographintro.pdf"
+	$(INSTALL) "$(srcdir)\tomographintro.pdf" "tomographintro.pdf"
+all-msc: $(C_noinst_shutdowntest_exe) $(C_inst_shutdowntest_exe) "mserver5.exe" "monetdblogo.png" "tomographintro.docx" "tomographintro.pdf"
+check-msc: all-msc "tomographintro.pdf" "tomographintro.docx" "monetdblogo.png"
+install-msc: install-exec install-data
+install-exec: "install_bin_shutdowntest" "install_bin_mserver5"  "install_tomographintro.pdf" "install_tomographintro.docx" "install_monetdblogo.png" 
+!IF defined(HAVE_TESTING)
+install_bin_shutdowntest: $(C_inst_shutdowntest_exe)
+	if not exist "$(shutdowntestdir)" $(MKDIR) "$(shutdowntestdir)"
+	$(INSTALL) $(C_inst_shutdowntest_exe) "$(shutdowntestdir)"
+	$(INSTALL) shutdowntest.pdb "$(shutdowntestdir)"
+!ELSE
+install_bin_shutdowntest:
+!ENDIF
+install_bin_mserver5: "mserver5.exe"
+	if not exist "$(mserver5dir)" $(MKDIR) "$(mserver5dir)"
+	$(INSTALL) "mserver5.exe" "$(mserver5dir)"
+	$(INSTALL) mserver5.pdb "$(mserver5dir)"
+install_tomographintro.pdf: "tomographintro.pdf" "$(datadir)\doc\MonetDB-client-tools"
+	$(INSTALL) "tomographintro.pdf" "$(datadir)\doc\MonetDB-client-tools\tomographintro.pdf"
+install_tomographintro.docx: "tomographintro.docx" "$(datadir)\doc\MonetDB-client-tools"
+	$(INSTALL) "tomographintro.docx" "$(datadir)\doc\MonetDB-client-tools\tomographintro.docx"
+install_monetdblogo.png: "monetdblogo.png" "$(datadir)\doc\MonetDB"
+	$(INSTALL) "monetdblogo.png" "$(datadir)\doc\MonetDB\monetdblogo.png"
+"$(datadir)\doc\MonetDB-client-tools":
+	if not exist "$(datadir)\doc\MonetDB-client-tools" $(MKDIR) "$(datadir)\doc\MonetDB-client-tools"
+"$(datadir)\doc\MonetDB":
+	if not exist "$(datadir)\doc\MonetDB" $(MKDIR) "$(datadir)\doc\MonetDB"
+install-data:

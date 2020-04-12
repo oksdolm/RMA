@@ -1,0 +1,54 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..\..\..
+srcdir = $(TOPDIR)\..\sql\backends\monet5\vaults\fits
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I.." -I$(srcdir)\.. "-I..\.." -I$(srcdir)\..\.. "-I..\..\..\..\include" -I$(srcdir)\..\..\..\..\include "-I..\..\..\..\common" -I$(srcdir)\..\..\..\..\common "-I..\..\..\..\storage" -I$(srcdir)\..\..\..\..\storage "-I..\..\..\..\server" -I$(srcdir)\..\..\..\..\server "-I..\..\..\..\..\monetdb5\modules\atoms" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms "-I..\..\..\..\..\monetdb5\modules\kernel" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\kernel "-I..\..\..\..\..\monetdb5\mal" -I$(srcdir)\..\..\..\..\..\monetdb5\mal "-I..\..\..\..\..\monetdb5\modules\mal" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\mal "-I..\..\..\..\..\monetdb5\optimizer" -I$(srcdir)\..\..\..\..\..\monetdb5\optimizer "-I..\..\..\..\..\monetdb5\scheduler" -I$(srcdir)\..\..\..\..\..\monetdb5\scheduler "-I..\..\..\..\..\common\options" -I$(srcdir)\..\..\..\..\..\common\options "-I..\..\..\..\..\common\stream" -I$(srcdir)\..\..\..\..\..\common\stream "-I..\..\..\..\..\common\utils" -I$(srcdir)\..\..\..\..\..\common\utils "-I..\..\..\..\..\gdk" -I$(srcdir)\..\..\..\..\..\gdk $(cfitsio_CFLAGS)
+72_fits.mal: "$(srcdir)\72_fits.mal"
+	$(INSTALL) "$(srcdir)\72_fits.mal" "72_fits.mal"
+fits.mal: "$(srcdir)\fits.mal"
+	$(INSTALL) "$(srcdir)\fits.mal" "fits.mal"
+72_fits.sql: "$(srcdir)\72_fits.sql"
+	$(INSTALL) "$(srcdir)\72_fits.sql" "72_fits.sql"
+lib_fits.dll:  ..\..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\..\gdk\libbat.lib
+lib_fits_LIBS = ..\..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\..\gdk\libbat.lib $(cfitsio_LIBS)
+lib_fits_OBJS = fits.obj
+lib_fits_DEPS = $(lib_fits_OBJS)
+lib_fits.lib: lib_fits.dll
+lib_fits.dll: $(lib_fits_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -Felib_fits.dll @<< /link @<<
+$(lib_fits_OBJS)
+<<
+$(lib_fits_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+fits.obj: "$(srcdir)\fits.c" "$(srcdir)\fits.h" "$(srcdir)\..\..\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_resolve.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_function.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_module.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_listing.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_profiler.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_client.h" "$(srcdir)\..\..\..\..\..\common\utils\mutils.h" "$(srcdir)\..\..\..\..\include\sql_mem.h" "$(srcdir)\..\..\..\..\server\sql_scan.h" "$(srcdir)\..\..\..\..\include\sql_list.h" "$(srcdir)\..\..\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\..\common\sql_types.h" "$(srcdir)\..\..\..\..\common\sql_string.h" "$(srcdir)\..\..\..\..\include\sql_catalog.h" "$(srcdir)\..\..\..\..\storage\sql_storage.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_logger.h" "$(srcdir)\..\..\..\..\common\sql_backend.h" "$(srcdir)\..\..\..\..\include\sql_relation.h" "$(srcdir)\..\..\..\..\include\sql_keyword.h" "$(srcdir)\..\..\..\..\server\sql_atom.h" "$(srcdir)\..\..\..\..\include\sql_query.h" "$(srcdir)\..\..\..\..\server\sql_mvc.h" "$(srcdir)\..\..\sql_scenario.h" "$(srcdir)\..\..\sql_execute.h" "$(srcdir)\..\..\mal_backend.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_session.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_scenario.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_import.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_utils.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_interpreter.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_factory.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\mal\tablet.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\streams.h" "$(srcdir)\..\..\..\..\..\common\stream\stream_socket.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\mtime.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\blob.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\mal\mkey.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\str.h" "$(srcdir)\..\..\..\..\server\sql_privileges.h" "$(srcdir)\..\..\..\..\server\sql_decimal.h" "$(srcdir)\..\..\..\..\server\sql_qc.h" "$(srcdir)\..\..\..\..\server\sql_symbol.h" "$(srcdir)\..\..\..\..\server\sql_env.h" "$(srcdir)\..\..\..\..\server\sql_parser.h" "$(srcdir)\..\..\sql_statement.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\mal\querylog.h" "$(srcdir)\..\..\..\..\storage\bat\bat_storage.h" "$(srcdir)\..\..\..\..\storage\bat\bat_utils.h" "$(srcdir)\..\..\sql_cast.h" "$(srcdir)\..\..\sql.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\mal\clients.h"
+	$(CC) /EHsc $(CFLAGS) $(fits_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBFITS "-Fofits.obj" -c "$(srcdir)\fits.c"
+all-msc: "lib_fits.dll" "72_fits.mal" "fits.mal" "72_fits.sql"
+check-msc: all-msc "72_fits.mal" "72_fits.sql" "fits.mal" "lib_fits.dll"
+install-msc: install-exec install-data
+install-exec:  "install_72_fits.mal" "install_72_fits.sql" "install_fits.mal" "install_lib_fits" 
+install_72_fits.mal: "72_fits.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "72_fits.mal" "$(libdir)\monetdb5\autoload\72_fits.mal"
+install_72_fits.sql: "72_fits.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "72_fits.sql" "$(libdir)\monetdb5\createdb\72_fits.sql"
+install_fits.mal: "fits.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "fits.mal" "$(libdir)\monetdb5\fits.mal"
+install_lib_fits: "lib_fits.dll" "$(libdir)\monetdb5"
+	$(INSTALL) "lib_fits.dll" "$(libdir)\monetdb5\lib_fits.dll"
+	$(INSTALL) "lib_fits.lib" "$(libdir)\monetdb5\lib_fits.lib"
+	$(INSTALL) "lib_fits.pdb" "$(libdir)\monetdb5\lib_fits.pdb"
+"$(libdir)\monetdb5\autoload":
+	if not exist "$(libdir)\monetdb5\autoload" $(MKDIR) "$(libdir)\monetdb5\autoload"
+"$(libdir)\monetdb5\createdb":
+	if not exist "$(libdir)\monetdb5\createdb" $(MKDIR) "$(libdir)\monetdb5\createdb"
+"$(libdir)\monetdb5":
+	if not exist "$(libdir)\monetdb5" $(MKDIR) "$(libdir)\monetdb5"
+install-data:

@@ -1,0 +1,54 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..\..\..
+srcdir = $(TOPDIR)\..\sql\backends\monet5\vaults\shp
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I.." -I$(srcdir)\.. "-I..\.." -I$(srcdir)\..\.. "-I..\..\..\..\include" -I$(srcdir)\..\..\..\..\include "-I..\..\..\..\common" -I$(srcdir)\..\..\..\..\common "-I..\..\..\..\storage" -I$(srcdir)\..\..\..\..\storage "-I..\..\..\..\server" -I$(srcdir)\..\..\..\..\server "-I..\..\..\..\..\monetdb5\modules\atoms" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms "-I..\..\..\..\..\monetdb5\modules\kernel" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\kernel "-I..\..\..\..\..\monetdb5\mal" -I$(srcdir)\..\..\..\..\..\monetdb5\mal "-I..\..\..\..\..\monetdb5\modules\mal" -I$(srcdir)\..\..\..\..\..\monetdb5\modules\mal "-I..\..\..\..\..\monetdb5\optimizer" -I$(srcdir)\..\..\..\..\..\monetdb5\optimizer "-I..\..\..\..\..\monetdb5\scheduler" -I$(srcdir)\..\..\..\..\..\monetdb5\scheduler "-I..\..\..\..\..\common\options" -I$(srcdir)\..\..\..\..\..\common\options "-I..\..\..\..\..\common\stream" -I$(srcdir)\..\..\..\..\..\common\stream "-I..\..\..\..\..\common\utils" -I$(srcdir)\..\..\..\..\..\common\utils "-I..\..\..\..\..\gdk" -I$(srcdir)\..\..\..\..\..\gdk "-I..\..\..\..\..\geom\lib" -I$(srcdir)\..\..\..\..\..\geom\lib "-I..\..\..\..\..\geom\monetdb5" -I$(srcdir)\..\..\..\..\..\geom\monetdb5 $(GDAL_CFLAGS)
+75_shp.sql: "$(srcdir)\75_shp.sql"
+	$(INSTALL) "$(srcdir)\75_shp.sql" "75_shp.sql"
+75_shp.mal: "$(srcdir)\75_shp.mal"
+	$(INSTALL) "$(srcdir)\75_shp.mal" "75_shp.mal"
+lib_shp.dll:  ..\..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\..\gdk\libbat.lib
+lib_shp_LIBS = ..\..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\..\gdk\libbat.lib $(GDAL_LIBS)
+lib_shp_OBJS = shp.obj
+lib_shp_DEPS = $(lib_shp_OBJS)
+lib_shp.lib: lib_shp.dll
+lib_shp.dll: $(lib_shp_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -Felib_shp.dll @<< /link @<<
+$(lib_shp_OBJS)
+<<
+$(lib_shp_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+shp.obj: "$(srcdir)\shp.c" "$(srcdir)\..\..\..\..\include\sql_mem.h" "$(srcdir)\..\..\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\..\server\sql_scan.h" "$(srcdir)\..\..\..\..\include\sql_list.h" "$(srcdir)\..\..\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\..\common\sql_types.h" "$(srcdir)\..\..\..\..\common\sql_string.h" "$(srcdir)\..\..\..\..\include\sql_catalog.h" "$(srcdir)\..\..\..\..\storage\sql_storage.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_logger.h" "$(srcdir)\..\..\..\..\common\sql_backend.h" "$(srcdir)\..\..\..\..\include\sql_relation.h" "$(srcdir)\..\..\..\..\include\sql_keyword.h" "$(srcdir)\..\..\..\..\server\sql_atom.h" "$(srcdir)\..\..\..\..\include\sql_query.h" "$(srcdir)\..\..\..\..\server\sql_mvc.h" "$(srcdir)\..\..\mal_backend.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_session.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_scenario.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_import.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_client.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_resolve.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_function.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_module.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_listing.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_profiler.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_utils.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_interpreter.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_factory.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\mal\tablet.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\streams.h" "$(srcdir)\..\..\..\..\..\common\stream\stream_socket.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\mtime.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\blob.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\mal\mkey.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\atoms\str.h" "$(srcdir)\..\..\..\..\server\sql_privileges.h" "$(srcdir)\..\..\..\..\server\sql_decimal.h" "$(srcdir)\..\..\..\..\server\sql_qc.h" "$(srcdir)\..\..\..\..\server\sql_symbol.h" "$(srcdir)\..\..\..\..\server\sql_env.h" "$(srcdir)\..\..\..\..\server\sql_parser.h" "$(srcdir)\..\..\sql_statement.h" "$(srcdir)\..\..\..\..\..\monetdb5\modules\mal\querylog.h" "$(srcdir)\..\..\..\..\storage\bat\bat_storage.h" "$(srcdir)\..\..\..\..\storage\bat\bat_utils.h" "$(srcdir)\..\..\sql_cast.h" "$(srcdir)\..\..\sql.h" "$(srcdir)\shp.h" "$(srcdir)\..\..\sql_execute.h" "$(srcdir)\..\..\..\..\..\geom\monetdb5\geom.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\..\..\gdk\gdk_calc.h" "$(srcdir)\..\..\..\..\include\sql_hash.h" "$(srcdir)\..\..\..\..\..\geom\lib\libgeom.h" "$(srcdir)\..\..\..\..\..\monetdb5\mal\mal_atom.h"
+	$(CC) /EHsc $(CFLAGS) $(shp_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSHP "-Foshp.obj" -c "$(srcdir)\shp.c"
+shp.mal: "$(srcdir)\shp.mal"
+	$(INSTALL) "$(srcdir)\shp.mal" "shp.mal"
+all-msc: "lib_shp.dll" "75_shp.sql" "75_shp.mal" "shp.mal"
+check-msc: all-msc "75_shp.mal" "shp.mal" "75_shp.sql" "lib_shp.dll"
+install-msc: install-exec install-data
+install-exec:  "install_75_shp.mal" "install_shp.mal" "install_75_shp.sql" "install_lib_shp" 
+install_75_shp.mal: "75_shp.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "75_shp.mal" "$(libdir)\monetdb5\autoload\75_shp.mal"
+install_shp.mal: "shp.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "shp.mal" "$(libdir)\monetdb5\shp.mal"
+install_75_shp.sql: "75_shp.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "75_shp.sql" "$(libdir)\monetdb5\createdb\75_shp.sql"
+install_lib_shp: "lib_shp.dll" "$(libdir)\monetdb5"
+	$(INSTALL) "lib_shp.dll" "$(libdir)\monetdb5\lib_shp.dll"
+	$(INSTALL) "lib_shp.lib" "$(libdir)\monetdb5\lib_shp.lib"
+	$(INSTALL) "lib_shp.pdb" "$(libdir)\monetdb5\lib_shp.pdb"
+"$(libdir)\monetdb5\autoload":
+	if not exist "$(libdir)\monetdb5\autoload" $(MKDIR) "$(libdir)\monetdb5\autoload"
+"$(libdir)\monetdb5":
+	if not exist "$(libdir)\monetdb5" $(MKDIR) "$(libdir)\monetdb5"
+"$(libdir)\monetdb5\createdb":
+	if not exist "$(libdir)\monetdb5\createdb" $(MKDIR) "$(libdir)\monetdb5\createdb"
+install-data:

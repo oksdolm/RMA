@@ -1,0 +1,46 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\clients\examples\perl
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+INCLUDES = -I$(srcdir)
+sqlsample.pl: "$(srcdir)\sqlsample.pl"
+	$(INSTALL) "$(srcdir)\sqlsample.pl" "sqlsample.pl"
+!IF defined(HAVE_TESTING)
+C_sqlsample_pl = sqlsample.pl
+!ELSE
+C_sqlsample_pl =
+!ENDIF
+malsample.pl: "$(srcdir)\malsample.pl"
+	$(INSTALL) "$(srcdir)\malsample.pl" "malsample.pl"
+!IF defined(HAVE_TESTING)
+C_malsample_pl = malsample.pl
+!ELSE
+C_malsample_pl =
+!ENDIF
+all-msc: $(C_sqlsample_pl) $(C_malsample_pl)
+check-msc: all-msc $(C_sqlsample_pl) $(C_malsample_pl)
+install-msc: install-exec install-data
+install-exec:  "install_sqlsample.pl" "install_malsample.pl" 
+!IF defined(HAVE_TESTING)
+install_sqlsample.pl: "$(C_sqlsample_pl)" "$(bindir)"
+	$(INSTALL) "$(C_sqlsample_pl)" "$(bindir)\sqlsample.pl"
+!ELSE
+install_sqlsample.pl:
+!ENDIF
+!IF defined(HAVE_TESTING)
+install_malsample.pl: "$(C_malsample_pl)" "$(bindir)"
+	$(INSTALL) "$(C_malsample_pl)" "$(bindir)\malsample.pl"
+!ELSE
+install_malsample.pl:
+!ENDIF
+"$(bindir)":
+	if not exist "$(bindir)" $(MKDIR) "$(bindir)"
+install-data:

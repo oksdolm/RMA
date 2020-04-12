@@ -1,0 +1,94 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..\..
+srcdir = $(TOPDIR)\..\sql\backends\monet5\generator
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir) "-I..\..\..\include" -I$(srcdir)\..\..\..\include "-I..\..\..\common" -I$(srcdir)\..\..\..\common "-I..\..\..\storage" -I$(srcdir)\..\..\..\storage "-I..\..\..\server" -I$(srcdir)\..\..\..\server "-I..\..\..\..\monetdb5\modules\atoms" -I$(srcdir)\..\..\..\..\monetdb5\modules\atoms "-I..\..\..\..\monetdb5\modules\kernel" -I$(srcdir)\..\..\..\..\monetdb5\modules\kernel "-I..\..\..\..\monetdb5\mal" -I$(srcdir)\..\..\..\..\monetdb5\mal "-I..\..\..\..\monetdb5\modules\mal" -I$(srcdir)\..\..\..\..\monetdb5\modules\mal "-I..\..\..\..\monetdb5\optimizer" -I$(srcdir)\..\..\..\..\monetdb5\optimizer "-I..\..\..\..\monetdb5\scheduler" -I$(srcdir)\..\..\..\..\monetdb5\scheduler "-I..\..\..\..\common\options" -I$(srcdir)\..\..\..\..\common\options "-I..\..\..\..\common\stream" -I$(srcdir)\..\..\..\..\common\stream "-I..\..\..\..\common\utils" -I$(srcdir)\..\..\..\..\common\utils "-I..\..\..\..\gdk" -I$(srcdir)\..\..\..\..\gdk
+EXTRA_DIST_DIR =  Tests
+90_generator.sql: "$(srcdir)\90_generator.sql"
+	$(INSTALL) "$(srcdir)\90_generator.sql" "90_generator.sql"
+90_generator.mal: "$(srcdir)\90_generator.mal"
+	$(INSTALL) "$(srcdir)\90_generator.mal" "90_generator.mal"
+90_generator_hge.sql: "$(srcdir)\90_generator_hge.sql"
+	$(INSTALL) "$(srcdir)\90_generator_hge.sql" "90_generator_hge.sql"
+!IF defined(HAVE_HGE)
+C_90_generator_hge_sql = 90_generator_hge.sql
+!ELSE
+C_90_generator_hge_sql =
+!ENDIF
+generator.mal: "$(srcdir)\generator.mal"
+	$(INSTALL) "$(srcdir)\generator.mal" "generator.mal"
+lib_generator.dll:  ..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\gdk\libbat.lib
+lib_generator_LIBS = ..\..\..\..\monetdb5\tools\libmonetdb5.lib ..\..\..\..\gdk\libbat.lib
+lib_generator_OBJS = generator.obj
+lib_generator_DEPS = $(lib_generator_OBJS)
+lib_generator.lib: lib_generator.dll
+lib_generator.dll: $(lib_generator_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -Felib_generator.dll @<< /link @<<
+$(lib_generator_OBJS)
+<<
+$(lib_generator_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+generator.obj: "$(srcdir)\generator.c" "$(srcdir)\..\..\..\..\monetdb5\optimizer\opt_support.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal.h" "$(srcdir)\..\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_function.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_instruction.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_type.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_stack.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_namespace.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_module.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_resolve.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_exception.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_errors.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_listing.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_scenario.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_import.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_client.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_profiler.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_session.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_utils.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_builder.h" "$(srcdir)\..\..\..\..\monetdb5\optimizer\opt_prelude.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_interpreter.h" "$(srcdir)\..\..\..\..\monetdb5\mal\mal_factory.h" "$(srcdir)\..\..\..\..\monetdb5\modules\kernel\algebra.h" "$(srcdir)\generator.h" "$(srcdir)\..\..\..\..\monetdb5\modules\atoms\mtime.h" "$(srcdir)\..\..\..\..\gdk\gdk_atomic.h" "$(srcdir)\..\..\..\..\gdk\gdk_system.h" "$(srcdir)\..\..\..\..\gdk\gdk_posix.h" "$(srcdir)\..\..\..\..\common\stream\stream.h" "$(srcdir)\..\..\..\..\gdk\gdk_delta.h" "$(srcdir)\..\..\..\..\gdk\gdk_hash.h" "$(srcdir)\..\..\..\..\gdk\gdk_atoms.h" "$(srcdir)\..\..\..\..\gdk\gdk_bbp.h" "$(srcdir)\..\..\..\..\common\options\monet_options.h" "$(srcdir)\..\..\..\..\gdk\gdk_utils.h" "$(srcdir)\..\..\..\..\gdk\gdk_calc.h"
+	$(CC) /EHsc $(CFLAGS) $(generator_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBGENERATOR "-Fogenerator.obj" -c "$(srcdir)\generator.c"
+90_generator_hge.mal: "$(srcdir)\90_generator_hge.mal"
+	$(INSTALL) "$(srcdir)\90_generator_hge.mal" "90_generator_hge.mal"
+!IF defined(HAVE_HGE)
+C_90_generator_hge_mal = 90_generator_hge.mal
+!ELSE
+C_90_generator_hge_mal =
+!ENDIF
+generator_hge.mal: "$(srcdir)\generator_hge.mal"
+	$(INSTALL) "$(srcdir)\generator_hge.mal" "generator_hge.mal"
+!IF defined(HAVE_HGE)
+C_generator_hge_mal = generator_hge.mal
+!ELSE
+C_generator_hge_mal =
+!ENDIF
+all-msc: "lib_generator.dll" "90_generator.sql" "90_generator.mal" "90_generator_hge.sql" "generator.mal" "90_generator_hge.mal" "generator_hge.mal"
+check-msc: all-msc "90_generator_hge.sql" "generator.mal" "90_generator.sql" "lib_generator.dll" "90_generator_hge.mal" "90_generator.mal" "generator_hge.mal"
+install-msc: install-exec install-data
+install-exec:  "install_90_generator_hge.sql" "install_generator.mal" "install_90_generator.sql" "install_lib_generator" "install_90_generator_hge.mal" "install_90_generator.mal" "install_generator_hge.mal" 
+!IF defined(HAVE_HGE)
+install_90_generator_hge.sql: "90_generator_hge.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "90_generator_hge.sql" "$(libdir)\monetdb5\createdb\90_generator_hge.sql"
+!ELSE
+install_90_generator_hge.sql:
+!ENDIF
+install_generator.mal: "generator.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "generator.mal" "$(libdir)\monetdb5\generator.mal"
+install_90_generator.sql: "90_generator.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "90_generator.sql" "$(libdir)\monetdb5\createdb\90_generator.sql"
+install_lib_generator: "lib_generator.dll" "$(libdir)\monetdb5"
+	$(INSTALL) "lib_generator.dll" "$(libdir)\monetdb5\lib_generator.dll"
+	$(INSTALL) "lib_generator.lib" "$(libdir)\monetdb5\lib_generator.lib"
+	$(INSTALL) "lib_generator.pdb" "$(libdir)\monetdb5\lib_generator.pdb"
+!IF defined(HAVE_HGE)
+install_90_generator_hge.mal: "90_generator_hge.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "90_generator_hge.mal" "$(libdir)\monetdb5\autoload\90_generator_hge.mal"
+!ELSE
+install_90_generator_hge.mal:
+!ENDIF
+install_90_generator.mal: "90_generator.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "90_generator.mal" "$(libdir)\monetdb5\autoload\90_generator.mal"
+!IF defined(HAVE_HGE)
+install_generator_hge.mal: "generator_hge.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "generator_hge.mal" "$(libdir)\monetdb5\generator_hge.mal"
+!ELSE
+install_generator_hge.mal:
+!ENDIF
+"$(libdir)\monetdb5\createdb":
+	if not exist "$(libdir)\monetdb5\createdb" $(MKDIR) "$(libdir)\monetdb5\createdb"
+"$(libdir)\monetdb5":
+	if not exist "$(libdir)\monetdb5" $(MKDIR) "$(libdir)\monetdb5"
+"$(libdir)\monetdb5\autoload":
+	if not exist "$(libdir)\monetdb5\autoload" $(MKDIR) "$(libdir)\monetdb5\autoload"
+install-data:

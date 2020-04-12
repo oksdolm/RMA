@@ -1,0 +1,58 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..
+srcdir = $(TOPDIR)\..\geom
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+EXTRA_DIST_DIR =  BugTracker
+INCLUDES = -I$(srcdir)
+lib-1-all: "lib-1-dir" "lib-1-Makefile"
+	$(CD) "lib" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+lib-1-dir: 
+	if not exist "lib" $(MKDIR) "lib"
+lib-1-Makefile: "$(srcdir)\lib\Makefile.msc"
+	$(INSTALL) "$(srcdir)\lib\Makefile.msc" "lib\Makefile"
+lib-1-check:
+	$(CD) "lib" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+lib-1-install:
+	$(CD) "lib" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!IFDEF HAVE_MONETDB5
+HAVE_MONETDB5-2-all: "HAVE_MONETDB5-2-dir" "HAVE_MONETDB5-2-Makefile"
+	$(CD) "monetdb5" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_MONETDB5-2-dir: 
+	if not exist "monetdb5" $(MKDIR) "monetdb5"
+HAVE_MONETDB5-2-Makefile: "$(srcdir)\monetdb5\Makefile.msc"
+	$(INSTALL) "$(srcdir)\monetdb5\Makefile.msc" "monetdb5\Makefile"
+HAVE_MONETDB5-2-check:
+	$(CD) "monetdb5" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_MONETDB5-2-install:
+	$(CD) "monetdb5" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_MONETDB5-2-all:
+HAVE_MONETDB5-2-check:
+HAVE_MONETDB5-2-install:
+!ENDIF
+sql-3-all: "sql-3-dir" "sql-3-Makefile"
+	$(CD) "sql" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+sql-3-dir: 
+	if not exist "sql" $(MKDIR) "sql"
+sql-3-Makefile: "$(srcdir)\sql\Makefile.msc"
+	$(INSTALL) "$(srcdir)\sql\Makefile.msc" "sql\Makefile"
+sql-3-check:
+	$(CD) "sql" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+sql-3-install:
+	$(CD) "sql" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+all-recursive: "lib-1-all" "HAVE_MONETDB5-2-all" "sql-3-all" 
+check-recursive: "lib-1-check" "HAVE_MONETDB5-2-check" "sql-3-check" 
+install-recursive: "lib-1-install" "HAVE_MONETDB5-2-install" "sql-3-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

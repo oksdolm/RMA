@@ -1,0 +1,47 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\monetdb5\tools
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir)
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+EXTRA_DIST_DIR =  Tests
+!IF defined(HAVE_MAPI)
+LIB0 = ..\..\clients\mapilib\libmapi.lib
+!ELSE
+LIB0 =
+!ENDIF
+libmonetdb5.dll:  ..\mal\libmal.lib ..\modules\atoms\libatoms.lib ..\modules\kernel\libkernel.lib ..\modules\mal\libmal.lib ..\optimizer\liboptimizer.lib ..\scheduler\libscheduler.lib ..\..\common\utils\libmsabaoth.lib ..\..\common\utils\libmuuid.lib ..\..\common\utils\libstrptime.lib ..\..\gdk\libbat.lib $(LIB0) ..\..\common\stream\libstream.lib
+libmonetdb5_LIBS = ..\mal\libmal.lib ..\modules\atoms\libatoms.lib ..\modules\kernel\libkernel.lib ..\modules\mal\libmal.lib ..\optimizer\liboptimizer.lib ..\scheduler\libscheduler.lib ..\..\common\utils\libmsabaoth.lib ..\..\common\utils\libmuuid.lib ..\..\common\utils\libstrptime.lib ..\..\gdk\libbat.lib $(LIB0) ..\..\common\stream\libstream.lib $(UUID_LIBS) $(MATH_LIBS) $(SOCKET_LIBS) $(MALLOC_LIBS) $(PTHREAD_LIBS) $(DL_LIBS) $(openssl_LIBS) $(pcre_LIBS) $(libxml2_LIBS)
+libmonetdb5_OBJS = libmonetdb5.res
+libmonetdb5_DEPS = $(libmonetdb5_OBJS)
+libmonetdb5.lib: libmonetdb5.dll
+libmonetdb5.dll: $(libmonetdb5_DEPS) 
+	python "$(TOPDIR)\..\NT\wincompile.py" $(CC) $(CFLAGS) -LD -Felibmonetdb5.dll @<< /link @<<
+$(libmonetdb5_OBJS)
+<<
+$(libmonetdb5_LIBS)
+<<
+	if exist $@.manifest $(MT) -manifest $@.manifest -outputresource:$@;2
+
+libmonetdb5.res: "$(srcdir)\libmonetdb5.rc"
+	$(RC) -folibmonetdb5.res $(srcdir)\libmonetdb5.rc
+monetdb5.pc: "$(TOPDIR)\winconfig_conds.py" "$(srcdir)\monetdb5.pc.in"
+	$(CONFIGURE) "$(srcdir)\monetdb5.pc.in" > "monetdb5.pc"
+all-msc: "libmonetdb5.dll"
+check-msc: all-msc "libmonetdb5.dll"
+install-msc: install-exec install-data
+install-exec:  "install_libmonetdb5" 
+install_libmonetdb5: "libmonetdb5.dll" "$(libdir)"
+	$(INSTALL) "libmonetdb5.dll" "$(libdir)\libmonetdb5.dll"
+	$(INSTALL) "libmonetdb5.lib" "$(libdir)\libmonetdb5.lib"
+	$(INSTALL) "libmonetdb5.pdb" "$(libdir)\libmonetdb5.pdb"
+"$(libdir)":
+	if not exist "$(libdir)" $(MKDIR) "$(libdir)"
+install-data:

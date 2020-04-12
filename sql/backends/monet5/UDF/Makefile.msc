@@ -1,0 +1,79 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..\..
+srcdir = $(TOPDIR)\..\sql\backends\monet5\UDF
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+INCLUDES = -I$(srcdir)
+udf-1-all: "udf-1-dir" "udf-1-Makefile"
+	$(CD) "udf" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+udf-1-dir: 
+	if not exist "udf" $(MKDIR) "udf"
+udf-1-Makefile: "$(srcdir)\udf\Makefile.msc"
+	$(INSTALL) "$(srcdir)\udf\Makefile.msc" "udf\Makefile"
+udf-1-check:
+	$(CD) "udf" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+udf-1-install:
+	$(CD) "udf" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!IFDEF NOT_WIN32
+NOT_WIN32-2-all: "NOT_WIN32-2-dir" "NOT_WIN32-2-Makefile"
+	$(CD) "capi" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+NOT_WIN32-2-dir: 
+	if not exist "capi" $(MKDIR) "capi"
+NOT_WIN32-2-Makefile: "$(srcdir)\capi\Makefile.msc"
+	$(INSTALL) "$(srcdir)\capi\Makefile.msc" "capi\Makefile"
+NOT_WIN32-2-check:
+	$(CD) "capi" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+NOT_WIN32-2-install:
+	$(CD) "capi" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+NOT_WIN32-2-all:
+NOT_WIN32-2-check:
+NOT_WIN32-2-install:
+!ENDIF
+!IFDEF HAVE_LIBPY
+HAVE_LIBPY-3-all: "HAVE_LIBPY-3-dir" "HAVE_LIBPY-3-Makefile"
+	$(CD) "pyapi" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_LIBPY-3-dir: 
+	if not exist "pyapi" $(MKDIR) "pyapi"
+HAVE_LIBPY-3-Makefile: "$(srcdir)\pyapi\Makefile.msc"
+	$(INSTALL) "$(srcdir)\pyapi\Makefile.msc" "pyapi\Makefile"
+HAVE_LIBPY-3-check:
+	$(CD) "pyapi" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_LIBPY-3-install:
+	$(CD) "pyapi" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_LIBPY-3-all:
+HAVE_LIBPY-3-check:
+HAVE_LIBPY-3-install:
+!ENDIF
+!IFDEF HAVE_LIBPY3
+HAVE_LIBPY3-4-all: "HAVE_LIBPY3-4-dir" "HAVE_LIBPY3-4-Makefile"
+	$(CD) "pyapi3" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_LIBPY3-4-dir: 
+	if not exist "pyapi3" $(MKDIR) "pyapi3"
+HAVE_LIBPY3-4-Makefile: "$(srcdir)\pyapi3\Makefile.msc"
+	$(INSTALL) "$(srcdir)\pyapi3\Makefile.msc" "pyapi3\Makefile"
+HAVE_LIBPY3-4-check:
+	$(CD) "pyapi3" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_LIBPY3-4-install:
+	$(CD) "pyapi3" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_LIBPY3-4-all:
+HAVE_LIBPY3-4-check:
+HAVE_LIBPY3-4-install:
+!ENDIF
+all-recursive: "udf-1-all" "NOT_WIN32-2-all" "HAVE_LIBPY-3-all" "HAVE_LIBPY3-4-all" 
+check-recursive: "udf-1-check" "NOT_WIN32-2-check" "HAVE_LIBPY-3-check" "HAVE_LIBPY3-4-check" 
+install-recursive: "udf-1-install" "NOT_WIN32-2-install" "HAVE_LIBPY-3-install" "HAVE_LIBPY3-4-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

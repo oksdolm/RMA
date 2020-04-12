@@ -1,0 +1,113 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..\..
+srcdir = $(TOPDIR)\..\monetdb5\modules\kernel
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+INCLUDES = -I$(srcdir) "-I..\..\mal" -I$(srcdir)\..\..\mal "-I..\atoms" -I$(srcdir)\..\atoms "-I..\..\..\common\options" -I$(srcdir)\..\..\..\common\options "-I..\..\..\common\stream" -I$(srcdir)\..\..\..\common\stream "-I..\..\..\gdk" -I$(srcdir)\..\..\..\gdk
+EXTRA_DIST_DIR =  Tests
+00_aggr_hge.mal: "$(srcdir)\00_aggr_hge.mal"
+	$(INSTALL) "$(srcdir)\00_aggr_hge.mal" "00_aggr_hge.mal"
+!IF defined(HAVE_HGE)
+C_00_aggr_hge_mal = 00_aggr_hge.mal
+!ELSE
+C_00_aggr_hge_mal =
+!ENDIF
+alarm.mal: "$(srcdir)\alarm.mal"
+	$(INSTALL) "$(srcdir)\alarm.mal" "alarm.mal"
+bat5.mal: "$(srcdir)\bat5.mal"
+	$(INSTALL) "$(srcdir)\bat5.mal" "bat5.mal"
+microbenchmark.mal: "$(srcdir)\microbenchmark.mal"
+	$(INSTALL) "$(srcdir)\microbenchmark.mal" "microbenchmark.mal"
+batmmath.mal: "$(srcdir)\batmmath.mal"
+	$(INSTALL) "$(srcdir)\batmmath.mal" "batmmath.mal"
+mmath.mal: "$(srcdir)\mmath.mal"
+	$(INSTALL) "$(srcdir)\mmath.mal" "mmath.mal"
+aggr.mal: "$(srcdir)\aggr.mal"
+	$(INSTALL) "$(srcdir)\aggr.mal" "aggr.mal"
+batstr.mal: "$(srcdir)\batstr.mal"
+	$(INSTALL) "$(srcdir)\batstr.mal" "batstr.mal"
+group.mal: "$(srcdir)\group.mal"
+	$(INSTALL) "$(srcdir)\group.mal" "group.mal"
+batcolor.mal: "$(srcdir)\batcolor.mal"
+	$(INSTALL) "$(srcdir)\batcolor.mal" "batcolor.mal"
+status.mal: "$(srcdir)\status.mal"
+	$(INSTALL) "$(srcdir)\status.mal" "status.mal"
+algebra.mal: "$(srcdir)\algebra.mal"
+	$(INSTALL) "$(srcdir)\algebra.mal" "algebra.mal"
+logger.mal: "$(srcdir)\logger.mal"
+	$(INSTALL) "$(srcdir)\logger.mal" "logger.mal"
+libkernel_OBJS = aggr.obj alarm.obj algebra.obj bat5.obj batcolor.obj batmmath.obj batstr.obj group.obj logger.obj microbenchmark.obj mmath.obj status.obj
+libkernel_DEPS = $(libkernel_OBJS)
+libkernel.lib: $(libkernel_DEPS)
+	$(ARCHIVER) /out:"libkernel.lib" $(libkernel_OBJS) $(libkernel_LIBS)
+
+alarm.obj: "$(srcdir)\alarm.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(alarm_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Foalarm.obj" -c "$(srcdir)\alarm.c"
+mmath.obj: "$(srcdir)\mmath.c" "$(srcdir)\mmath.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(mmath_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Fommath.obj" -c "$(srcdir)\mmath.c"
+batcolor.obj: "$(srcdir)\batcolor.c" "$(srcdir)\batcolor.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\atoms\color.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(batcolor_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Fobatcolor.obj" -c "$(srcdir)\batcolor.c"
+aggr.obj: "$(srcdir)\aggr.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\algebra.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h"
+	$(CC) /EHsc $(CFLAGS) $(aggr_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Foaggr.obj" -c "$(srcdir)\aggr.c"
+algebra.obj: "$(srcdir)\algebra.c" "$(srcdir)\algebra.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h"
+	$(CC) /EHsc $(CFLAGS) $(algebra_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Foalgebra.obj" -c "$(srcdir)\algebra.c"
+bat5.obj: "$(srcdir)\bat5.c" "$(srcdir)\bat5.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(bat5_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Fobat5.obj" -c "$(srcdir)\bat5.c"
+group.obj: "$(srcdir)\group.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\group.h" "$(srcdir)\algebra.h" "$(srcdir)\..\..\mal\mal_client.h" "$(srcdir)\..\..\mal\mal_resolve.h" "$(srcdir)\..\..\mal\mal_function.h" "$(srcdir)\..\..\mal\mal_module.h" "$(srcdir)\..\..\mal\mal_listing.h" "$(srcdir)\..\..\mal\mal_profiler.h" "$(srcdir)\..\..\mal\mal_factory.h" "$(srcdir)\..\..\mal\mal_interpreter.h"
+	$(CC) /EHsc $(CFLAGS) $(group_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Fogroup.obj" -c "$(srcdir)\group.c"
+microbenchmark.obj: "$(srcdir)\microbenchmark.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\microbenchmark.h"
+	$(CC) /EHsc $(CFLAGS) $(microbenchmark_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Fomicrobenchmark.obj" -c "$(srcdir)\microbenchmark.c"
+status.obj: "$(srcdir)\status.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\status.h"
+	$(CC) /EHsc $(CFLAGS) $(status_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Fostatus.obj" -c "$(srcdir)\status.c"
+logger.obj: "$(srcdir)\logger.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\..\gdk\gdk_logger.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(logger_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Fologger.obj" -c "$(srcdir)\logger.c"
+batstr.obj: "$(srcdir)\batstr.c" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h" "$(srcdir)\..\atoms\str.h"
+	$(CC) /EHsc $(CFLAGS) $(batstr_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Fobatstr.obj" -c "$(srcdir)\batstr.c"
+batmmath.obj: "$(srcdir)\batmmath.c" "$(srcdir)\batmmath.h" "$(srcdir)\..\..\..\gdk\gdk.h" "$(srcdir)\..\..\mal\mal_instruction.h" "$(srcdir)\..\..\mal\mal_type.h" "$(srcdir)\..\..\mal\mal.h" "$(srcdir)\..\..\mal\mal_stack.h" "$(srcdir)\..\..\mal\mal_namespace.h" "$(srcdir)\..\..\mal\mal_errors.h" "$(srcdir)\..\..\mal\mal_exception.h"
+	$(CC) /EHsc $(CFLAGS) $(batmmath_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBKERNEL "-Fobatmmath.obj" -c "$(srcdir)\batmmath.c"
+all-msc: "libkernel.lib" "00_aggr_hge.mal" "alarm.mal" "bat5.mal" "microbenchmark.mal" "batmmath.mal" "mmath.mal" "aggr.mal" "batstr.mal" "group.mal" "batcolor.mal" "status.mal" "algebra.mal" "logger.mal"
+check-msc: all-msc "alarm.mal" "bat5.mal" "microbenchmark.mal" "batmmath.mal" "mmath.mal" "aggr.mal" "batstr.mal" "status.mal" "00_aggr_hge.mal" "batcolor.mal" "group.mal" "algebra.mal" "logger.mal"
+install-msc: install-exec install-data
+install-exec:  "install_alarm.mal" "install_bat5.mal" "install_microbenchmark.mal" "install_batmmath.mal" "install_mmath.mal" "install_aggr.mal" "install_batstr.mal" "install_status.mal" "install_00_aggr_hge.mal" "install_batcolor.mal" "install_group.mal" "install_algebra.mal" "install_logger.mal" 
+install_alarm.mal: "alarm.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "alarm.mal" "$(libdir)\monetdb5\alarm.mal"
+install_bat5.mal: "bat5.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "bat5.mal" "$(libdir)\monetdb5\bat5.mal"
+install_microbenchmark.mal: "microbenchmark.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "microbenchmark.mal" "$(libdir)\monetdb5\microbenchmark.mal"
+install_batmmath.mal: "batmmath.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "batmmath.mal" "$(libdir)\monetdb5\batmmath.mal"
+install_mmath.mal: "mmath.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "mmath.mal" "$(libdir)\monetdb5\mmath.mal"
+install_aggr.mal: "aggr.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "aggr.mal" "$(libdir)\monetdb5\aggr.mal"
+install_batstr.mal: "batstr.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "batstr.mal" "$(libdir)\monetdb5\batstr.mal"
+install_status.mal: "status.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "status.mal" "$(libdir)\monetdb5\status.mal"
+!IF defined(HAVE_HGE)
+install_00_aggr_hge.mal: "00_aggr_hge.mal" "$(libdir)\monetdb5\autoload"
+	$(INSTALL) "00_aggr_hge.mal" "$(libdir)\monetdb5\autoload\00_aggr_hge.mal"
+!ELSE
+install_00_aggr_hge.mal:
+!ENDIF
+install_batcolor.mal: "batcolor.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "batcolor.mal" "$(libdir)\monetdb5\batcolor.mal"
+install_group.mal: "group.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "group.mal" "$(libdir)\monetdb5\group.mal"
+install_algebra.mal: "algebra.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "algebra.mal" "$(libdir)\monetdb5\algebra.mal"
+install_logger.mal: "logger.mal" "$(libdir)\monetdb5"
+	$(INSTALL) "logger.mal" "$(libdir)\monetdb5\logger.mal"
+"$(libdir)\monetdb5":
+	if not exist "$(libdir)\monetdb5" $(MKDIR) "$(libdir)\monetdb5"
+"$(libdir)\monetdb5\autoload":
+	if not exist "$(libdir)\monetdb5\autoload" $(MKDIR) "$(libdir)\monetdb5\autoload"
+install-data:

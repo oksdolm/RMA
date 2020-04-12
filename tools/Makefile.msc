@@ -1,0 +1,53 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..
+srcdir = $(TOPDIR)\..\tools
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+INCLUDES = -I$(srcdir)
+!IFDEF HAVE_MONETDB5
+HAVE_MONETDB5-1-all: "HAVE_MONETDB5-1-dir" "HAVE_MONETDB5-1-Makefile"
+	$(CD) "mserver" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_MONETDB5-1-dir: 
+	if not exist "mserver" $(MKDIR) "mserver"
+HAVE_MONETDB5-1-Makefile: "$(srcdir)\mserver\Makefile.msc"
+	$(INSTALL) "$(srcdir)\mserver\Makefile.msc" "mserver\Makefile"
+HAVE_MONETDB5-1-check:
+	$(CD) "mserver" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_MONETDB5-1-install:
+	$(CD) "mserver" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_MONETDB5-1-all:
+HAVE_MONETDB5-1-check:
+HAVE_MONETDB5-1-install:
+!ENDIF
+!IFDEF NOT_WIN32
+NOT_WIN32-2-all: "NOT_WIN32-2-dir" "NOT_WIN32-2-Makefile"
+	$(CD) "merovingian" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+NOT_WIN32-2-dir: 
+	if not exist "merovingian" $(MKDIR) "merovingian"
+NOT_WIN32-2-Makefile: "$(srcdir)\merovingian\Makefile.msc"
+	$(INSTALL) "$(srcdir)\merovingian\Makefile.msc" "merovingian\Makefile"
+NOT_WIN32-2-check:
+	$(CD) "merovingian" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+NOT_WIN32-2-install:
+	$(CD) "merovingian" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+NOT_WIN32-2-all:
+NOT_WIN32-2-check:
+NOT_WIN32-2-install:
+!ENDIF
+all-recursive: "HAVE_MONETDB5-1-all" "NOT_WIN32-2-all" 
+check-recursive: "HAVE_MONETDB5-1-check" "NOT_WIN32-2-check" 
+install-recursive: "HAVE_MONETDB5-1-install" "NOT_WIN32-2-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

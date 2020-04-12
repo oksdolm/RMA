@@ -1,0 +1,359 @@
+
+	$(includedir)/monetdb/monetdb_config.h
+buildtools/
+buildtools/conf/
+	$(prefix)/website.html#NATIVE_WIN32
+	$(sysconfdir)/tmpfiles.d/monetdbd.conf#NOT_WIN32
+	$(prefix)/banner.bmp#NATIVE_WIN32
+	$(prefix)/monetdb.ico#NATIVE_WIN32
+	$(bindir)/Maddlog#HAVE_DEVELOPER
+	$(prefix)/license.rtf#NATIVE_WIN32
+common/
+common/stream/
+	$(includedir)/monetdb/stream_socket.h
+	$(includedir)/monetdb/stream.h
+	$(libdir)/libstream.so
+	$(libdir)/pkgconfig/monetdb-stream.pc#NOT_WIN32
+common/options/
+	$(includedir)/monetdb/monet_options.h
+common/utils/
+clients/
+clients/mapilib/#HAVE_MAPI
+	$(includedir)/monetdb/mapi.h
+	$(libdir)/libmapi.so
+	$(libdir)/pkgconfig/monetdb-mapi.pc#NOT_WIN32
+clients/mapiclient/#HAVE_MAPI
+	$(bindir)/mclient
+	$(bindir)/stethoscope
+	$(bindir)/tomograph
+	$(bindir)/msqldump
+	$(bindir)/tachograph
+	$(bindir)/mclient
+	$(bindir)/stethoscope
+	$(bindir)/tomograph
+	$(bindir)/msqldump
+	$(bindir)/tachograph
+clients/odbc/#HAVE_ODBC
+clients/odbc/setup/#HAVE_ODBC+NOT_WIN32
+	$(libdir)/libMonetODBCs.so
+clients/odbc/winsetup/#HAVE_ODBC+!NOT_WIN32
+	$(bindir)/odbcinstall
+	$(libdir)/libMonetODBCs.so
+	$(bindir)/odbcinstall
+clients/odbc/driver/#HAVE_ODBC
+	$(libdir)/libMonetODBC.so
+clients/odbc/samples/#HAVE_ODBC
+	$(bindir)/$(C_inst_odbcsample1)
+	$(bindir)/$(C_inst_testgetinfo)
+	$(bindir)/$(C_inst_arraytest)
+	$(bindir)/$(C_inst_testStmtAttr)
+clients/examples/#HAVE_MAPI
+clients/examples/C/#HAVE_MAPI
+	$(bindir)/$(C_inst_sample0)
+	$(bindir)/$(C_inst_sample1)
+	$(bindir)/$(C_inst_sample4)
+	$(bindir)/$(C_inst_smack00)
+	$(bindir)/$(C_inst_smack01)
+clients/examples/php/#HAVE_MAPI
+	$(bindir)/sqlsample.php#HAVE_TESTING
+clients/examples/perl/#HAVE_MAPI
+	$(bindir)/sqlsample.pl#HAVE_TESTING
+	$(bindir)/malsample.pl#HAVE_TESTING
+clients/NT/#NATIVE_WIN32
+	$(prefix)/mclient.bat
+	$(prefix)/msqldump.bat
+	$(prefix)/stethoscope.bat
+gdk/#HAVE_GDK
+	$(libdir)/libbat.so
+	$(includedir)/monetdb/gdk_utils.h
+	$(includedir)/monetdb/gdk_cand.h
+	$(includedir)/monetdb/gdk_delta.h
+	$(includedir)/monetdb/gdk_hash.h
+	$(includedir)/monetdb/gdk_bbp.h
+	$(includedir)/monetdb/gdk_atoms.h
+	$(includedir)/monetdb/gdk_calc.h
+	$(includedir)/monetdb/gdk_system.h
+	$(includedir)/monetdb/gdk_atomic.h
+	$(includedir)/monetdb/gdk.h
+	$(includedir)/monetdb/gdk_posix.h
+	$(libdir)/pkgconfig/monetdb-gdk.pc#NOT_WIN32
+monetdb5/#HAVE_MONETDB5
+monetdb5/mal/#HAVE_MONETDB5
+	$(includedir)/monetdb/mal_exception.h
+	$(includedir)/monetdb/mal_type.h
+	$(includedir)/monetdb/mal_profiler.h
+	$(includedir)/monetdb/mal_errors.h
+	$(includedir)/monetdb/mal_client.h
+	$(includedir)/monetdb/mal_resolve.h
+	$(includedir)/monetdb/mal_namespace.h
+	$(includedir)/monetdb/mal_interpreter.h
+	$(includedir)/monetdb/mal_module.h
+	$(includedir)/monetdb/mal_stack.h
+	$(includedir)/monetdb/mal_instruction.h
+	$(includedir)/monetdb/mal_listing.h
+	$(includedir)/monetdb/mal_function.h
+	$(includedir)/monetdb/mal.h
+	$(includedir)/monetdb/mal_factory.h
+monetdb5/modules/#HAVE_MONETDB5
+monetdb5/modules/atoms/#HAVE_MONETDB5
+	$(libdir)/monetdb5/autoload/00_json_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/xml.mal
+	$(libdir)/monetdb5/url.mal
+	$(libdir)/monetdb5/blob.mal
+	$(libdir)/monetdb5/json.mal
+	$(libdir)/monetdb5/color.mal
+	$(libdir)/monetdb5/identifier.mal
+	$(libdir)/monetdb5/streams.mal
+	$(libdir)/monetdb5/batxml.mal
+	$(libdir)/monetdb5/inet.mal
+	$(libdir)/monetdb5/uuid.mal
+	$(libdir)/monetdb5/mcurl.mal
+	$(libdir)/monetdb5/mtime.mal
+	$(libdir)/monetdb5/str.mal
+monetdb5/modules/kernel/#HAVE_MONETDB5
+	$(libdir)/monetdb5/autoload/00_aggr_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/alarm.mal
+	$(libdir)/monetdb5/bat5.mal
+	$(libdir)/monetdb5/microbenchmark.mal
+	$(libdir)/monetdb5/batmmath.mal
+	$(libdir)/monetdb5/mmath.mal
+	$(libdir)/monetdb5/aggr.mal
+	$(libdir)/monetdb5/batstr.mal
+	$(libdir)/monetdb5/group.mal
+	$(libdir)/monetdb5/batcolor.mal
+	$(libdir)/monetdb5/status.mal
+	$(libdir)/monetdb5/algebra.mal
+	$(libdir)/monetdb5/logger.mal
+monetdb5/modules/mal/#HAVE_MONETDB5
+	$(libdir)/monetdb5/autoload/00_batcalc_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/autoload/00_calc_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/autoload/00_mkey_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/autoload/00_mal_mapi_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/autoload/00_iterator_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/autoload/00_language_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/autoload/00_batExtensions_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/pcre.mal
+	$(libdir)/monetdb5/manifold.mal
+	$(libdir)/monetdb5/sysmon.mal
+	$(libdir)/monetdb5/json_util.mal
+	$(libdir)/monetdb5/groupby.mal
+	$(libdir)/monetdb5/mal_init.mal
+	$(libdir)/monetdb5/remote.mal
+	$(libdir)/monetdb5/mal_mapi.mal
+	$(libdir)/monetdb5/tokenizer.mal
+	$(libdir)/monetdb5/bbp.mal
+	$(libdir)/monetdb5/oltp.mal
+	$(libdir)/monetdb5/wlc.mal
+	$(libdir)/monetdb5/sabaoth.mal
+	$(libdir)/monetdb5/batExtensions.mal
+	$(libdir)/monetdb5/manual.mal
+	$(libdir)/monetdb5/language.mal
+	$(libdir)/monetdb5/mdb.mal
+	$(libdir)/monetdb5/factories.mal
+	$(libdir)/monetdb5/inspect.mal
+	$(libdir)/monetdb5/mat.mal
+	$(libdir)/monetdb5/profiler.mal
+	$(libdir)/monetdb5/iterator.mal
+	$(libdir)/monetdb5/transaction.mal
+	$(libdir)/monetdb5/sample.mal
+	$(libdir)/monetdb5/orderidx.mal
+	$(libdir)/monetdb5/querylog.mal
+	$(libdir)/monetdb5/txtsim.mal
+	$(libdir)/monetdb5/clients.mal
+	$(libdir)/monetdb5/batmtime.mal
+	$(libdir)/monetdb5/mkey.mal
+	$(libdir)/monetdb5/mal_io.mal
+	$(libdir)/monetdb5/autoload/01_batcalc.mal
+	$(libdir)/monetdb5/autoload/01_calc.mal
+monetdb5/optimizer/#HAVE_MONETDB5
+	$(libdir)/monetdb5/optimizer.mal
+monetdb5/scheduler/#HAVE_MONETDB5
+	$(libdir)/monetdb5/run_memo.mal
+	$(libdir)/monetdb5/run_adder.mal
+	$(libdir)/monetdb5/run_isolate.mal
+monetdb5/tools/#HAVE_MONETDB5
+	$(libdir)/libmonetdb5.so
+	$(libdir)/pkgconfig/monetdb5.pc#NOT_WIN32
+monetdb5/extras/#HAVE_MONETDB5
+monetdb5/extras/mal_optimizer_template/#HAVE_MONETDB5
+	$(libdir)/monetdb5/lib_opt_sql_append.so
+	$(libdir)/monetdb5/opt_sql_append.mal
+	$(libdir)/monetdb5/autoload/91_opt_sql_append.mal
+monetdb5/extras/rapi/#HAVE_MONETDB5+HAVE_LIBR
+	$(libdir)/monetdb5/rapi.R
+	$(libdir)/monetdb5/autoload/50_rapi.mal
+	$(libdir)/monetdb5/lib_rapi.so
+	$(libdir)/monetdb5/rapi.mal
+monetdb5/NT/#HAVE_MONETDB5+NATIVE_WIN32
+	$(prefix)/M5server.bat
+sql/#HAVE_SQL
+	$(datadir)/doc/MonetDB-SQL/dump-restore.html
+	$(datadir)/doc/MonetDB-SQL/dump-restore.txt
+sql/include/#HAVE_SQL
+sql/common/#HAVE_SQL
+sql/storage/#HAVE_SQL
+sql/storage/bat/#HAVE_SQL
+sql/server/#HAVE_SQL
+sql/backends/#HAVE_SQL
+sql/backends/monet5/#HAVE_SQL
+	$(libdir)/monetdb5/lib_sql.so
+	$(libdir)/monetdb5/autoload/40_sql.mal
+	$(libdir)/monetdb5/sql.mal
+	$(libdir)/monetdb5/sql_aggr_lng.mal
+	$(libdir)/monetdb5/sql_transaction.mal
+	$(libdir)/monetdb5/sql_inspect.mal
+	$(libdir)/monetdb5/sql_aggr_flt.mal
+	$(libdir)/monetdb5/sql_rank.mal
+	$(libdir)/monetdb5/wlr.mal
+	$(libdir)/monetdb5/sql_aggr_int.mal
+	$(libdir)/monetdb5/sql_aggr_bte.mal
+	$(libdir)/monetdb5/sql_decimal.mal
+	$(libdir)/monetdb5/sql_aggr_sht.mal
+	$(libdir)/monetdb5/sqlcatalog.mal
+	$(libdir)/monetdb5/sql_aggr_dbl.mal
+	$(libdir)/monetdb5/autoload/41_sql_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/sql_aggr_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/sql_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/sql_decimal_hge.mal#HAVE_HGE
+sql/backends/monet5/vaults/#HAVE_SQL+NOT_WIN32
+	$(libdir)/monetdb5/autoload/70_vault.mal
+	$(libdir)/monetdb5/vault.mal
+	$(libdir)/monetdb5/vault.sql
+	$(libdir)/monetdb5/lib_vault.so
+sql/backends/monet5/vaults/bam/#HAVE_SQL+NOT_WIN32+HAVE_SAMTOOLS
+	$(libdir)/monetdb5/lib_bam.so
+	$(libdir)/monetdb5/autoload/85_bam.mal
+	$(libdir)/monetdb5/bam.mal
+	$(libdir)/monetdb5/createdb/85_bam.sql
+sql/backends/monet5/vaults/fits/#HAVE_SQL+NOT_WIN32+HAVE_FITS
+	$(libdir)/monetdb5/autoload/72_fits.mal
+	$(libdir)/monetdb5/fits.mal
+	$(libdir)/monetdb5/createdb/72_fits.sql
+	$(libdir)/monetdb5/lib_fits.so
+sql/backends/monet5/vaults/lidar/#HAVE_SQL+NOT_WIN32+HAVE_LIDAR
+	$(libdir)/monetdb5/createdb/75_lidar.sql
+	$(libdir)/monetdb5/autoload/75_lidar.mal
+	$(libdir)/monetdb5/lidar.mal
+	$(libdir)/monetdb5/lib_lidar.so
+sql/backends/monet5/vaults/netcdf/#HAVE_SQL+NOT_WIN32+HAVE_NETCDF
+	$(libdir)/monetdb5/createdb/74_netcdf.sql
+	$(libdir)/monetdb5/autoload/74_netcdf.mal
+	$(libdir)/monetdb5/netcdf.mal
+	$(libdir)/monetdb5/lib_netcdf.so
+sql/backends/monet5/vaults/shp/#HAVE_SQL+NOT_WIN32+HAVE_SHP
+	$(libdir)/monetdb5/createdb/75_shp.sql
+	$(libdir)/monetdb5/autoload/75_shp.mal
+	$(libdir)/monetdb5/lib_shp.so
+	$(libdir)/monetdb5/shp.mal
+sql/backends/monet5/UDF/#HAVE_SQL
+sql/backends/monet5/UDF/udf/#HAVE_SQL
+	$(libdir)/monetdb5/autoload/80_udf.mal
+	$(libdir)/monetdb5/createdb/80_udf_hge.sql#HAVE_HGE
+	$(libdir)/monetdb5/udf.mal
+	$(libdir)/monetdb5/createdb/80_udf.sql
+	$(libdir)/monetdb5/autoload/80_udf_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/udf_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/lib_udf.so
+sql/backends/monet5/UDF/capi/#HAVE_SQL+NOT_WIN32
+	$(libdir)/monetdb5/capi.mal
+	$(libdir)/monetdb5/autoload/50_capi.mal
+	$(libdir)/monetdb5/lib_capi.so
+sql/backends/monet5/UDF/pyapi/#HAVE_SQL+HAVE_LIBPY
+	$(libdir)/monetdb5/autoload/50_pyapi.mal
+	$(libdir)/monetdb5/lib_pyapi.so
+	$(libdir)/monetdb5/pyapi.mal
+	$(prefix)/pyapi_locatepython.bat#NATIVE_WIN32
+sql/backends/monet5/UDF/pyapi3/#HAVE_SQL+HAVE_LIBPY3
+	$(libdir)/monetdb5/autoload/50_pyapi3.mal#HAVE_LIBPY3
+	$(libdir)/monetdb5/pyapi3.mal#HAVE_LIBPY3
+	$(libdir)/monetdb5/lib_pyapi3.so
+sql/backends/monet5/LSST/#HAVE_SQL
+	$(libdir)/monetdb5/lsst.mal
+	$(libdir)/monetdb5/lsst.sql
+	$(libdir)/monetdb5/autoload/80_lsst.mal
+	$(libdir)/monetdb5/lib_lsst.so
+sql/backends/monet5/generator/#HAVE_SQL
+	$(libdir)/monetdb5/createdb/90_generator.sql
+	$(libdir)/monetdb5/autoload/90_generator.mal
+	$(libdir)/monetdb5/createdb/90_generator_hge.sql#HAVE_HGE
+	$(libdir)/monetdb5/generator.mal
+	$(libdir)/monetdb5/lib_generator.so
+	$(libdir)/monetdb5/autoload/90_generator_hge.mal#HAVE_HGE
+	$(libdir)/monetdb5/generator_hge.mal#HAVE_HGE
+sql/scripts/#HAVE_SQL
+	$(libdir)/monetdb5/createdb/21_dependency_views.sql
+	$(libdir)/monetdb5/createdb/80_statistics.sql
+	$(libdir)/monetdb5/createdb/39_analytics.sql
+	$(libdir)/monetdb5/createdb/60_wlcr.sql
+	$(libdir)/monetdb5/createdb/26_sysmon.sql
+	$(libdir)/monetdb5/createdb/13_date.sql
+	$(libdir)/monetdb5/createdb/75_storagemodel.sql
+	$(libdir)/monetdb5/createdb/17_temporal.sql
+	$(libdir)/monetdb5/createdb/10_math.sql
+	$(libdir)/monetdb5/createdb/51_sys_schema_extension.sql
+	$(libdir)/monetdb5/createdb/21_dependency_functions.sql
+	$(libdir)/monetdb5/createdb/09_like.sql
+	$(libdir)/monetdb5/createdb/22_clients.sql
+	$(libdir)/monetdb5/createdb/40_json.sql
+	$(libdir)/monetdb5/createdb/41_md5sum.sql
+	$(libdir)/monetdb5/createdb/20_vacuum.sql
+	$(libdir)/monetdb5/createdb/25_debug.sql
+	$(libdir)/monetdb5/createdb/23_skyserver.sql
+	$(libdir)/monetdb5/createdb/46_profiler.sql
+	$(libdir)/monetdb5/createdb/45_uuid.sql
+	$(libdir)/monetdb5/createdb/16_tracelog.sql
+	$(libdir)/monetdb5/createdb/99_system.sql
+	$(libdir)/monetdb5/createdb/18_index.sql
+	$(libdir)/monetdb5/createdb/15_querylog.sql
+	$(libdir)/monetdb5/createdb/12_url.sql
+	$(libdir)/monetdb5/createdb/27_rejects.sql
+	$(libdir)/monetdb5/createdb/14_inet.sql
+	$(libdir)/monetdb5/createdb/11_times.sql
+	$(libdir)/monetdb5/createdb/39_analytics_hge.sql#HAVE_HGE
+	$(libdir)/monetdb5/createdb/40_json_hge.sql#HAVE_HGE
+sql/NT/#HAVE_SQL+NATIVE_WIN32
+	$(prefix)/MSQLclient.bat
+	$(prefix)/MSQLserver.bat
+geom/#HAVE_GEOM
+geom/lib/#HAVE_GEOM
+geom/monetdb5/#HAVE_GEOM+HAVE_MONETDB5
+	$(libdir)/monetdb5/autoload/30_geom.mal
+	$(libdir)/monetdb5/geom.mal
+	$(libdir)/monetdb5/lib_geom.so
+geom/sql/#HAVE_GEOM
+	$(libdir)/monetdb5/createdb/40_geom.sql
+tools/
+tools/mserver/#HAVE_MONETDB5
+	$(bindir)/shutdowntest#HAVE_TESTING
+	$(datadir)/doc/MonetDB/monetdblogo.png
+	$(bindir)/mserver5
+	$(datadir)/doc/MonetDB-client-tools/tomographintro.docx
+	$(datadir)/doc/MonetDB-client-tools/tomographintro.pdf
+	$(bindir)/$(C_inst_shutdowntest)
+	$(bindir)/mserver5
+tools/merovingian/#NOT_WIN32
+tools/merovingian/utils/#NOT_WIN32
+tools/merovingian/client/#NOT_WIN32
+	$(bindir)/monetdb
+	$(bindir)/monetdb
+tools/merovingian/daemon/#NOT_WIN32+HAVE_MONETDB5
+	$(bindir)/monetdbd
+	$(bindir)/monetdbd
+testing/#HAVE_TESTING
+	$(bindir)/Mapprove.py.bat#NATIVE_WIN32
+	$(bindir)/Mtest.py
+	$(bindir)/Mapprove.py
+	$(bindir)/Mtimeout#NOT_WIN32
+	$(prefix)/$(PYTHON_LIBDIR)/MonetDBtesting/exportutils.py
+	$(prefix)/$(PYTHON_LIBDIR)/MonetDBtesting/listexports.py
+	$(prefix)/$(PYTHON_LIBDIR)/MonetDBtesting/monet_options.py
+	$(prefix)/$(PYTHON_LIBDIR)/MonetDBtesting/__init__.py
+	$(prefix)/$(PYTHON_LIBDIR)/MonetDBtesting/Mfilter.py
+	$(prefix)/$(PYTHON_LIBDIR)/MonetDBtesting/malcheck.py
+	$(prefix)/$(PYTHON_LIBDIR)/MonetDBtesting/process.py
+	$(bindir)/Mlog#NOT_WIN32
+	$(bindir)/MkillUsers#NOT_WIN32
+	$(bindir)/Mlog.bat#NATIVE_WIN32
+	$(bindir)/Mtest.py.bat#NATIVE_WIN32
+	$(bindir)/Mdiff
+	$(bindir)/Mdiff

@@ -1,0 +1,57 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\tools\merovingian
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+INCLUDES = -I$(srcdir)
+utils-1-all: "utils-1-dir" "utils-1-Makefile"
+	$(CD) "utils" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+utils-1-dir: 
+	if not exist "utils" $(MKDIR) "utils"
+utils-1-Makefile: "$(srcdir)\utils\Makefile.msc"
+	$(INSTALL) "$(srcdir)\utils\Makefile.msc" "utils\Makefile"
+utils-1-check:
+	$(CD) "utils" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+utils-1-install:
+	$(CD) "utils" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+client-2-all: "client-2-dir" "client-2-Makefile"
+	$(CD) "client" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+client-2-dir: 
+	if not exist "client" $(MKDIR) "client"
+client-2-Makefile: "$(srcdir)\client\Makefile.msc"
+	$(INSTALL) "$(srcdir)\client\Makefile.msc" "client\Makefile"
+client-2-check:
+	$(CD) "client" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+client-2-install:
+	$(CD) "client" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!IFDEF HAVE_MONETDB5
+HAVE_MONETDB5-3-all: "HAVE_MONETDB5-3-dir" "HAVE_MONETDB5-3-Makefile"
+	$(CD) "daemon" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_MONETDB5-3-dir: 
+	if not exist "daemon" $(MKDIR) "daemon"
+HAVE_MONETDB5-3-Makefile: "$(srcdir)\daemon\Makefile.msc"
+	$(INSTALL) "$(srcdir)\daemon\Makefile.msc" "daemon\Makefile"
+HAVE_MONETDB5-3-check:
+	$(CD) "daemon" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_MONETDB5-3-install:
+	$(CD) "daemon" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_MONETDB5-3-all:
+HAVE_MONETDB5-3-check:
+HAVE_MONETDB5-3-install:
+!ENDIF
+all-recursive: "utils-1-all" "client-2-all" "HAVE_MONETDB5-3-all" 
+check-recursive: "utils-1-check" "client-2-check" "HAVE_MONETDB5-3-check" 
+install-recursive: "utils-1-install" "client-2-install" "HAVE_MONETDB5-3-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

@@ -1,0 +1,31 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\clients\NT
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir)
+mclient.bat: "$(srcdir)\mclient.bat"
+	$(INSTALL) "$(srcdir)\mclient.bat" "mclient.bat"
+msqldump.bat: "$(srcdir)\msqldump.bat"
+	$(INSTALL) "$(srcdir)\msqldump.bat" "msqldump.bat"
+stethoscope.bat: "$(srcdir)\stethoscope.bat"
+	$(INSTALL) "$(srcdir)\stethoscope.bat" "stethoscope.bat"
+all-msc: "mclient.bat" "msqldump.bat" "stethoscope.bat"
+check-msc: all-msc "msqldump.bat" "stethoscope.bat" "mclient.bat"
+install-msc: install-exec install-data
+install-exec:  "install_msqldump.bat" "install_stethoscope.bat" "install_mclient.bat" 
+install_msqldump.bat: "msqldump.bat" "$(prefix)"
+	$(INSTALL) "msqldump.bat" "$(prefix)\msqldump.bat"
+install_stethoscope.bat: "stethoscope.bat" "$(prefix)"
+	$(INSTALL) "stethoscope.bat" "$(prefix)\stethoscope.bat"
+install_mclient.bat: "mclient.bat" "$(prefix)"
+	$(INSTALL) "mclient.bat" "$(prefix)\mclient.bat"
+"$(prefix)":
+	if not exist "$(prefix)" $(MKDIR) "$(prefix)"
+install-data:

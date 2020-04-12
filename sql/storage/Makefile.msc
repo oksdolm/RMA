@@ -1,0 +1,44 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\sql\storage
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+INCLUDES = -I$(srcdir) "-I..\include" -I$(srcdir)\..\include "-I..\common" -I$(srcdir)\..\common "-I..\..\common\options" -I$(srcdir)\..\..\common\options "-I..\..\common\stream" -I$(srcdir)\..\..\common\stream "-I..\..\gdk" -I$(srcdir)\..\..\gdk
+bat-1-all: "bat-1-dir" "bat-1-Makefile"
+	$(CD) "bat" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+bat-1-dir: 
+	if not exist "bat" $(MKDIR) "bat"
+bat-1-Makefile: "$(srcdir)\bat\Makefile.msc"
+	$(INSTALL) "$(srcdir)\bat\Makefile.msc" "bat\Makefile"
+bat-1-check:
+	$(CD) "bat" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+bat-1-install:
+	$(CD) "bat" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+all-recursive: "bat-1-all" 
+check-recursive: "bat-1-check" 
+install-recursive: "bat-1-install" 
+libstore_OBJS = store_dependency.obj store_sequence.obj store.obj sql_catalog.obj
+libstore_DEPS = $(libstore_OBJS)
+libstore.lib: $(libstore_DEPS)
+	$(ARCHIVER) /out:"libstore.lib" $(libstore_OBJS) $(libstore_LIBS)
+
+store_sequence.obj: "$(srcdir)\store_sequence.c" "$(srcdir)\store_sequence.h" "$(srcdir)\..\include\sql_catalog.h" "$(srcdir)\sql_storage.h" "$(srcdir)\..\..\gdk\gdk_logger.h"
+	$(CC) /EHsc $(CFLAGS) $(store_sequence_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSTORE "-Fostore_sequence.obj" -c "$(srcdir)\store_sequence.c"
+sql_catalog.obj: "$(srcdir)\sql_catalog.c" "$(srcdir)\..\include\sql_catalog.h"
+	$(CC) /EHsc $(CFLAGS) $(sql_catalog_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSTORE "-Fosql_catalog.obj" -c "$(srcdir)\sql_catalog.c"
+store.obj: "$(srcdir)\store.c" "$(srcdir)\..\include\sql_mem.h" "$(srcdir)\..\include\sql_list.h" "$(srcdir)\..\common\sql_string.h" "$(srcdir)\..\include\sql_catalog.h" "$(srcdir)\..\storage\sql_storage.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\common\sql_types.h" "$(srcdir)\sql_storage.h" "$(srcdir)\..\..\gdk\gdk_logger.h" "$(srcdir)\store_dependency.h" "$(srcdir)\..\include\sql_relation.h" "$(srcdir)\..\common\sql_backend.h" "$(srcdir)\store_sequence.h" "$(srcdir)\bat\bat_utils.h" "$(srcdir)\bat\bat_storage.h" "$(srcdir)\bat\bat_table.h" "$(srcdir)\bat\bat_logger.h"
+	$(CC) /EHsc $(CFLAGS) $(store_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSTORE "-Fostore.obj" -c "$(srcdir)\store.c"
+store_dependency.obj: "$(srcdir)\store_dependency.c" "$(srcdir)\store_dependency.h" "$(srcdir)\..\include\sql_mem.h" "$(srcdir)\..\include\sql_list.h" "$(srcdir)\..\common\sql_string.h" "$(srcdir)\..\include\sql_catalog.h" "$(srcdir)\..\storage\sql_storage.h" "$(srcdir)\..\..\common\stream\stream.h" "$(srcdir)\..\common\sql_types.h" "$(srcdir)\..\include\sql_relation.h" "$(srcdir)\..\common\sql_backend.h" "$(srcdir)\store_sequence.h"
+	$(CC) /EHsc $(CFLAGS) $(store_dependency_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSTORE "-Fostore_dependency.obj" -c "$(srcdir)\store_dependency.c"
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc: "libstore.lib"
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

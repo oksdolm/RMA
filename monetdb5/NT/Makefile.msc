@@ -1,0 +1,23 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\monetdb5\NT
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+INCLUDES = -I$(srcdir)
+M5server.bat: "$(srcdir)\M5server.bat"
+	$(INSTALL) "$(srcdir)\M5server.bat" "M5server.bat"
+all-msc: "M5server.bat"
+check-msc: all-msc "M5server.bat"
+install-msc: install-exec install-data
+install-exec:  "install_M5server.bat" 
+install_M5server.bat: "M5server.bat" "$(prefix)"
+	$(INSTALL) "M5server.bat" "$(prefix)\M5server.bat"
+"$(prefix)":
+	if not exist "$(prefix)" $(MKDIR) "$(prefix)"
+install-data:

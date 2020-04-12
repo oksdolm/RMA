@@ -1,0 +1,102 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..
+srcdir = $(TOPDIR)\..\clients
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: build-all
+check: check-recursive check-msc
+install: install-recursive install-msc
+EXTRA_DIST_DIR =  Tests ruby R
+INCLUDES = -I$(srcdir)
+!IFDEF HAVE_MAPI
+HAVE_MAPI-1-all: "HAVE_MAPI-1-dir" "HAVE_MAPI-1-Makefile"
+	$(CD) "mapilib" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_MAPI-1-dir: 
+	if not exist "mapilib" $(MKDIR) "mapilib"
+HAVE_MAPI-1-Makefile: "$(srcdir)\mapilib\Makefile.msc"
+	$(INSTALL) "$(srcdir)\mapilib\Makefile.msc" "mapilib\Makefile"
+HAVE_MAPI-1-check:
+	$(CD) "mapilib" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_MAPI-1-install:
+	$(CD) "mapilib" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_MAPI-1-all:
+HAVE_MAPI-1-check:
+HAVE_MAPI-1-install:
+!ENDIF
+!IFDEF HAVE_MAPI
+HAVE_MAPI-2-all: "HAVE_MAPI-2-dir" "HAVE_MAPI-2-Makefile"
+	$(CD) "mapiclient" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_MAPI-2-dir: 
+	if not exist "mapiclient" $(MKDIR) "mapiclient"
+HAVE_MAPI-2-Makefile: "$(srcdir)\mapiclient\Makefile.msc"
+	$(INSTALL) "$(srcdir)\mapiclient\Makefile.msc" "mapiclient\Makefile"
+HAVE_MAPI-2-check:
+	$(CD) "mapiclient" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_MAPI-2-install:
+	$(CD) "mapiclient" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_MAPI-2-all:
+HAVE_MAPI-2-check:
+HAVE_MAPI-2-install:
+!ENDIF
+!IFDEF HAVE_ODBC
+HAVE_ODBC-3-all: "HAVE_ODBC-3-dir" "HAVE_ODBC-3-Makefile"
+	$(CD) "odbc" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_ODBC-3-dir: 
+	if not exist "odbc" $(MKDIR) "odbc"
+HAVE_ODBC-3-Makefile: "$(srcdir)\odbc\Makefile.msc"
+	$(INSTALL) "$(srcdir)\odbc\Makefile.msc" "odbc\Makefile"
+HAVE_ODBC-3-check:
+	$(CD) "odbc" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_ODBC-3-install:
+	$(CD) "odbc" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_ODBC-3-all:
+HAVE_ODBC-3-check:
+HAVE_ODBC-3-install:
+!ENDIF
+!IFDEF HAVE_MAPI
+HAVE_MAPI-4-all: "HAVE_MAPI-4-dir" "HAVE_MAPI-4-Makefile"
+	$(CD) "examples" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+HAVE_MAPI-4-dir: 
+	if not exist "examples" $(MKDIR) "examples"
+HAVE_MAPI-4-Makefile: "$(srcdir)\examples\Makefile.msc"
+	$(INSTALL) "$(srcdir)\examples\Makefile.msc" "examples\Makefile"
+HAVE_MAPI-4-check:
+	$(CD) "examples" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+HAVE_MAPI-4-install:
+	$(CD) "examples" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+HAVE_MAPI-4-all:
+HAVE_MAPI-4-check:
+HAVE_MAPI-4-install:
+!ENDIF
+!IFDEF NATIVE_WIN32
+NATIVE_WIN32-5-all: "NATIVE_WIN32-5-dir" "NATIVE_WIN32-5-Makefile"
+	$(CD) "NT" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" all 
+NATIVE_WIN32-5-dir: 
+	if not exist "NT" $(MKDIR) "NT"
+NATIVE_WIN32-5-Makefile: "$(srcdir)\NT\Makefile.msc"
+	$(INSTALL) "$(srcdir)\NT\Makefile.msc" "NT\Makefile"
+NATIVE_WIN32-5-check:
+	$(CD) "NT" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" check
+NATIVE_WIN32-5-install:
+	$(CD) "NT" && $(MAKE) /nologo $(MAKEDEBUG) "prefix=$(prefix)" "bits=$(bits)" install
+!ELSE
+NATIVE_WIN32-5-all:
+NATIVE_WIN32-5-check:
+NATIVE_WIN32-5-install:
+!ENDIF
+all-recursive: "HAVE_MAPI-1-all" "HAVE_MAPI-2-all" "HAVE_ODBC-3-all" "HAVE_MAPI-4-all" "NATIVE_WIN32-5-all" 
+check-recursive: "HAVE_MAPI-1-check" "HAVE_MAPI-2-check" "HAVE_ODBC-3-check" "HAVE_MAPI-4-check" "NATIVE_WIN32-5-check" 
+install-recursive: "HAVE_MAPI-1-install" "HAVE_MAPI-2-install" "HAVE_ODBC-3-install" "HAVE_MAPI-4-install" "NATIVE_WIN32-5-install" 
+build-all: $(BUILT_SOURCES) all-recursive all-msc
+all-msc:
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

@@ -1,0 +1,55 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\common\utils
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+CFLAGS=$(CFLAGS) $(thread_safe_flag_spec)
+INCLUDES = -I$(srcdir) $(openssl_CFLAGS)
+libmcrypt_OBJS = mcrypt.obj
+libmcrypt_DEPS = $(libmcrypt_OBJS)
+libmcrypt.lib: $(libmcrypt_DEPS)
+	$(ARCHIVER) /out:"libmcrypt.lib" $(libmcrypt_OBJS) $(libmcrypt_LIBS)
+
+strptime.obj: "$(srcdir)\strptime.cpp"
+	$(CC) /EHsc $(CFLAGS) $(strptime_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBSTRPTIME "-Fostrptime.obj" -c "$(srcdir)\strptime.cpp"
+muuid.obj: "$(srcdir)\muuid.c" "$(srcdir)\muuid.h"
+	$(CC) /EHsc $(CFLAGS) $(muuid_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMUUID "-Fomuuid.obj" -c "$(srcdir)\muuid.c"
+msabaoth.obj: "$(srcdir)\msabaoth.c" "$(srcdir)\msabaoth.h" "$(srcdir)\mutils.h" "$(srcdir)\muuid.h"
+	$(CC) /EHsc $(CFLAGS) $(msabaoth_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMSABAOTH "-Fomsabaoth.obj" -c "$(srcdir)\msabaoth.c"
+mutils.obj: "$(srcdir)\mutils.c" "$(srcdir)\mutils.h"
+	$(CC) /EHsc $(CFLAGS) $(mutils_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMUTILS "-Fomutils.obj" -c "$(srcdir)\mutils.c"
+mcrypt.obj: "$(srcdir)\mcrypt.c" "$(srcdir)\mcrypt.h"
+	$(CC) /EHsc $(CFLAGS) $(mcrypt_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMCRYPT "-Fomcrypt.obj" -c "$(srcdir)\mcrypt.c"
+prompt.obj: "$(srcdir)\prompt.c" "$(srcdir)\mprompt.h"
+	$(CC) /EHsc $(CFLAGS) $(prompt_CFLAGS) $(GENDLL) -D_CRT_SECURE_NO_WARNINGS -DLIBMUTILS "-Foprompt.obj" -c "$(srcdir)\prompt.c"
+libmutils_OBJS = mutils.obj prompt.obj
+libmutils_DEPS = $(libmutils_OBJS)
+libmutils.lib: $(libmutils_DEPS)
+	$(ARCHIVER) /out:"libmutils.lib" $(libmutils_OBJS) $(libmutils_LIBS)
+
+libmsabaoth_OBJS = msabaoth.obj
+libmsabaoth_DEPS = $(libmsabaoth_OBJS)
+libmsabaoth.lib: $(libmsabaoth_DEPS)
+	$(ARCHIVER) /out:"libmsabaoth.lib" $(libmsabaoth_OBJS) $(libmsabaoth_LIBS)
+
+libstrptime_OBJS = strptime.obj
+libstrptime_DEPS = $(libstrptime_OBJS)
+libstrptime.lib: $(libstrptime_DEPS)
+	$(ARCHIVER) /out:"libstrptime.lib" $(libstrptime_OBJS) $(libstrptime_LIBS)
+
+libmuuid_OBJS = muuid.obj
+libmuuid_DEPS = $(libmuuid_OBJS)
+libmuuid.lib: $(libmuuid_DEPS)
+	$(ARCHIVER) /out:"libmuuid.lib" $(libmuuid_OBJS) $(libmuuid_LIBS)
+
+all-msc: "libmcrypt.lib" "libmutils.lib" "libmsabaoth.lib" "libstrptime.lib" "libmuuid.lib"
+check-msc: all-msc
+install-msc: install-exec install-data
+install-exec:  
+install-data:

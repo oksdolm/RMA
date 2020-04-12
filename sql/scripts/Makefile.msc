@@ -1,0 +1,158 @@
+
+## Use: nmake -f makefile.msc install
+
+# Nothing much configurable below
+
+TOPDIR = .\..\..
+srcdir = $(TOPDIR)\..\sql\scripts
+!INCLUDE $(TOPDIR)\..\NT\rules.msc
+all: all-msc
+check: check-msc
+install: install-msc
+MT_SAFE = 
+INCLUDES = -I$(srcdir)
+21_dependency_views.sql: "$(srcdir)\21_dependency_views.sql"
+	$(INSTALL) "$(srcdir)\21_dependency_views.sql" "21_dependency_views.sql"
+80_statistics.sql: "$(srcdir)\80_statistics.sql"
+	$(INSTALL) "$(srcdir)\80_statistics.sql" "80_statistics.sql"
+39_analytics.sql: "$(srcdir)\39_analytics.sql"
+	$(INSTALL) "$(srcdir)\39_analytics.sql" "39_analytics.sql"
+60_wlcr.sql: "$(srcdir)\60_wlcr.sql"
+	$(INSTALL) "$(srcdir)\60_wlcr.sql" "60_wlcr.sql"
+26_sysmon.sql: "$(srcdir)\26_sysmon.sql"
+	$(INSTALL) "$(srcdir)\26_sysmon.sql" "26_sysmon.sql"
+13_date.sql: "$(srcdir)\13_date.sql"
+	$(INSTALL) "$(srcdir)\13_date.sql" "13_date.sql"
+75_storagemodel.sql: "$(srcdir)\75_storagemodel.sql"
+	$(INSTALL) "$(srcdir)\75_storagemodel.sql" "75_storagemodel.sql"
+17_temporal.sql: "$(srcdir)\17_temporal.sql"
+	$(INSTALL) "$(srcdir)\17_temporal.sql" "17_temporal.sql"
+10_math.sql: "$(srcdir)\10_math.sql"
+	$(INSTALL) "$(srcdir)\10_math.sql" "10_math.sql"
+51_sys_schema_extension.sql: "$(srcdir)\51_sys_schema_extension.sql"
+	$(INSTALL) "$(srcdir)\51_sys_schema_extension.sql" "51_sys_schema_extension.sql"
+21_dependency_functions.sql: "$(srcdir)\21_dependency_functions.sql"
+	$(INSTALL) "$(srcdir)\21_dependency_functions.sql" "21_dependency_functions.sql"
+09_like.sql: "$(srcdir)\09_like.sql"
+	$(INSTALL) "$(srcdir)\09_like.sql" "09_like.sql"
+22_clients.sql: "$(srcdir)\22_clients.sql"
+	$(INSTALL) "$(srcdir)\22_clients.sql" "22_clients.sql"
+40_json.sql: "$(srcdir)\40_json.sql"
+	$(INSTALL) "$(srcdir)\40_json.sql" "40_json.sql"
+41_md5sum.sql: "$(srcdir)\41_md5sum.sql"
+	$(INSTALL) "$(srcdir)\41_md5sum.sql" "41_md5sum.sql"
+20_vacuum.sql: "$(srcdir)\20_vacuum.sql"
+	$(INSTALL) "$(srcdir)\20_vacuum.sql" "20_vacuum.sql"
+25_debug.sql: "$(srcdir)\25_debug.sql"
+	$(INSTALL) "$(srcdir)\25_debug.sql" "25_debug.sql"
+23_skyserver.sql: "$(srcdir)\23_skyserver.sql"
+	$(INSTALL) "$(srcdir)\23_skyserver.sql" "23_skyserver.sql"
+46_profiler.sql: "$(srcdir)\46_profiler.sql"
+	$(INSTALL) "$(srcdir)\46_profiler.sql" "46_profiler.sql"
+45_uuid.sql: "$(srcdir)\45_uuid.sql"
+	$(INSTALL) "$(srcdir)\45_uuid.sql" "45_uuid.sql"
+16_tracelog.sql: "$(srcdir)\16_tracelog.sql"
+	$(INSTALL) "$(srcdir)\16_tracelog.sql" "16_tracelog.sql"
+99_system.sql: "$(srcdir)\99_system.sql"
+	$(INSTALL) "$(srcdir)\99_system.sql" "99_system.sql"
+18_index.sql: "$(srcdir)\18_index.sql"
+	$(INSTALL) "$(srcdir)\18_index.sql" "18_index.sql"
+15_querylog.sql: "$(srcdir)\15_querylog.sql"
+	$(INSTALL) "$(srcdir)\15_querylog.sql" "15_querylog.sql"
+12_url.sql: "$(srcdir)\12_url.sql"
+	$(INSTALL) "$(srcdir)\12_url.sql" "12_url.sql"
+27_rejects.sql: "$(srcdir)\27_rejects.sql"
+	$(INSTALL) "$(srcdir)\27_rejects.sql" "27_rejects.sql"
+14_inet.sql: "$(srcdir)\14_inet.sql"
+	$(INSTALL) "$(srcdir)\14_inet.sql" "14_inet.sql"
+11_times.sql: "$(srcdir)\11_times.sql"
+	$(INSTALL) "$(srcdir)\11_times.sql" "11_times.sql"
+39_analytics_hge.sql: "$(srcdir)\39_analytics_hge.sql"
+	$(INSTALL) "$(srcdir)\39_analytics_hge.sql" "39_analytics_hge.sql"
+!IF defined(HAVE_HGE)
+C_39_analytics_hge_sql = 39_analytics_hge.sql
+!ELSE
+C_39_analytics_hge_sql =
+!ENDIF
+40_json_hge.sql: "$(srcdir)\40_json_hge.sql"
+	$(INSTALL) "$(srcdir)\40_json_hge.sql" "40_json_hge.sql"
+!IF defined(HAVE_HGE)
+C_40_json_hge_sql = 40_json_hge.sql
+!ELSE
+C_40_json_hge_sql =
+!ENDIF
+all-msc: "21_dependency_views.sql" "80_statistics.sql" "39_analytics.sql" "60_wlcr.sql" "26_sysmon.sql" "13_date.sql" "75_storagemodel.sql" "17_temporal.sql" "10_math.sql" "51_sys_schema_extension.sql" "21_dependency_functions.sql" "09_like.sql" "22_clients.sql" "40_json.sql" "41_md5sum.sql" "20_vacuum.sql" "25_debug.sql" "23_skyserver.sql" "46_profiler.sql" "45_uuid.sql" "16_tracelog.sql" "99_system.sql" "18_index.sql" "15_querylog.sql" "12_url.sql" "27_rejects.sql" "14_inet.sql" "11_times.sql" "39_analytics_hge.sql" "40_json_hge.sql"
+check-msc: all-msc "21_dependency_views.sql" "80_statistics.sql" "39_analytics.sql" "60_wlcr.sql" "20_vacuum.sql" "13_date.sql" "75_storagemodel.sql" "27_rejects.sql" "14_inet.sql" "51_sys_schema_extension.sql" "21_dependency_functions.sql" "40_json.sql" "22_clients.sql" "09_like.sql" "39_analytics_hge.sql" "41_md5sum.sql" "26_sysmon.sql" "25_debug.sql" "23_skyserver.sql" "11_times.sql" "45_uuid.sql" "16_tracelog.sql" "99_system.sql" "18_index.sql" "15_querylog.sql" "12_url.sql" "17_temporal.sql" "10_math.sql" "40_json_hge.sql" "46_profiler.sql"
+install-msc: install-exec install-data
+install-exec:  "install_21_dependency_views.sql" "install_80_statistics.sql" "install_39_analytics.sql" "install_60_wlcr.sql" "install_20_vacuum.sql" "install_13_date.sql" "install_75_storagemodel.sql" "install_27_rejects.sql" "install_14_inet.sql" "install_51_sys_schema_extension.sql" "install_21_dependency_functions.sql" "install_40_json.sql" "install_22_clients.sql" "install_09_like.sql" "install_39_analytics_hge.sql" "install_41_md5sum.sql" "install_26_sysmon.sql" "install_25_debug.sql" "install_23_skyserver.sql" "install_11_times.sql" "install_45_uuid.sql" "install_16_tracelog.sql" "install_99_system.sql" "install_18_index.sql" "install_15_querylog.sql" "install_12_url.sql" "install_17_temporal.sql" "install_10_math.sql" "install_40_json_hge.sql" "install_46_profiler.sql" 
+install_21_dependency_views.sql: "21_dependency_views.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "21_dependency_views.sql" "$(libdir)\monetdb5\createdb\21_dependency_views.sql"
+install_80_statistics.sql: "80_statistics.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "80_statistics.sql" "$(libdir)\monetdb5\createdb\80_statistics.sql"
+install_39_analytics.sql: "39_analytics.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "39_analytics.sql" "$(libdir)\monetdb5\createdb\39_analytics.sql"
+install_60_wlcr.sql: "60_wlcr.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "60_wlcr.sql" "$(libdir)\monetdb5\createdb\60_wlcr.sql"
+install_20_vacuum.sql: "20_vacuum.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "20_vacuum.sql" "$(libdir)\monetdb5\createdb\20_vacuum.sql"
+install_13_date.sql: "13_date.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "13_date.sql" "$(libdir)\monetdb5\createdb\13_date.sql"
+install_75_storagemodel.sql: "75_storagemodel.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "75_storagemodel.sql" "$(libdir)\monetdb5\createdb\75_storagemodel.sql"
+install_27_rejects.sql: "27_rejects.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "27_rejects.sql" "$(libdir)\monetdb5\createdb\27_rejects.sql"
+install_14_inet.sql: "14_inet.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "14_inet.sql" "$(libdir)\monetdb5\createdb\14_inet.sql"
+install_51_sys_schema_extension.sql: "51_sys_schema_extension.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "51_sys_schema_extension.sql" "$(libdir)\monetdb5\createdb\51_sys_schema_extension.sql"
+install_21_dependency_functions.sql: "21_dependency_functions.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "21_dependency_functions.sql" "$(libdir)\monetdb5\createdb\21_dependency_functions.sql"
+install_40_json.sql: "40_json.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "40_json.sql" "$(libdir)\monetdb5\createdb\40_json.sql"
+install_22_clients.sql: "22_clients.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "22_clients.sql" "$(libdir)\monetdb5\createdb\22_clients.sql"
+install_09_like.sql: "09_like.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "09_like.sql" "$(libdir)\monetdb5\createdb\09_like.sql"
+!IF defined(HAVE_HGE)
+install_39_analytics_hge.sql: "39_analytics_hge.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "39_analytics_hge.sql" "$(libdir)\monetdb5\createdb\39_analytics_hge.sql"
+!ELSE
+install_39_analytics_hge.sql:
+!ENDIF
+install_41_md5sum.sql: "41_md5sum.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "41_md5sum.sql" "$(libdir)\monetdb5\createdb\41_md5sum.sql"
+install_26_sysmon.sql: "26_sysmon.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "26_sysmon.sql" "$(libdir)\monetdb5\createdb\26_sysmon.sql"
+install_25_debug.sql: "25_debug.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "25_debug.sql" "$(libdir)\monetdb5\createdb\25_debug.sql"
+install_23_skyserver.sql: "23_skyserver.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "23_skyserver.sql" "$(libdir)\monetdb5\createdb\23_skyserver.sql"
+install_11_times.sql: "11_times.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "11_times.sql" "$(libdir)\monetdb5\createdb\11_times.sql"
+install_45_uuid.sql: "45_uuid.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "45_uuid.sql" "$(libdir)\monetdb5\createdb\45_uuid.sql"
+install_16_tracelog.sql: "16_tracelog.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "16_tracelog.sql" "$(libdir)\monetdb5\createdb\16_tracelog.sql"
+install_99_system.sql: "99_system.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "99_system.sql" "$(libdir)\monetdb5\createdb\99_system.sql"
+install_18_index.sql: "18_index.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "18_index.sql" "$(libdir)\monetdb5\createdb\18_index.sql"
+install_15_querylog.sql: "15_querylog.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "15_querylog.sql" "$(libdir)\monetdb5\createdb\15_querylog.sql"
+install_12_url.sql: "12_url.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "12_url.sql" "$(libdir)\monetdb5\createdb\12_url.sql"
+install_17_temporal.sql: "17_temporal.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "17_temporal.sql" "$(libdir)\monetdb5\createdb\17_temporal.sql"
+install_10_math.sql: "10_math.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "10_math.sql" "$(libdir)\monetdb5\createdb\10_math.sql"
+!IF defined(HAVE_HGE)
+install_40_json_hge.sql: "40_json_hge.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "40_json_hge.sql" "$(libdir)\monetdb5\createdb\40_json_hge.sql"
+!ELSE
+install_40_json_hge.sql:
+!ENDIF
+install_46_profiler.sql: "46_profiler.sql" "$(libdir)\monetdb5\createdb"
+	$(INSTALL) "46_profiler.sql" "$(libdir)\monetdb5\createdb\46_profiler.sql"
+"$(libdir)\monetdb5\createdb":
+	if not exist "$(libdir)\monetdb5\createdb" $(MKDIR) "$(libdir)\monetdb5\createdb"
+install-data:
