@@ -1,6 +1,13 @@
 This document describes how to download, compile, install and
 start using our RMA+ extension of MonetDB system.
 
+The extension of MonetDB is done on all levels of
+the system, from parser to physical BAT operations. Consider the
+extension of MonetDB with addition, QR decomposition, linear
+regression, and copy to MKL format. In total it changes 20 files out
+of approximately 4500 files (we excluded test and configuration
+files) and includes additionally 2426 lines of code.
+
 Please refer to HowToStart.rst file in order to find official
 installation guide from MonetDB. 
 
