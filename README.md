@@ -6,6 +6,8 @@ Detailed information is given in the paper `"A relational matrix algebra and its
 
 This repositoty includes the implementation of selected Relational Matrix Algebra operations in MonetDB.
 
+#### Installation
+
 Go to the folder RMA_README and perform the following steps:
 
 - Execute the commands in the file RMA_README.txt to install RMA+MonetDB.
@@ -19,7 +21,7 @@ of mclient with output given in RMA_QueryDataOutput.txt.
 
 - Perform the steps in file RMA_CreateTables.txt to repeat selected experiments.
 
-Example queries:
+#### Example queries:
 
 `CREATE TABLE t1 (x1 STRING, x2 DOUBLE, x3 DOUBLE);`
 `CREATE TABLE t2 (y1 STRING, y2 STRING, y3 DOUBLE, y4 DOUBLE);`
@@ -34,6 +36,7 @@ The following query returns relation Q from QR decompisition applied to values i
 
 
 The follwing query performs addition between attributes x2, x3 and y3, y4 from relations t1 and t2 order by x1 and y1, respectively:
+
 `SELECT * FROM (t1 ON x2, x3  BY x1) add (t2 ON y3, y4  BY y1);`
 
 
