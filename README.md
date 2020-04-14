@@ -38,7 +38,7 @@ The following query returns relation Q from QR decompisition applied to values i
 `SELECT * FROM qqr ((SELECT * FROM t1 WHERE x2 > 1) t ON x2, x3  BY x1);`
 
 
-The following query performs addition between attributes x2, x3 and y3, y4 from relations t1 and t2 order by x1 and y1, respectively:
+The following query performs addition between attributes x2, x3 and y3, y4 from relations t1 and t2 ordered by x1 and y1, respectively:
 
 `SELECT * FROM (t1 ON x2, x3  BY x1) add (t2 ON y3, y4  BY y1);`
 
