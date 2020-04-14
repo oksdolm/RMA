@@ -23,7 +23,10 @@ of mclient with output given in RMA_QueryDataOutput.txt.
 
 #### Example queries:
 
+Consider two relations with the following create statements:
+
 `CREATE TABLE t1 (x1 STRING, x2 DOUBLE, x3 DOUBLE);`
+
 `CREATE TABLE t2 (y1 STRING, y2 STRING, y3 DOUBLE, y4 DOUBLE);`
 
 The following query returns relation Q from QR decompisition applied to values in attributes x2 and x3 in relation t1 ordered by attribute x1:
