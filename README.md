@@ -6,7 +6,7 @@ Detailed information is given in the paper `"A relational matrix algebra and its
 
 This repositoty includes the implementation of selected Relational Matrix Algebra operations in MonetDB.
 
-#### Installation
+#### Installation:
 
 Go to the folder RMA_README and perform the following steps:
 
