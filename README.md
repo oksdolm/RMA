@@ -1,7 +1,7 @@
 # RMA
 RMA is the extension of SQL and column store MonetDB with matrix operations defined over relations, 
 that preserve contextual information.
-Detailed information is given in the ppaer "A relational matrix algebra and its implementation in a column store",  SIGMOD2020, and in our technical report http://arxiv.org/abs/2004.05517.
+Detailed information is given in the paper `"A relational matrix algebra and its implementation in a column store"`,  SIGMOD 2020, and in our technical report http://arxiv.org/abs/2004.05517.
 
 This repositoty includes the implementation of selected Relational Matrix Algebra operations in MonetDB.
 
