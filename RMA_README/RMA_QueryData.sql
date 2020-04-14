@@ -1,5 +1,6 @@
 --This file includes the quiries of sample tables 
 --Currently add, qqr, sol, cpd, and lapack are supported
+--Both versions of ordering clause (ORDER BY and BY) are supported
 --Please notice that in this version ordering is switched off
 --Please notice that now only type double is supported in attributes included in application schema
 --Currently in implementation you still must specify application schema explicitly 
