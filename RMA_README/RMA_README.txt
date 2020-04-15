@@ -57,7 +57,7 @@ Configure
 
 Then in BUILD directory give the following command to reach maximal optimisation:
 
-../MonetDB-Mar2018/configure --prefix=/root_to_INSTALL_folder/INSTALL/ --disable-debug --disable-assert --enable-optimize
+../RMA/configure --prefix=/root_to_INSTALL_folder/INSTALL/ --disable-debug --disable-assert --enable-optimize
 
 The directory where you execute ``configure`` is the place where all
 intermediate source and object files are generated during compilation
