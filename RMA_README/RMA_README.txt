@@ -26,7 +26,7 @@ pkg-config:
 apt install pkg-config
 
 gcc:
-apt install build-essentials
+apt install build-essential
 
 bison:
 apt install bison
