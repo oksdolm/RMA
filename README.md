@@ -42,6 +42,8 @@ The following query performs addition between attributes x2, x3 and y3, y4 from 
 
 `SELECT * FROM (t1 ON x2, x3  BY x1) add (t2 ON y3, y4  BY y1);`
 
+More examples are given in the file RMA_README/RMA_QueryData.sql.
+
 
 
 
