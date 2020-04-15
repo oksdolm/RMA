@@ -45,7 +45,7 @@ Perform bootstrap in the source directory:
 
 ./bootstrap
 
-In the directory where folder with the source code (MonetDB-Mar2018) is located
+In the directory where folder with the source code (RMA) is located
 create two directories BUILD and INSTALL:
 
 mkdir BUILD
