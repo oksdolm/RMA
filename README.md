@@ -65,7 +65,7 @@ ordered t1
 | pit  |       6 |       5 |
 
 The ordered values of x1 and x3 are interpreted as an input matrix for the QQR decomposition (returns only matrix Q).
-The query returns relation qqr(t1), where attribute x1 can be used again to determine the order for the further computtaions.
+The query returns relation qqr(t1), where attribute x1 can be used again to determine the order for the further computations.
 
 qqr(t1)
 | x1   | x2                       | x3                       |
